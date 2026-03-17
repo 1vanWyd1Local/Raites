@@ -17,45 +17,31 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #6c5ce7;
-            --secondary: #a29bfe;
-            --dark: #1a1a2e;
-            --darker: #0f0f1a;
-            --light: #ffffff;
-            --gray: #b2bec3;
-            --accent: #fd79a8;
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--dark);
-            color: var(--light);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        /* Header */
         header {
             position: fixed;
             top: 0;
             width: 100%;
             background: rgba(15, 15, 26, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
             padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(108, 92, 231, 0.3);
+            z-index: 1000;
+            border-bottom: 2px solid #6c5ce7;
         }
 
         .logo {
             font-size: 1.8rem;
             font-weight: bold;
-            color: var(--primary);
+            color: #6c5ce7;
             text-decoration: none;
-            letter-spacing: 2px;
         }
 
         nav ul {
@@ -65,86 +51,58 @@
         }
 
         nav a {
-            color: var(--light);
+            color: #ffffff;
             text-decoration: none;
             transition: color 0.3s;
-            font-weight: 500;
         }
 
         nav a:hover {
-            color: var(--primary);
+            color: #6c5ce7;
         }
 
         .menu-toggle {
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--light);
         }
 
-        /* Hero Section */
         .hero {
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
             padding-top: 80px;
-            position: relative;
-            overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(108, 92, 231, 0.2) 0%, transparent 70%);
-            top: -200px;
-            right: -200px;
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        .hero-content h1 {
+        .hero h1 {
             font-size: 4rem;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #6c5ce7;
         }
 
-        .hero-content p {
+        .hero p {
             font-size: 1.5rem;
-            color: var(--gray);
+            color: #b2bec3;
             margin-bottom: 2rem;
         }
 
         .btn {
             display: inline-block;
             padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: var(--light);
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: #ffffff;
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: none;
-            cursor: pointer;
+            transition: transform 0.3s;
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
         }
 
-        /* Sections */
         section {
             padding: 5rem 5%;
         }
@@ -153,10 +111,71 @@
             text-align: center;
             font-size: 2.5rem;
             margin-bottom: 3rem;
-            color: var(--primary);
+            color: #6c5ce7;
         }
 
-        /* Games Grid */
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-card {
+            min-width: 100%;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .carousel-card img {
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-card h3 {
+            color: #6c5ce7;
+            margin-bottom: 0.5rem;
+        }
+
+        .carousel-card p {
+            color: #b2bec3;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-card a {
+            color: #fd79a8;
+            text-decoration: none;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(108, 92, 231, 0.8);
+            color: #ffffff;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            border-radius: 50%;
+        }
+
+        .carousel-btn.prev {
+            left: 10px;
+        }
+
+        .carousel-btn.next {
+            right: 10px;
+        }
+
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -164,11 +183,11 @@
         }
 
         .game-card {
-            background: var(--darker);
+            background: #0f0f1a;
             border-radius: 15px;
             overflow: hidden;
             transition: transform 0.3s;
-            border: 1px solid rgba(108, 92, 231, 0.2);
+            border: 1px solid #6c5ce7;
         }
 
         .game-card:hover {
@@ -186,22 +205,20 @@
         }
 
         .game-card h3 {
-            color: var(--primary);
+            color: #6c5ce7;
             margin-bottom: 0.5rem;
         }
 
         .game-card p {
-            color: var(--gray);
+            color: #b2bec3;
             margin-bottom: 1rem;
         }
 
         .game-card a {
-            color: var(--accent);
+            color: #fd79a8;
             text-decoration: none;
-            font-weight: 600;
         }
 
-        /* About Section */
         .about-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -210,7 +227,7 @@
         }
 
         .about-text p {
-            color: var(--gray);
+            color: #b2bec3;
             margin-bottom: 1rem;
         }
 
@@ -224,21 +241,25 @@
         .stat-item {
             text-align: center;
             padding: 1.5rem;
-            background: var(--darker);
+            background: #0f0f1a;
             border-radius: 10px;
-            border: 1px solid rgba(108, 92, 231, 0.2);
+            border: 1px solid #6c5ce7;
         }
 
         .stat-item h4 {
             font-size: 2rem;
-            color: var(--primary);
+            color: #6c5ce7;
         }
 
         .stat-item p {
-            color: var(--gray);
+            color: #b2bec3;
         }
 
-        /* News Section */
+        .about-image img {
+            width: 100%;
+            border-radius: 15px;
+        }
+
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -246,10 +267,10 @@
         }
 
         .news-card {
-            background: var(--darker);
+            background: #0f0f1a;
             padding: 2rem;
             border-radius: 15px;
-            border: 1px solid rgba(108, 92, 231, 0.2);
+            border: 1px solid #6c5ce7;
             transition: transform 0.3s;
         }
 
@@ -258,51 +279,52 @@
         }
 
         .news-date {
-            color: var(--accent);
+            color: #fd79a8;
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
         }
 
         .news-card h3 {
-            color: var(--primary);
+            color: #6c5ce7;
             margin-bottom: 1rem;
         }
 
         .news-card p {
-            color: var(--gray);
+            color: #b2bec3;
             margin-bottom: 1rem;
         }
 
         .news-card a {
-            color: var(--accent);
+            color: #fd79a8;
             text-decoration: none;
-            font-weight: 600;
         }
 
-        /* Support Section */
         .support-content {
             max-width: 800px;
             margin: 0 auto;
         }
 
         .faq-item {
-            background: var(--darker);
+            background: #0f0f1a;
             padding: 1.5rem;
             border-radius: 10px;
             margin-bottom: 1rem;
-            border: 1px solid rgba(108, 92, 231, 0.2);
+            border: 1px solid #6c5ce7;
         }
 
         .faq-item h4 {
-            color: var(--primary);
+            color: #6c5ce7;
             margin-bottom: 0.5rem;
         }
 
         .faq-item p {
-            color: var(--gray);
+            color: #b2bec3;
         }
 
-        /* Contact Section */
+        .faq-item a {
+            color: #6c5ce7;
+        }
+
         .contact-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -310,42 +332,140 @@
         }
 
         .contact-info {
-            background: var(--darker);
+            background: #0f0f1a;
             padding: 2rem;
             border-radius: 15px;
-            border: 1px solid rgba(108, 92, 231, 0.2);
+            border: 1px solid #6c5ce7;
+        }
+
+        .contact-info h3 {
+            color: #6c5ce7;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
         }
 
         .contact-info-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 1rem;
             margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+
+        .contact-info-item:hover {
+            background: rgba(108, 92, 231, 0.2);
         }
 
         .contact-info-item span {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            min-width: 40px;
+        }
+
+        .contact-info-item div {
+            flex: 1;
         }
 
         .contact-info-item p {
-            color: var(--gray);
+            color: #b2bec3;
+            margin-bottom: 0.25rem;
         }
 
         .contact-info-item a {
-            color: var(--primary);
+            color: #6c5ce7;
             text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-info-item a:hover {
+            color: #fd79a8;
+        }
+
+        .contact-info-item .label {
+            font-size: 0.85rem;
+            color: #a29bfe;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-social {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(108, 92, 231, 0.3);
+        }
+
+        .contact-social h4 {
+            color: #6c5ce7;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(108, 92, 231, 0.2);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(108, 92, 231, 0.3);
+        }
+
+        .social-links a:hover {
+            background: #6c5ce7;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .contact-map {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .contact-map p {
+            color: #b2bec3;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-map a {
+            color: #fd79a8;
+            text-decoration: none;
+            font-weight: 600;
         }
 
         .contact-form {
-            background: var(--darker);
+            background: #0f0f1a;
             padding: 2rem;
             border-radius: 15px;
-            border: 1px solid rgba(108, 92, 231, 0.2);
+            border: 1px solid #6c5ce7;
         }
 
         .contact-form h3 {
-            color: var(--primary);
+            color: #6c5ce7;
             margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .contact-form .form-desc {
+            color: #b2bec3;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
         }
 
         .form-group {
@@ -355,25 +475,29 @@
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: var(--gray);
+            color: #b2bec3;
+            font-weight: 500;
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 1rem;
-            background: var(--dark);
-            border: 1px solid rgba(108, 92, 231, 0.3);
+            background: #1a1a2e;
+            border: 1px solid #6c5ce7;
             border-radius: 10px;
-            color: var(--light);
+            color: #ffffff;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #a29bfe;
+            box-shadow: 0 0 10px rgba(108, 92, 231, 0.3);
         }
 
         .form-group textarea {
@@ -381,17 +505,36 @@
             resize: none;
         }
 
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: #1a1a2e;
+            color: #ffffff;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
         .submit-btn {
             width: 100%;
             padding: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: var(--light);
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: #ffffff;
             border: none;
             border-radius: 10px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .submit-btn:hover {
@@ -410,6 +553,7 @@
             padding: 1rem;
             border-radius: 10px;
             display: none;
+            font-weight: 500;
         }
 
         .form-status.success {
@@ -426,11 +570,37 @@
             border: 1px solid #e74c3c;
         }
 
-        /* Footer */
-        footer {
-            background: var(--darker);
-            padding: 3rem 5% 1rem;
+        .contact-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
             border-top: 1px solid rgba(108, 92, 231, 0.3);
+        }
+
+        .contact-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 8px;
+        }
+
+        .contact-feature span {
+            font-size: 1.3rem;
+        }
+
+        .contact-feature p {
+            color: #b2bec3;
+            font-size: 0.85rem;
+        }
+
+        footer {
+            background: #0f0f1a;
+            padding: 3rem 5% 1rem;
+            border-top: 2px solid #6c5ce7;
         }
 
         .footer-content {
@@ -441,7 +611,7 @@
         }
 
         .footer-section h4 {
-            color: var(--primary);
+            color: #6c5ce7;
             margin-bottom: 1rem;
         }
 
@@ -454,13 +624,13 @@
         }
 
         .footer-section a {
-            color: var(--gray);
+            color: #b2bec3;
             text-decoration: none;
             transition: color 0.3s;
         }
 
         .footer-section a:hover {
-            color: var(--primary);
+            color: #6c5ce7;
         }
 
         .social-links {
@@ -470,26 +640,20 @@
 
         .social-links a {
             font-size: 1.5rem;
-            transition: transform 0.3s;
-        }
-
-        .social-links a:hover {
-            transform: scale(1.2);
         }
 
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
-            border-top: 1px solid rgba(108, 92, 231, 0.2);
-            color: var(--gray);
+            border-top: 1px solid #6c5ce7;
+            color: #b2bec3;
         }
 
         .footer-bottom a {
-            color: var(--primary);
+            color: #6c5ce7;
             text-decoration: none;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -508,13 +672,13 @@
         }
 
         .modal-content {
-            background: var(--dark);
+            background: #1a1a2e;
             padding: 2rem;
             border-radius: 15px;
             max-width: 600px;
             width: 90%;
             position: relative;
-            border: 1px solid rgba(108, 92, 231, 0.3);
+            border: 2px solid #6c5ce7;
         }
 
         .modal-close {
@@ -523,12 +687,11 @@
             right: 1rem;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--gray);
-            transition: color 0.3s;
+            color: #b2bec3;
         }
 
         .modal-close:hover {
-            color: var(--accent);
+            color: #fd79a8;
         }
 
         .modal img {
@@ -540,15 +703,14 @@
         }
 
         .modal h3 {
-            color: var(--primary);
+            color: #6c5ce7;
             margin-bottom: 1rem;
         }
 
         .modal p {
-            color: var(--gray);
+            color: #b2bec3;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block;
@@ -560,7 +722,7 @@
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background: var(--darker);
+                background: #0f0f1a;
                 flex-direction: column;
                 padding: 1rem;
                 gap: 1rem;
@@ -570,7 +732,7 @@
                 display: flex;
             }
 
-            .hero-content h1 {
+            .hero h1 {
                 font-size: 2.5rem;
             }
 
@@ -582,21 +744,18 @@
             .stats {
                 grid-template-columns: 1fr;
             }
-        }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
 
-        .animate {
-            animation: fadeIn 0.6s ease forwards;
+            .contact-features {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <a href="#" class="logo">RAITES</a>
         <div class="menu-toggle" id="menuToggle">☰</div>
@@ -611,47 +770,72 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-content">
+        <div>
             <h1>Создаём миры</h1>
             <p>Погрузитесь в миры, созданные с любовью</p>
             <a href="#games" class="btn">Смотреть игры</a>
         </div>
     </section>
 
-    <!-- Games Section -->
+    <section>
+        <h2 class="section-title">Новые Игры</h2>
+        <div class="carousel">
+            <button class="carousel-btn prev" id="carouselPrev">❮</button>
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-card">
+                    <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1285226f1-2899-4563-8fcd-00d4177f8cc4.png" alt="Mystic Realms">
+                    <h3>Mystic Realms</h3>
+                    <p>Погрузитесь в загадочный мир древней магии и кристальных земель. Эпическое приключение ждёт вас!</p>
+                    <a href="#" onclick="openModal('mystic'); return false;">Подробнее →</a>
+                </div>
+                <div class="carousel-card">
+                    <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/17ba1f307-5055-4a79-a508-7e913f8c9f22.png" alt="Nexus-7">
+                    <h3>Nexus-7</h3>
+                    <p>Научно-фантастический шутер в космических просторах. Сражайтесь за выживание человечества!</p>
+                    <a href="#" onclick="openModal('nexus'); return false;">Подробнее →</a>
+                </div>
+                <div class="carousel-card">
+                    <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1c351e2e1-74c8-40bf-ab3c-5b471a3f88ce.png" alt="Neon Racers">
+                    <h3>Neon Racers</h3>
+                    <p>Скоростные гонки в киберпанк городе будущего. Почувствуйте адреналин на неоновых трассах!</p>
+                    <a href="#" onclick="openModal('neon'); return false;">Подробнее →</a>
+                </div>
+            </div>
+            <button class="carousel-btn next" id="carouselNext">❯</button>
+        </div>
+    </section>
+
     <section id="games">
         <h2 class="section-title">Наши Игры</h2>
         <div class="games-grid">
-            <div class="game-card animate">
+            <div class="game-card">
                 <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1285226f1-2899-4563-8fcd-00d4177f8cc4.png" alt="Mystic Realms">
                 <div class="game-card-content">
                     <h3>Mystic Realms</h3>
                     <p>Фэнтези RPG с открытым миром, где каждый выбор влияет на судьбу королевства.</p>
-                    <a href="#" onclick="openModal('mystic')">Подробнее →</a>
+                    <a href="#" onclick="openModal('mystic'); return false;">Подробнее →</a>
                 </div>
             </div>
-            <div class="game-card animate">
+            <div class="game-card">
                 <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/17ba1f307-5055-4a79-a508-7e913f8c9f22.png" alt="Nexus-7">
                 <div class="game-card-content">
                     <h3>Nexus-7</h3>
                     <p>Тактический шутер в космосе с многопользовательским режимом и эпическими битвами.</p>
-                    <a href="#" onclick="openModal('nexus')">Подробнее →</a>
+                    <a href="#" onclick="openModal('nexus'); return false;">Подробнее →</a>
                 </div>
             </div>
-            <div class="game-card animate">
+            <div class="game-card">
                 <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1c351e2e1-74c8-40bf-ab3c-5b471a3f88ce.png" alt="Neon Racers">
                 <div class="game-card-content">
                     <h3>Neon Racers</h3>
                     <p>Аркадные гонки в стиле киберпанк с невероятной графикой и динамичным геймплеем.</p>
-                    <a href="#" onclick="openModal('neon')">Подробнее →</a>
+                    <a href="#" onclick="openModal('neon'); return false;">Подробнее →</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
     <section id="about">
         <h2 class="section-title">О Компании</h2>
         <div class="about-content">
@@ -679,37 +863,35 @@
                 </div>
             </div>
             <div class="about-image">
-                <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1285226f1-2899-4563-8fcd-00d4177f8cc4.png" alt="О компании" style="width: 100%; border-radius: 15px;">
+                <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1285226f1-2899-4563-8fcd-00d4177f8cc4.png" alt="О компании">
             </div>
         </div>
     </section>
 
-    <!-- News Section -->
     <section id="news">
         <h2 class="section-title">Новости</h2>
         <div class="news-grid">
-            <div class="news-card animate">
+            <div class="news-card">
                 <p class="news-date">15 Января 2024</p>
                 <h3>Анонс новой игры</h3>
                 <p>Мы рады представить наш новый проект — эпическую RPG в открытом мире с революционной системой боя.</p>
-                <a href="#" onclick="openModal('news1')">Читать далее →</a>
+                <a href="#" onclick="openModal('news1'); return false;">Читать далее →</a>
             </div>
-            <div class="news-card animate">
+            <div class="news-card">
                 <p class="news-date">8 Января 2024</p>
                 <h3>Обновление Nexus-7</h3>
                 <p>Вышло крупное обновление с новыми картами, оружием и режимом игры для 64 игроков.</p>
-                <a href="#" onclick="openModal('news2')">Читать далее →</a>
+                <a href="#" onclick="openModal('news2'); return false;">Читать далее →</a>
             </div>
-            <div class="news-card animate">
+            <div class="news-card">
                 <p class="news-date">1 Января 2024</p>
                 <h3>Итоги года</h3>
                 <p>Благодарим всех игроков за поддержку! 2023 год стал для нас рекордным по всем показателям.</p>
-                <a href="#" onclick="openModal('news3')">Читать далее →</a>
+                <a href="#" onclick="openModal('news3'); return false;">Читать далее →</a>
             </div>
         </div>
     </section>
 
-    <!-- Support Section -->
     <section id="support">
         <h2 class="section-title">Поддержка</h2>
         <div class="support-content">
@@ -732,56 +914,133 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section id="contact">
         <h2 class="section-title">Контакты</h2>
         <div class="contact-content">
             <div class="contact-info">
+                <h3>Свяжитесь с нами</h3>
+
                 <div class="contact-info-item">
                     <span>📧</span>
-                    <p><a href="mailto:raites158@gmail.com">raites158@gmail.com</a></p>
+                    <div>
+                        <p class="label">Email</p>
+                        <p><a href="mailto:raites158@gmail.com">raites158@gmail.com</a></p>
+                        <p style="font-size: 0.85rem; color: #a29bfe;">Отвечаем в течение 24 часов</p>
+                    </div>
                 </div>
+
                 <div class="contact-info-item">
                     <span>📞</span>
-                    <p>+7 (902) 270-72-13</p>
+                    <div>
+                        <p class="label">Телефон</p>
+                        <p><a href="tel:+79022707213">+7 (902) 270-72-13</a></p>
+                        <p style="font-size: 0.85rem; color: #a29bfe;">Пн-Пт: 10:00 - 19:00 (МСК)</p>
+                    </div>
                 </div>
+
                 <div class="contact-info-item">
                     <span>📍</span>
-                    <p>Москва, ул. Геймеров, д. 2024</p>
+                    <div>
+                        <p class="label">Адрес</p>
+                        <p>Москва, ул. Геймеров, д. 2024</p>
+                        <p style="font-size: 0.85rem; color: #a29bfe;">Офис 404, 4 этаж</p>
+                    </div>
                 </div>
+
                 <div class="contact-info-item">
                     <span>🕐</span>
-                    <p>Пн-Пт: 10:00 - 19:00</p>
+                    <div>
+                        <p class="label">Режим работы</p>
+                        <p>Пн-Пт: 10:00 - 19:00</p>
+                        <p style="font-size: 0.85rem; color: #a29bfe;">Сб-Вс: Выходной</p>
+                    </div>
+                </div>
+
+                <div class="contact-social">
+                    <h4>Мы в социальных сетях</h4>
+                    <div class="social-links">
+                        <a href="#" title="VKontakte">📘</a>
+                        <a href="#" title="Telegram">✈️</a>
+                        <a href="#" title="YouTube">📺</a>
+                        <a href="#" title="Discord">🎮</a>
+                        <a href="#" title="Twitter">🐦</a>
+                    </div>
+                </div>
+
+                <div class="contact-map">
+                    <p>🗺️ Посмотреть на карте</p>
+                    <a href="https://yandex.ru/maps" target="_blank">Открыть в Яндекс.Картах →</a>
+                </div>
+
+                <div class="contact-features">
+                    <div class="contact-feature">
+                        <span>⚡</span>
+                        <p>Быстрый ответ</p>
+                    </div>
+                    <div class="contact-feature">
+                        <span>🔒</span>
+                        <p>Конфиденциально</p>
+                    </div>
+                    <div class="contact-feature">
+                        <span>🌍</span>
+                        <p>Работаем worldwide</p>
+                    </div>
+                    <div class="contact-feature">
+                        <span>💬</span>
+                        <p>Поддержка 24/7</p>
+                    </div>
                 </div>
             </div>
+
             <div class="contact-form">
                 <h3>Отправить письмо на raites158@gmail.com</h3>
+                <p class="form-desc">Заполните форму ниже и мы свяжемся с вами в ближайшее время. Все поля обязательны для заполнения.</p>
                 <form id="contactForm">
-                    <div class="form-group">
-                        <label for="user_name">Ваше имя</label>
-                        <input type="text" id="user_name" name="user_name" required placeholder="Введите ваше имя">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="user_name">Ваше имя *</label>
+                            <input type="text" id="user_name" name="user_name" required placeholder="Иван Иванов">
+                        </div>
+                        <div class="form-group">
+                            <label for="user_email">Email *</label>
+                            <input type="email" id="user_email" name="user_email" required placeholder="example@mail.ru">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="user_phone">Телефон</label>
+                            <input type="tel" id="user_phone" name="user_phone" placeholder="+7 (___) ___-__-__" maxlength="18">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Тема *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Выберите тему</option>
+                                <option value="Техническая поддержка">Техническая поддержка</option>
+                                <option value="Сотрудничество">Сотрудничество</option>
+                                <option value="Обратная связь">Обратная связь</option>
+                                <option value="Пресса / СМИ">Пресса / СМИ</option>
+                                <option value="Другое">Другое</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="user_email">Email</label>
-                        <input type="email" id="user_email" name="user_email" required placeholder="Введите ваш email">
+                        <label for="message">Сообщение *</label>
+                        <textarea id="message" name="message" required placeholder="Опишите ваш вопрос или предложение подробно..."></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="message">Сообщение</label>
-                        <textarea id="message" name="message" required placeholder="Введите ваше сообщение"></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn" id="submitBtn">Отправить</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span>📤</span> Отправить
+                    </button>
                     <div class="form-status" id="formStatus"></div>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
                 <h4>RAITES</h4>
-                <p style="color: var(--gray);">Создаём миры, в которые хочется возвращаться.</p>
+                <p style="color: #b2bec3;">Создаём миры, в которые хочется возвращаться.</p>
                 <div class="social-links" style="margin-top: 1rem;">
                     <a href="#">📘</a>
                     <a href="#">🐦</a>
@@ -792,9 +1051,9 @@
             <div class="footer-section">
                 <h4>Игры</h4>
                 <ul>
-                    <li><a href="#" onclick="openModal('mystic')">Mystic Realms</a></li>
-                    <li><a href="#" onclick="openModal('nexus')">Nexus-7</a></li>
-                    <li><a href="#" onclick="openModal('neon')">Neon Racers</a></li>
+                    <li><a href="#" onclick="openModal('mystic'); return false;">Mystic Realms</a></li>
+                    <li><a href="#" onclick="openModal('nexus'); return false;">Nexus-7</a></li>
+                    <li><a href="#" onclick="openModal('neon'); return false;">Neon Racers</a></li>
                     <li><a href="#games">Все игры</a></li>
                 </ul>
             </div>
@@ -822,7 +1081,6 @@
         </div>
     </footer>
 
-    <!-- Modals -->
     <div class="modal" id="gameModal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal()">&times;</span>
@@ -833,7 +1091,79 @@
     </div>
 
     <script>
-        // Mobile Menu Toggle
+        // Маска для телефона +7 (___) ___-__-__
+        const phoneInput = document.getElementById('user_phone');
+
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Удаляем все нецифровые символы
+
+            // Если начинаем вводить, добавляем 7 в начале
+            if (value.length > 0) {
+                if (value[0] === '7') {
+                    value = value.substring(1);
+                }
+                if (value[0] === '8') {
+                    value = value.substring(1);
+                }
+            }
+
+            // Ограничиваем до 10 цифр
+            value = value.substring(0, 10);
+
+            // Форматируем
+            let formattedValue = '+7';
+            if (value.length > 0) {
+                formattedValue += ' (';
+                formattedValue += value.substring(0, 3);
+            }
+            if (value.length > 3) {
+                formattedValue += ') ';
+                formattedValue += value.substring(3, 6);
+            }
+            if (value.length > 6) {
+                formattedValue += '-';
+                formattedValue += value.substring(6, 8);
+            }
+            if (value.length > 8) {
+                formattedValue += '-';
+                formattedValue += value.substring(8, 10);
+            }
+
+            e.target.value = formattedValue;
+        });
+
+        phoneInput.addEventListener('keydown', function(e) {
+            // Разрешаем backspace, delete, tab, escape, enter
+            if ([8, 9, 13, 27, 46].indexOf(e.keyCode) !== -1 ||
+                // Разрешаем Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                (e.keyCode === 65 && e.ctrlKey === true) ||
+                (e.keyCode === 67 && e.ctrlKey === true) ||
+                (e.keyCode === 86 && e.ctrlKey === true) ||
+                (e.keyCode === 88 && e.ctrlKey === true) ||
+                // Разрешаем home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                return;
+            }
+
+            // Запрещаем всё кроме цифр
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) &&
+                (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        phoneInput.addEventListener('focus', function() {
+            if (this.value === '') {
+                this.value = '+7 (';
+            }
+        });
+
+        phoneInput.addEventListener('blur', function() {
+            if (this.value === '+7 (') {
+                this.value = '';
+            }
+        });
+
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
 
@@ -841,14 +1171,12 @@
             navMenu.classList.toggle('active');
         });
 
-        // Close menu when clicking a link
         document.querySelectorAll('nav a').forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
             });
         });
 
-        // Modal Data
         const modalData = {
             mystic: {
                 title: 'Mystic Realms',
@@ -882,7 +1210,6 @@
             }
         };
 
-        // Modal Functions
         function openModal(key) {
             const modal = document.getElementById('gameModal');
             const data = modalData[key];
@@ -898,32 +1225,28 @@
             document.getElementById('gameModal').classList.remove('active');
         }
 
-        // Close modal when clicking outside
         document.getElementById('gameModal').addEventListener('click', (e) => {
             if (e.target.id === 'gameModal') {
                 closeModal();
             }
         });
 
-        // EmailJS Form Submission
         document.getElementById('contactForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
             const submitBtn = document.getElementById('submitBtn');
             const formStatus = document.getElementById('formStatus');
-            const originalText = submitBtn.textContent;
+            const originalText = submitBtn.innerHTML;
 
-            // Disable button during submission
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Отправка...';
+            submitBtn.innerHTML = '<span>⏳</span> Отправка...';
             formStatus.className = 'form-status';
             formStatus.style.display = 'none';
 
-            // Send email via EmailJS
             emailjs.sendForm('service_6u5en3m', 'template_aj1z0ff', this)
                 .then(function() {
                     console.log('SUCCESS!');
-                    submitBtn.textContent = 'Отправлено!';
+                    submitBtn.innerHTML = '<span>✅</span> Отправлено!';
                     formStatus.textContent = 'Спасибо! Ваше сообщение успешно отправлено. Мы ответим в течение 24 часов.';
                     formStatus.className = 'form-status success';
                     formStatus.style.display = 'block';
@@ -931,12 +1254,12 @@
 
                     setTimeout(() => {
                         submitBtn.disabled = false;
-                        submitBtn.textContent = originalText;
+                        submitBtn.innerHTML = originalText;
                         formStatus.style.display = 'none';
                     }, 5000);
                 }, function(error) {
                     console.log('FAILED...', error);
-                    submitBtn.textContent = originalText;
+                    submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                     formStatus.textContent = 'Ошибка отправки. Пожалуйста, попробуйте позже или напишите нам напрямую на raites158@gmail.com';
                     formStatus.className = 'form-status error';
@@ -944,7 +1267,6 @@
                 });
         });
 
-        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
@@ -961,22 +1283,21 @@
             });
         });
 
-        // Animation on Scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        const carouselTrack = document.getElementById('carouselTrack');
+        const carouselPrev = document.getElementById('carouselPrev');
+        const carouselNext = document.getElementById('carouselNext');
+        let carouselIndex = 0;
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
-            });
-        }, observerOptions);
+        carouselNext.addEventListener('click', () => {
+            const cards = document.querySelectorAll('.carousel-card');
+            carouselIndex = (carouselIndex + 1) % cards.length;
+            carouselTrack.style.transform = `translateX(-${carouselIndex * 100}%)`;
+        });
 
-        document.querySelectorAll('.game-card, .news-card').forEach(el => {
-            observer.observe(el);
+        carouselPrev.addEventListener('click', () => {
+            const cards = document.querySelectorAll('.carousel-card');
+            carouselIndex = (carouselIndex - 1 + cards.length) % cards.length;
+            carouselTrack.style.transform = `translateX(-${carouselIndex * 100}%)`;
         });
     </script>
 </body>
