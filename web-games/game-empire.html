@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Empire Tycoon - Бизнес Империя</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            transition: all 0.15s ease;
+            min-height: 48px;
+        }
+        .btn-buy:active:not(:disabled) {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+        .btn-buy:disabled {
+            background: #334155;
+            color: #94a3b8;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .animate-pop {
+            animation: pop 0.1s ease-out;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .floating-text {
+            position: fixed;
+            pointer-events: none;
+            animation: floatUp 0.8s ease-out forwards;
+            font-weight: bold;
+            color: #4ade80;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            z-index: 100;
+            font-size: 1.25rem;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.1); }
+        }
+
+        .locked-overlay {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(4px);
+        }
+
+        .blur-text {
+            filter: blur(4px);
+            user-select: none;
+        }
+
+        .locked-card {
+            filter: grayscale(100%);
+            opacity: 0.6;
+        }
+
+        .work-btn-pulse {
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+            70% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        .safe-top {
+            padding-top: env(safe-area-inset-top, 0px);
+        }
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * {
+            touch-action: manipulation;
+        }
+
+        .progress-bar {
+            transition: width 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col safe-top safe-bottom">
+
+    <!-- Header -->
+    <header class="glass-panel sticky top-0 z-40 border-b border-slate-700 shadow-lg safe-top">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="https://image.qwenlm.ai/public_source/c2e53587-7a67-43dd-94d9-ef8f608fabdf/175543622-820a-4583-9e69-f9c0993862fa.png" alt="Logo" class="w-10 h-10 rounded-lg shadow-md bg-blue-900">
+                <div>
+                    <h1 class="text-xl font-bold text-white tracking-tight">Empire Tycoon</h1>
+                    <p class="text-xs text-slate-400">Построй свою империю</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto h-full flex flex-col md:flex-row">
+
+            <!-- Left Sidebar: Active Work & Stats -->
+            <aside class="w-full md:w-1/4 p-4 flex flex-col gap-4 border-r border-slate-700/50 bg-slate-900/50">
+
+                <!-- Work Button -->
+                <div class="glass-panel p-6 rounded-xl flex flex-col items-center justify-center text-center gap-4 h-64 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                    <button id="work-btn" class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30 flex items-center justify-center text-white text-4xl hover:scale-105 active:scale-95 transition-all relative z-10 border-4 border-blue-400/30">
+                        <i class="ri-briefcase-4-line"></i>
+                    </button>
+
+                    <div>
+                        <h3 class="font-bold text-lg">Работа</h3>
+                        <p class="text-sm text-slate-400">Кликай, чтобы заработать</p>
+                        <p class="text-xs text-blue-300 mt-1">+<span id="click-value">$1.00</span> за клик</p>
+                    </div>
+                </div>
+
+                <!-- Stats Panel (Balance + Income under work button) -->
+                <div class="glass-panel p-4 rounded-xl">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <p class="text-xs text-slate-400 uppercase font-semibold mb-1">Баланс</p>
+                            <p class="text-yellow-400 font-mono font-bold text-lg" id="cash-display">$0.00</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-xs text-slate-400 uppercase font-semibold mb-1">Доход/сек</p>
+                            <p class="text-emerald-400 font-mono font-bold text-lg" id="income-display">$0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upgrades Section -->
+                <div class="glass-panel p-4 rounded-xl flex-1 overflow-y-auto">
+                    <h3 class="font-bold text-slate-200 mb-3 flex items-center gap-2">
+                        <i class="ri-flashlight-fill text-yellow-400"></i> Улучшения
+                    </h3>
+                    <div id="upgrades-list" class="space-y-2">
+                        <!-- Upgrades injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="mt-auto pt-4 border-t border-slate-700">
+                    <button onclick="resetGame()" class="w-full py-2 text-xs text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded transition-colors">
+                        Сбросить прогресс
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Right Area: Businesses -->
+            <section class="flex-1 p-4 overflow-y-auto bg-slate-900/30">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-white">Мои Бизнесы</h2>
+                    <div class="text-sm text-slate-400">
+                        Открыто: <span id="total-businesses" class="text-white font-bold">0</span>/<span id="total-available">10</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mb-4 glass-panel p-4 rounded-xl">
+                    <div class="flex justify-between text-xs text-slate-400 mb-2">
+                        <span>Прогресс империи</span>
+                        <span id="progress-percent" class="text-emerald-400 font-bold">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-3">
+                        <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-emerald-500 h-3 rounded-full progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="businesses-grid" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-20">
+                    <!-- Business Cards injected by JS -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-slate-800 border border-slate-600 text-white px-4 py-3 rounded-lg shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3">
+        <i class="ri-information-line text-blue-400"></i>
+        <span id="toast-message">Сообщение</span>
+    </div>
+
+    <script>
+        // --- Game Configuration ---
+        const CONFIG = {
+            businesses: [
+                { id: 'lemonade', name: 'Ларёк с лимонадом', baseCost: 15, baseIncome: 1, icon: 'ri-cup-fill', color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
+                { id: 'newspaper', name: 'Газетный киоск', baseCost: 100, baseIncome: 5, icon: 'ri-newspaper-fill', color: 'text-blue-400', bg: 'bg-blue-400/10' },
+                { id: 'carwash', name: 'Автомойка', baseCost: 1100, baseIncome: 28, icon: 'ri-car-fill', color: 'text-cyan-400', bg: 'bg-cyan-400/10' },
+                { id: 'pizza', name: 'Пиццерия', baseCost: 12000, baseIncome: 140, icon: 'ri-pizza-fill', color: 'text-orange-400', bg: 'bg-orange-400/10' },
+                { id: 'donuts', name: 'Пончиковая', baseCost: 130000, baseIncome: 600, icon: 'ri-restaurant-fill', color: 'text-pink-400', bg: 'bg-pink-400/10' },
+                { id: 'shrimp', name: 'Креветочная ферма', baseCost: 1400000, baseIncome: 3200, icon: 'ri-ship-fill', color: 'text-red-400', bg: 'bg-red-400/10' },
+                { id: 'hockey', name: 'Хоккейная команда', baseCost: 20000000, baseIncome: 12000, icon: 'ri-medal-fill', color: 'text-indigo-400', bg: 'bg-indigo-400/10' },
+                { id: 'movie', name: 'Киностудия', baseCost: 330000000, baseIncome: 55000, icon: 'ri-movie-fill', color: 'text-purple-400', bg: 'bg-purple-400/10' },
+                { id: 'bank', name: 'Банк', baseCost: 1000000000, baseIncome: 260000, icon: 'ri-bank-fill', color: 'text-green-400', bg: 'bg-green-400/10' },
+                { id: 'oil', name: 'Нефтяная вышка', baseCost: 50000000000, baseIncome: 1400000, icon: 'ri-oil-fill', color: 'text-slate-400', bg: 'bg-slate-400/10' }
+            ],
+            upgrades: [
+                { id: 'click1', name: 'Улучшенный курсор', baseCost: 500, type: 'click', multiplier: 2, purchased: false, icon: 'ri-mouse-line' },
+                { id: 'click2', name: 'Золотая мышь', baseCost: 5000, type: 'click', multiplier: 5, purchased: false, icon: 'ri-mouse-fill' },
+                { id: 'global1', name: 'Налоговые льготы', baseCost: 10000, type: 'global', multiplier: 1.2, purchased: false, icon: 'ri-file-list-3-line' },
+                { id: 'global2', name: 'Маркетинг', baseCost: 100000, type: 'global', multiplier: 1.5, purchased: false, icon: 'ri-megaphone-line' }
+            ]
+        };
+
+        // --- Game State ---
+        let state = {
+            cash: 0,
+            lifetimeEarnings: 0,
+            businesses: {},
+            upgrades: [],
+            startTime: Date.now()
+        };
+
+        CONFIG.businesses.forEach(b => {
+            if (!state.businesses[b.id]) state.businesses[b.id] = 0;
+        });
+
+        // --- Core Logic ---
+
+        function isBusinessUnlocked(index) {
+            if (index === 0) return true;
+            const prevBiz = CONFIG.businesses[index - 1];
+            return state.businesses[prevBiz.id] > 0;
+        }
+
+        function getBusinessCost(id) {
+            const biz = CONFIG.businesses.find(b => b.id === id);
+            const count = state.businesses[id];
+            return Math.floor(biz.baseCost * Math.pow(1.15, count));
+        }
+
+        function getBusinessIncome(id) {
+            const biz = CONFIG.businesses.find(b => b.id === id);
+            const count = state.businesses[id];
+            let income = biz.baseIncome * count;
+
+            state.upgrades.forEach(upgId => {
+                const upg = CONFIG.upgrades.find(u => u.id === upgId);
+                if (upg && upg.type === 'global') {
+                    income *= upg.multiplier;
+                }
+            });
+
+            return income;
+        }
+
+        function getTotalIncomePerSecond() {
+            let total = 0;
+            Object.keys(state.businesses).forEach(id => {
+                total += getBusinessIncome(id);
+            });
+            return total;
+        }
+
+        function getClickValue() {
+            let value = 1;
+
+            state.upgrades.forEach(upgId => {
+                const upg = CONFIG.upgrades.find(u => u.id === upgId);
+                if (upg && upg.type === 'click') {
+                    value *= upg.multiplier;
+                }
+            });
+            return value;
+        }
+
+        function formatMoney(amount) {
+            if (amount >= 1e12) return '$' + (amount / 1e12).toFixed(2) + 'T';
+            if (amount >= 1e9) return '$' + (amount / 1e9).toFixed(2) + 'B';
+            if (amount >= 1e6) return '$' + (amount / 1e6).toFixed(2) + 'M';
+            if (amount >= 1e3) return '$' + (amount / 1e3).toFixed(2) + 'k';
+            return '$' + amount.toFixed(2);
+        }
+
+        // --- Actions ---
+
+        function addCash(amount) {
+            state.cash += amount;
+            state.lifetimeEarnings += amount;
+            updateUI();
+        }
+
+        function buyBusiness(id) {
+            const cost = getBusinessCost(id);
+            if (state.cash >= cost) {
+                const wasLocked = state.businesses[id] === 0;
+                state.cash -= cost;
+                state.businesses[id]++;
+
+                const btn = document.getElementById(`buy-btn-${id}`);
+                if(btn) {
+                    btn.classList.add('animate-pop');
+                    setTimeout(() => btn.classList.remove('animate-pop'), 100);
+                }
+
+                saveGame();
+                updateUI();
+                renderBusinesses();
+
+                if (wasLocked) {
+                    const biz = CONFIG.businesses.find(b => b.id === id);
+                    showToast(`🔓 Открыто: ${biz.name}`);
+
+                    const currentIndex = CONFIG.businesses.findIndex(b => b.id === id);
+                    if (currentIndex < CONFIG.businesses.length - 1) {
+                        const nextBiz = CONFIG.businesses[currentIndex + 1];
+                        setTimeout(() => showToast(`➡️ Доступно: ${nextBiz.name}`), 1500);
+                    }
+                }
+            } else {
+                showToast('❌ Недостаточно средств');
+            }
+        }
+
+        function buyUpgrade(id) {
+            const upg = CONFIG.upgrades.find(u => u.id === id);
+            if (state.cash >= upg.baseCost && !state.upgrades.includes(id)) {
+                state.cash -= upg.baseCost;
+                state.upgrades.push(id);
+                upg.purchased = true;
+                saveGame();
+                updateUI();
+                renderUpgrades();
+                showToast(`✅ Куплено: ${upg.name}`);
+            }
+        }
+
+        function workClick(e) {
+            e.preventDefault();
+            const value = getClickValue();
+            addCash(value);
+
+            const touch = e.touches ? e.touches[0] : e;
+            const x = touch.clientX;
+            const y = touch.clientY;
+
+            createFloatingText(x, y, '+' + formatMoney(value));
+
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+        }
+
+        function createFloatingText(x, y, text) {
+            const floatEl = document.createElement('div');
+            floatEl.className = 'floating-text';
+            floatEl.innerText = text;
+            floatEl.style.left = (x - 30) + 'px';
+            floatEl.style.top = (y - 30) + 'px';
+            document.body.appendChild(floatEl);
+
+            setTimeout(() => floatEl.remove(), 800);
+        }
+
+        // --- UI Rendering ---
+
+        function renderBusinesses() {
+            const grid = document.getElementById('businesses-grid');
+            grid.innerHTML = '';
+
+            CONFIG.businesses.forEach((biz, index) => {
+                const count = state.businesses[biz.id];
+                const cost = getBusinessCost(biz.id);
+                const income = getBusinessIncome(biz.id);
+                const canAfford = state.cash >= cost;
+                const isUnlocked = isBusinessUnlocked(index);
+                const isOwned = count > 0;
+
+                const card = document.createElement('div');
+                card.className = `glass-panel p-4 rounded-xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden ${isOwned ? 'border-l-4 border-l-emerald-500' : (isUnlocked ? 'border-l-4 border-l-blue-500' : 'border-l-4 border-l-slate-600 locked-card')}`;
+
+                if (isUnlocked) {
+                    card.innerHTML = `
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-lg ${biz.bg} flex items-center justify-center ${biz.color} text-2xl">
+                                    <i class="${biz.icon}"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-200">${biz.name}</h3>
+                                    <p class="text-xs text-slate-400">Доход: ${formatMoney(income)}/сек</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-2xl font-bold text-white">${count}</span>
+                                <span class="text-xs text-slate-500 uppercase">шт.</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <button id="buy-btn-${biz.id}"
+                                onclick="buyBusiness('${biz.id}')"
+                                ${!canAfford ? 'disabled' : ''}
+                                class="btn-buy w-full py-2 rounded-lg text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span>${isOwned ? 'Купить' : 'Открыть'}</span>
+                                <span class="bg-black/20 px-2 py-0.5 rounded text-xs">${formatMoney(cost)}</span>
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    const prevBiz = CONFIG.businesses[index - 1];
+                    card.innerHTML = `
+                        <div class="flex items-start justify-between mb-3 opacity-50">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-lg bg-slate-700/50 flex items-center justify-center text-slate-500 text-2xl">
+                                    <i class="ri-lock-line"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-500 blur-text">?????????????</h3>
+                                    <p class="text-xs text-slate-600">???</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-2xl font-bold text-slate-600">0</span>
+                                <span class="text-xs text-slate-600 uppercase">шт.</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <button disabled class="w-full py-2 rounded-lg bg-slate-700 text-slate-500 font-bold text-sm flex items-center justify-center gap-2 cursor-not-allowed">
+                                <i class="ri-lock-line"></i>
+                                <span>Закрыто</span>
+                            </button>
+                        </div>
+
+                        <div class="absolute inset-0 locked-overlay flex items-center justify-center pointer-events-none">
+                            <div class="text-center px-4">
+                                <i class="ri-lock-chain-line text-4xl text-slate-500 mb-2"></i>
+                                <p class="text-slate-400 text-sm mb-1">Требуется бизнес</p>
+                                <p class="text-blue-400 text-xs font-bold">${prevBiz ? prevBiz.name : 'Пред.'}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                grid.appendChild(card);
+            });
+        }
+
+        function renderUpgrades() {
+            const list = document.getElementById('upgrades-list');
+            list.innerHTML = '';
+
+            CONFIG.upgrades.forEach(upg => {
+                if (upg.purchased) return;
+
+                const canAfford = state.cash >= upg.baseCost;
+
+                const item = document.createElement('div');
+                item.className = `flex items-center justify-between p-3 rounded-lg border ${canAfford ? 'border-slate-600 bg-slate-800' : 'border-slate-700 bg-slate-800/50 opacity-60'}`;
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-yellow-500/20 text-yellow-400 flex items-center justify-center">
+                            <i class="${upg.icon}"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-200">${upg.name}</p>
+                            <p class="text-xs text-slate-400">x${upg.multiplier} ${upg.type === 'click' ? 'клик' : 'доход'}</p>
+                        </div>
+                    </div>
+                    <button onclick="buyUpgrade('${upg.id}')" ${!canAfford ? 'disabled' : ''} class="px-3 py-1 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 text-white text-xs rounded font-bold transition-colors">
+                        ${formatMoney(upg.baseCost)}
+                    </button>
+                `;
+                list.appendChild(item);
+            });
+
+            if (list.innerHTML === '') {
+                list.innerHTML = '<p class="text-center text-slate-500 text-sm py-4">Все улучшения куплены!</p>';
+            }
+        }
+
+        function updateUI() {
+            const cash = formatMoney(state.cash);
+            const income = formatMoney(getTotalIncomePerSecond());
+            const click = formatMoney(getClickValue());
+
+            // Stats under work button
+            document.getElementById('cash-display').innerText = cash;
+            document.getElementById('income-display').innerText = income;
+            document.getElementById('click-value').innerText = click;
+
+            // Count unlocked businesses (for progress)
+            let unlockedBiz = 0;
+            Object.keys(state.businesses).forEach(id => {
+                const index = CONFIG.businesses.findIndex(b => b.id === id);
+                if (isBusinessUnlocked(index)) unlockedBiz++;
+            });
+
+            document.getElementById('total-businesses').innerText = unlockedBiz;
+            document.getElementById('total-available').innerText = CONFIG.businesses.length;
+
+            // Progress based on unlocked businesses (0% at start, increases with each unlock)
+            const progressPercent = Math.floor((unlockedBiz / CONFIG.businesses.length) * 100);
+            document.getElementById('progress-percent').innerText = progressPercent + '%';
+            document.getElementById('progress-bar').style.width = progressPercent + '%';
+
+            CONFIG.businesses.forEach((biz, index) => {
+                const btn = document.getElementById(`buy-btn-${biz.id}`);
+                if (btn && isBusinessUnlocked(index)) {
+                    const cost = getBusinessCost(biz.id);
+                    btn.disabled = state.cash < cost;
+                    const count = state.businesses[biz.id];
+                    const span = btn.querySelector('span:first-child');
+                    if (span) {
+                        span.innerText = count > 0 ? 'Купить' : 'Открыть';
+                    }
+                    btn.querySelector('span:last-child').innerText = formatMoney(cost);
+                }
+            });
+
+            document.title = `${cash} - Empire Tycoon`;
+        }
+
+        // --- Toast System ---
+
+        let toastTimeout;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => hideToast(), 3000);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+            toast.classList.add('translate-y-20', 'opacity-0');
+        }
+
+        // --- Game Loop & Save System ---
+
+        let lastTime = Date.now();
+        let saveTimer = 0;
+
+        function gameLoop() {
+            const now = Date.now();
+            const dt = (now - lastTime) / 1000;
+            lastTime = now;
+
+            const incomePerSec = getTotalIncomePerSecond();
+            if (incomePerSec > 0) {
+                addCash(incomePerSec * dt);
+            }
+
+            saveTimer += dt;
+            if (saveTimer >= 10) {
+                saveGame();
+                saveTimer = 0;
+            }
+
+            if (Math.floor(now) % 60 === 0) {
+                renderUpgrades();
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function saveGame() {
+            localStorage.setItem('empireTycoonSave', JSON.stringify(state));
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('empireTycoonSave');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state = { ...state, ...parsed };
+
+                    CONFIG.businesses.forEach(b => {
+                        if (typeof state.businesses[b.id] === 'undefined') {
+                            state.businesses[b.id] = 0;
+                        }
+                    });
+
+                    state.upgrades.forEach(id => {
+                        const upg = CONFIG.upgrades.find(u => u.id === id);
+                        if (upg) upg.purchased = true;
+                    });
+
+                    showToast('Прогресс загружен');
+                } catch (e) {
+                    console.error("Save file corrupted", e);
+                }
+            }
+        }
+
+        function resetGame() {
+            if(confirm("Вы уверены? Весь прогресс будет удален.")) {
+                localStorage.removeItem('empireTycoonSave');
+                location.reload();
+            }
+        }
+
+        // --- Initialization ---
+
+        document.getElementById('work-btn').addEventListener('mousedown', workClick);
+        document.getElementById('work-btn').addEventListener('touchstart', workClick, { passive: false });
+
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        }, { passive: false });
+
+        loadGame();
+        renderBusinesses();
+        renderUpgrades();
+        updateUI();
+        requestAnimationFrame(gameLoop);
+
+    </script>
+</body>
+</html>
