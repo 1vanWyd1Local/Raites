@@ -1,1304 +1,849 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игровая Компания Raites | Создаём миры</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function() {
-            emailjs.init("ugovLRn3G9yRvbUfG");
-        })();
-    </script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #ffffff;
-            line-height: 1.6;
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(15, 15, 26, 0.95);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            border-bottom: 2px solid #6c5ce7;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #6c5ce7;
-            text-decoration: none;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: #ffffff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #6c5ce7;
-        }
-
-        .menu-toggle {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
-            padding-top: 80px;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            color: #6c5ce7;
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            color: #b2bec3;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: transform 0.3s;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-        }
-
-        section {
-            padding: 5rem 5%;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #6c5ce7;
-        }
-
-        .carousel {
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 3rem;
-        }
-
-        .carousel-track {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
-
-        .carousel-card {
-            min-width: 100%;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .carousel-card img {
-            width: 100%;
-            max-width: 400px;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin-bottom: 1rem;
-        }
-
-        .carousel-card h3 {
-            color: #6c5ce7;
-            margin-bottom: 0.5rem;
-        }
-
-        .carousel-card p {
-            color: #b2bec3;
-            margin-bottom: 1rem;
-        }
-
-        .carousel-card a {
-            color: #fd79a8;
-            text-decoration: none;
-        }
-
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(108, 92, 231, 0.8);
-            color: #ffffff;
-            border: none;
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            font-size: 1.5rem;
-            border-radius: 50%;
-        }
-
-        .carousel-btn.prev {
-            left: 10px;
-        }
-
-        .carousel-btn.next {
-            right: 10px;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .game-card {
-            background: #0f0f1a;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: transform 0.3s;
-            border: 1px solid #6c5ce7;
-        }
-
-        .game-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .game-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .game-card-content {
-            padding: 1.5rem;
-        }
-
-        .game-card h3 {
-            color: #6c5ce7;
-            margin-bottom: 0.5rem;
-        }
-
-        .game-card p {
-            color: #b2bec3;
-            margin-bottom: 1rem;
-        }
-
-        .game-card a {
-            color: #fd79a8;
-            text-decoration: none;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .about-text p {
-            color: #b2bec3;
-            margin-bottom: 1rem;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 1.5rem;
-            background: #0f0f1a;
-            border-radius: 10px;
-            border: 1px solid #6c5ce7;
-        }
-
-        .stat-item h4 {
-            font-size: 2rem;
-            color: #6c5ce7;
-        }
-
-        .stat-item p {
-            color: #b2bec3;
-        }
-
-        .about-image img {
-            width: 100%;
-            border-radius: 15px;
-        }
-
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .news-card {
-            background: #0f0f1a;
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid #6c5ce7;
-            transition: transform 0.3s;
-        }
-
-        .news-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .news-date {
-            color: #fd79a8;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .news-card h3 {
-            color: #6c5ce7;
-            margin-bottom: 1rem;
-        }
-
-        .news-card p {
-            color: #b2bec3;
-            margin-bottom: 1rem;
-        }
-
-        .news-card a {
-            color: #fd79a8;
-            text-decoration: none;
-        }
-
-        .support-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            background: #0f0f1a;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            border: 1px solid #6c5ce7;
-        }
-
-        .faq-item h4 {
-            color: #6c5ce7;
-            margin-bottom: 0.5rem;
-        }
-
-        .faq-item p {
-            color: #b2bec3;
-        }
-
-        .faq-item a {
-            color: #6c5ce7;
-        }
-
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-
-        .contact-info {
-            background: #0f0f1a;
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid #6c5ce7;
-        }
-
-        .contact-info h3 {
-            color: #6c5ce7;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-
-        .contact-info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: rgba(108, 92, 231, 0.1);
-            border-radius: 10px;
-            transition: background 0.3s;
-        }
-
-        .contact-info-item:hover {
-            background: rgba(108, 92, 231, 0.2);
-        }
-
-        .contact-info-item span {
-            font-size: 1.8rem;
-            min-width: 40px;
-        }
-
-        .contact-info-item div {
-            flex: 1;
-        }
-
-        .contact-info-item p {
-            color: #b2bec3;
-            margin-bottom: 0.25rem;
-        }
-
-        .contact-info-item a {
-            color: #6c5ce7;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .contact-info-item a:hover {
-            color: #fd79a8;
-        }
-
-        .contact-info-item .label {
-            font-size: 0.85rem;
-            color: #a29bfe;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.25rem;
-        }
-
-        .contact-social {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(108, 92, 231, 0.3);
-        }
-
-        .contact-social h4 {
-            color: #6c5ce7;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background: rgba(108, 92, 231, 0.2);
-            border-radius: 50%;
-            font-size: 1.5rem;
-            text-decoration: none;
-            transition: all 0.3s;
-            border: 1px solid rgba(108, 92, 231, 0.3);
-        }
-
-        .social-links a:hover {
-            background: #6c5ce7;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
-        }
-
-        .contact-map {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: rgba(108, 92, 231, 0.1);
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .contact-map p {
-            color: #b2bec3;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-map a {
-            color: #fd79a8;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .contact-form {
-            background: #0f0f1a;
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid #6c5ce7;
-        }
-
-        .contact-form h3 {
-            color: #6c5ce7;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-
-        .contact-form .form-desc {
-            color: #b2bec3;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #b2bec3;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 1rem;
-            background: #1a1a2e;
-            border: 1px solid #6c5ce7;
-            border-radius: 10px;
-            color: #ffffff;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #a29bfe;
-            box-shadow: 0 0 10px rgba(108, 92, 231, 0.3);
-        }
-
-        .form-group textarea {
-            height: 150px;
-            resize: none;
-        }
-
-        .form-group select {
-            cursor: pointer;
-        }
-
-        .form-group select option {
-            background: #1a1a2e;
-            color: #ffffff;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .form-status {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 10px;
-            display: none;
-            font-weight: 500;
-        }
-
-        .form-status.success {
-            display: block;
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
-            border: 1px solid #2ecc71;
-        }
-
-        .form-status.error {
-            display: block;
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
-            border: 1px solid #e74c3c;
-        }
-
-        .contact-features {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(108, 92, 231, 0.3);
-        }
-
-        .contact-feature {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            background: rgba(108, 92, 231, 0.1);
-            border-radius: 8px;
-        }
-
-        .contact-feature span {
-            font-size: 1.3rem;
-        }
-
-        .contact-feature p {
-            color: #b2bec3;
-            font-size: 0.85rem;
-        }
-
-        footer {
-            background: #0f0f1a;
-            padding: 3rem 5% 1rem;
-            border-top: 2px solid #6c5ce7;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h4 {
-            color: #6c5ce7;
-            margin-bottom: 1rem;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-section a {
-            color: #b2bec3;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #6c5ce7;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-links a {
-            font-size: 1.5rem;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #6c5ce7;
-            color: #b2bec3;
-        }
-
-        .footer-bottom a {
-            color: #6c5ce7;
-            text-decoration: none;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #1a1a2e;
-            padding: 2rem;
-            border-radius: 15px;
-            max-width: 600px;
-            width: 90%;
-            position: relative;
-            border: 2px solid #6c5ce7;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #b2bec3;
-        }
-
-        .modal-close:hover {
-            color: #fd79a8;
-        }
-
-        .modal img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .modal h3 {
-            color: #6c5ce7;
-            margin-bottom: 1rem;
-        }
-
-        .modal p {
-            color: #b2bec3;
-        }
-
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-
-            nav ul {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: #0f0f1a;
-                flex-direction: column;
-                padding: 1rem;
-                gap: 1rem;
-            }
-
-            nav ul.active {
-                display: flex;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .about-content,
-            .contact-content {
-                grid-template-columns: 1fr;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-features {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Игровая Компания Raites | Создаём миры</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+(function() {
+emailjs.init("ugovLRn3G9yRvbUfG");
+})();
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+* {
+scroll-behavior: smooth;
+}
+body {
+font-family: 'Inter', sans-serif;
+}
+/* Game Transition Overlay */
+.game-transition {
+position: fixed;
+inset: 0;
+background: #0f172a;
+z-index: 9999;
+display: flex;
+align-items: center;
+justify-content: center;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.5s ease;
+}
+.game-transition.active {
+opacity: 1;
+pointer-events: all;
+}
+.game-loader {
+width: 80px;
+height: 80px;
+border: 4px solid #1e293b;
+border-top-color: #3b82f6;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+.game-title {
+margin-top: 20px;
+color: #e2e8f0;
+font-size: 1.5rem;
+font-weight: 600;
+opacity: 0;
+transform: translateY(20px);
+transition: all 0.3s ease 0.3s;
+}
+.game-transition.active .game-title {
+opacity: 1;
+transform: translateY(0);
+}
+/* Hover Effects */
+.game-card {
+transition: all 0.3s ease;
+}
+.game-card:hover {
+transform: translateY(-8px);
+box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+}
+.play-btn {
+position: relative;
+overflow: hidden;
+}
+.play-btn::before {
+content: '';
+position: absolute;
+inset: 0;
+background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+transform: translateX(-100%);
+transition: transform 0.5s ease;
+}
+.play-btn:hover::before {
+transform: translateX(100%);
+}
+/* Scroll Animations */
+.fade-in {
+opacity: 0;
+transform: translateY(30px);
+transition: all 0.6s ease;
+}
+.fade-in.visible {
+opacity: 1;
+transform: translateY(0);
+}
+/* Contact Section Styles */
+.contact-content {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 3rem;
+}
+.contact-info {
+background: #0f0f1a;
+padding: 2rem;
+border-radius: 15px;
+border: 1px solid #6c5ce7;
+}
+.contact-info h3 {
+color: #6c5ce7;
+margin-bottom: 1.5rem;
+font-size: 1.5rem;
+}
+.contact-info-item {
+display: flex;
+align-items: flex-start;
+gap: 1rem;
+margin-bottom: 1.5rem;
+padding: 1rem;
+background: rgba(108, 92, 231, 0.1);
+border-radius: 10px;
+transition: background 0.3s;
+}
+.contact-info-item:hover {
+background: rgba(108, 92, 231, 0.2);
+}
+.contact-info-item span {
+font-size: 1.8rem;
+min-width: 40px;
+}
+.contact-info-item div {
+flex: 1;
+}
+.contact-info-item p {
+color: #b2bec3;
+margin-bottom: 0.25rem;
+}
+.contact-info-item a {
+color: #6c5ce7;
+text-decoration: none;
+transition: color 0.3s;
+}
+.contact-info-item a:hover {
+color: #fd79a8;
+}
+.contact-info-item .label {
+font-size: 0.85rem;
+color: #a29bfe;
+text-transform: uppercase;
+letter-spacing: 1px;
+margin-bottom: 0.25rem;
+}
+.contact-social {
+margin-top: 2rem;
+padding-top: 1.5rem;
+border-top: 1px solid rgba(108, 92, 231, 0.3);
+}
+.contact-social h4 {
+color: #6c5ce7;
+margin-bottom: 1rem;
+font-size: 1.1rem;
+}
+.contact-social-links {
+display: flex;
+gap: 1rem;
+flex-wrap: wrap;
+}
+.contact-social-links a {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 50px;
+height: 50px;
+background: rgba(108, 92, 231, 0.2);
+border-radius: 50%;
+font-size: 1.5rem;
+text-decoration: none;
+transition: all 0.3s;
+border: 1px solid rgba(108, 92, 231, 0.3);
+}
+.contact-social-links a:hover {
+background: #6c5ce7;
+transform: translateY(-3px);
+box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+}
+.contact-map {
+margin-top: 1.5rem;
+padding: 1rem;
+background: rgba(108, 92, 231, 0.1);
+border-radius: 10px;
+text-align: center;
+}
+.contact-map p {
+color: #b2bec3;
+font-size: 0.9rem;
+margin-bottom: 0.5rem;
+}
+.contact-map a {
+color: #fd79a8;
+text-decoration: none;
+font-weight: 600;
+}
+.contact-form {
+background: #0f0f1a;
+padding: 2rem;
+border-radius: 15px;
+border: 1px solid #6c5ce7;
+}
+.contact-form h3 {
+color: #6c5ce7;
+margin-bottom: 1.5rem;
+font-size: 1.5rem;
+}
+.contact-form .form-desc {
+color: #b2bec3;
+margin-bottom: 1.5rem;
+font-size: 0.95rem;
+}
+.form-group {
+margin-bottom: 1.5rem;
+}
+.form-group label {
+display: block;
+margin-bottom: 0.5rem;
+color: #b2bec3;
+font-weight: 500;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+width: 100%;
+padding: 1rem;
+background: #1a1a2e;
+border: 1px solid #6c5ce7;
+border-radius: 10px;
+color: #ffffff;
+font-size: 1rem;
+transition: all 0.3s;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+outline: none;
+border-color: #a29bfe;
+box-shadow: 0 0 10px rgba(108, 92, 231, 0.3);
+}
+.form-group textarea {
+height: 150px;
+resize: none;
+}
+.form-group select {
+cursor: pointer;
+}
+.form-group select option {
+background: #1a1a2e;
+color: #ffffff;
+}
+.form-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1rem;
+}
+.submit-btn {
+width: 100%;
+padding: 1rem;
+background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+color: #ffffff;
+border: none;
+border-radius: 10px;
+font-size: 1rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0.5rem;
+}
+.submit-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
+}
+.submit-btn:disabled {
+opacity: 0.7;
+cursor: not-allowed;
+transform: none;
+}
+.form-status {
+margin-top: 1rem;
+padding: 1rem;
+border-radius: 10px;
+display: none;
+font-weight: 500;
+}
+.form-status.success {
+display: block;
+background: rgba(46, 204, 113, 0.2);
+color: #2ecc71;
+border: 1px solid #2ecc71;
+}
+.form-status.error {
+display: block;
+background: rgba(231, 76, 60, 0.2);
+color: #e74c3c;
+border: 1px solid #e74c3c;
+}
+.contact-features {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 1rem;
+margin-top: 2rem;
+padding-top: 1.5rem;
+border-top: 1px solid rgba(108, 92, 231, 0.3);
+}
+.contact-feature {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+padding: 0.75rem;
+background: rgba(108, 92, 231, 0.1);
+border-radius: 8px;
+}
+.contact-feature span {
+font-size: 1.3rem;
+}
+.contact-feature p {
+color: #b2bec3;
+font-size: 0.85rem;
+}
+@media (max-width: 768px) {
+.contact-content {
+grid-template-columns: 1fr;
+}
+.form-row {
+grid-template-columns: 1fr;
+}
+.contact-features {
+grid-template-columns: 1fr;
+}
+}
+</style>
 </head>
-<body>
-    <header>
-        <a href="#" class="logo">RAITES</a>
-        <div class="menu-toggle" id="menuToggle">☰</div>
-        <nav>
-            <ul id="navMenu">
-                <li><a href="#games">Игры</a></li>
-                <li><a href="#about">О компании</a></li>
-                <li><a href="#news">Новости</a></li>
-                <li><a href="#support">Поддержка</a></li>
-                <li><a href="#contact">Контакты</a></li>
-            </ul>
-        </nav>
-    </header>
+<body class="bg-slate-900 text-white">
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
+<div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold text-xl">R</div>
+<span class="text-xl font-bold">RAITES</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a href="#games" class="text-slate-300 hover:text-white transition-colors">Игры</a>
+<a href="#webgames" class="text-slate-300 hover:text-white transition-colors">Веб-игры</a>
+<a href="#about" class="text-slate-300 hover:text-white transition-colors">О компании</a>
+<a href="#news" class="text-slate-300 hover:text-white transition-colors">Новости</a>
+<a href="#support" class="text-slate-300 hover:text-white transition-colors">Поддержка</a>
+<a href="#contact" class="text-slate-300 hover:text-white transition-colors">Контакты</a>
+</div>
+<button class="md:hidden text-2xl">☰</button>
+</div>
+</nav>
 
-    <section class="hero">
-        <div>
-            <h1>Создаём миры</h1>
-            <p>Погрузитесь в миры, созданные с любовью</p>
-            <a href="#games" class="btn">Смотреть игры</a>
-        </div>
-    </section>
+<!-- Hero Section -->
+<section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+<div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-slate-900 to-purple-900/20"></div>
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+<div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+<div class="inline-block px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400 text-sm mb-6 fade-in">
+🎮 Теперь и веб-игры доступны!
+</div>
+<h1 class="text-5xl md:text-7xl font-bold mb-6 fade-in" style="transition-delay: 0.1s">
+Создаём <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">миры</span>
+</h1>
+<p class="text-xl text-slate-400 mb-8 fade-in" style="transition-delay: 0.2s">
+Погрузитесь в миры, созданные с любовью
+</p>
+<div class="flex flex-wrap gap-4 justify-center fade-in" style="transition-delay: 0.3s">
+<a href="#webgames" class="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold hover:shadow-lg hover:shadow-blue-500/30 transition-all hover:scale-105">
+Играть сейчас
+</a>
+<a href="#contact" class="px-8 py-4 bg-slate-800 border border-slate-700 rounded-full font-semibold hover:bg-slate-700 transition-all hover:scale-105">
+Контакты
+</a>
+</div>
+</div>
+</section>
 
-    <section>
-        <h2 class="section-title">Новые Игры</h2>
-        <div class="carousel">
-            <button class="carousel-btn prev" id="carouselPrev">❮</button>
-            <div class="carousel-track" id="carouselTrack">
-                <div class="carousel-card">
-                    <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1285226f1-2899-4563-8fcd-00d4177f8cc4.png" alt="Mystic Realms">
-                    <h3>Mystic Realms</h3>
-                    <p>Погрузитесь в загадочный мир древней магии и кристальных земель. Эпическое приключение ждёт вас!</p>
-                    <a href="#" onclick="openModal('mystic'); return false;">Подробнее →</a>
-                </div>
-                <div class="carousel-card">
-                    <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/17ba1f307-5055-4a79-a508-7e913f8c9f22.png" alt="Nexus-7">
-                    <h3>Nexus-7</h3>
-                    <p>Научно-фантастический шутер в космических просторах. Сражайтесь за выживание человечества!</p>
-                    <a href="#" onclick="openModal('nexus'); return false;">Подробнее →</a>
-                </div>
-                <div class="carousel-card">
-                    <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1c351e2e1-74c8-40bf-ab3c-5b471a3f88ce.png" alt="Neon Racers">
-                    <h3>Neon Racers</h3>
-                    <p>Скоростные гонки в киберпанк городе будущего. Почувствуйте адреналин на неоновых трассах!</p>
-                    <a href="#" onclick="openModal('neon'); return false;">Подробнее →</a>
-                </div>
-            </div>
-            <button class="carousel-btn next" id="carouselNext">❯</button>
-        </div>
-    </section>
+<!-- Games Section - Coming Soon -->
+<section id="games" class="py-20 px-4">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Наши Игры</h2>
+<p class="text-slate-400 text-center mb-12 fade-in">Полноценные проекты для ПК и консолей</p>
+<div class="max-w-2xl mx-auto">
+<div class="bg-slate-800/50 border border-slate-700 rounded-3xl p-12 text-center fade-in">
+<div class="text-6xl mb-6">🚧</div>
+<h3 class="text-2xl font-bold mb-4 text-blue-400">Игр пока нет</h3>
+<p class="text-slate-400 mb-6">Мы активно работаем над новыми проектами. Скоро здесь появятся захватывающие игры, которые вы полюбите!</p>
+<div class="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400">
+<span class="animate-pulse">🔔</span>
+<span>Следите за обновлениями</span>
+</div>
+</div>
+</div>
+</div>
+</section>
 
-    <section id="games">
-        <h2 class="section-title">Наши Игры</h2>
-        <div class="games-grid">
-            <div class="game-card">
-                <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1285226f1-2899-4563-8fcd-00d4177f8cc4.png" alt="Mystic Realms">
-                <div class="game-card-content">
-                    <h3>Mystic Realms</h3>
-                    <p>Фэнтези RPG с открытым миром, где каждый выбор влияет на судьбу королевства.</p>
-                    <a href="#" onclick="openModal('mystic'); return false;">Подробнее →</a>
-                </div>
-            </div>
-            <div class="game-card">
-                <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/17ba1f307-5055-4a79-a508-7e913f8c9f22.png" alt="Nexus-7">
-                <div class="game-card-content">
-                    <h3>Nexus-7</h3>
-                    <p>Тактический шутер в космосе с многопользовательским режимом и эпическими битвами.</p>
-                    <a href="#" onclick="openModal('nexus'); return false;">Подробнее →</a>
-                </div>
-            </div>
-            <div class="game-card">
-                <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1c351e2e1-74c8-40bf-ab3c-5b471a3f88ce.png" alt="Neon Racers">
-                <div class="game-card-content">
-                    <h3>Neon Racers</h3>
-                    <p>Аркадные гонки в стиле киберпанк с невероятной графикой и динамичным геймплеем.</p>
-                    <a href="#" onclick="openModal('neon'); return false;">Подробнее →</a>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- Web Games Section - Empire Tycoon Only -->
+<section id="webgames" class="py-20 px-4 bg-slate-800/50">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-12 fade-in">
+<h2 class="text-3xl md:text-4xl font-bold mb-4">🌐 Веб-Игры</h2>
+<p class="text-slate-400">Играйте прямо в браузере без установки! Бесплатно и доступно везде</p>
+</div>
+<!-- Single Featured Web Game - Empire Tycoon -->
+<div class="max-w-4xl mx-auto">
+<div class="game-card bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl overflow-hidden border border-slate-700 fade-in">
+<div class="grid md:grid-cols-2">
+<div class="relative h-64 md:h-auto">
+<img src="https://image.qwenlm.ai/public_source/c2e53587-7a67-43dd-94d9-ef8f608fabdf/175543622-820a-4583-9e69-f9c0993862fa.png" alt="Empire Tycoon" class="w-full h-full object-cover">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent md:hidden"></div>
+<span class="absolute top-4 left-4 px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-xs font-semibold">Браузер</span>
+</div>
+<div class="p-8 flex flex-col justify-center">
+<h3 class="text-2xl font-bold mb-3">🏢 Empire Tycoon</h3>
+<p class="text-slate-400 text-sm mb-6">Построй свою бизнес-империю с нуля! Начинай с маленького ларька и стань магнатом. Покупай бизнесы, нанимай менеджеров, получай пассивный доход и стань самым богатым предпринимателем!</p>
+<div class="flex flex-wrap gap-3 mb-6">
+<span class="px-3 py-1 bg-slate-700 rounded-full text-xs">💼 Бизнес</span>
+<span class="px-3 py-1 bg-slate-700 rounded-full text-xs">📈 Стратегия</span>
+<span class="px-3 py-1 bg-slate-700 rounded-full text-xs">⏱️ Idle</span>
+</div>
+<button onclick="launchGame()" class="play-btn w-full py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all flex items-center justify-center gap-3">
+<span>🎮 Играть</span>
+<i class="ri-external-link-line"></i>
+</button>
+<p class="text-xs text-slate-500 mt-4 text-center">✓ Бесплатно ✓ Без регистрации ✓ Мгновенный старт</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Other Web Games - Coming Soon -->
+<div class="max-w-2xl mx-auto mt-12">
+<div class="bg-slate-800/30 border border-slate-700/50 rounded-2xl p-8 text-center fade-in">
+<div class="text-4xl mb-4">🎯</div>
+<h4 class="text-xl font-bold mb-2 text-purple-400">Больше веб-игр скоро</h4>
+<p class="text-slate-400 text-sm">Мы работаем над новыми браузерными играми. Следите за обновлениями!</p>
+</div>
+</div>
+</div>
+</section>
 
-    <section id="about">
-        <h2 class="section-title">О Компании</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <p>Raites — инновационная игровая компания, создающая захватывающие миры с 2018 года. Наша миссия — дарить игрокам незабываемые эмоции через качественные игры.</p>
-                <p>Мы объединяем талантливых разработчиков, художников и дизайнеров со всего мира, чтобы создавать игры, которые вдохновляют и развлекают миллионы игроков.</p>
-                <p>Наша команда постоянно экспериментирует с новыми технологиями и игровыми механиками, чтобы каждый наш проект был уникальным.</p>
-                <div class="stats">
-                    <div class="stat-item">
-                        <h4>5+</h4>
-                        <p>Лет на рынке</p>
-                    </div>
-                    <div class="stat-item">
-                        <h4>10M+</h4>
-                        <p>Игроков</p>
-                    </div>
-                    <div class="stat-item">
-                        <h4>15+</h4>
-                        <p>Игр выпущено</p>
-                    </div>
-                    <div class="stat-item">
-                        <h4>50+</h4>
-                        <p>Наград</p>
-                    </div>
-                </div>
-            </div>
-            <div class="about-image">
-                <img src="https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1285226f1-2899-4563-8fcd-00d4177f8cc4.png" alt="О компании">
-            </div>
-        </div>
-    </section>
+<!-- About Section -->
+<section id="about" class="py-20 px-4">
+<div class="max-w-7xl mx-auto">
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div class="fade-in">
+<h2 class="text-3xl md:text-4xl font-bold mb-6">О Компании</h2>
+<p class="text-slate-400 mb-6">Raites — инновационная игровая компания, создающая захватывающие миры с 2018 года. Наша миссия — дарить игрокам незабываемые эмоции через качественные игры.</p>
+<p class="text-slate-400 mb-6">Мы объединяем талантливых разработчиков, художников и дизайнеров со всего мира, чтобы создавать игры, которые вдохновляют и развлекают миллионы игроков.</p>
+<p class="text-slate-400">Наша команда постоянно экспериментирует с новыми технологиями и игровыми механиками, чтобы каждый наш проект был уникальным.</p>
+</div>
+<div class="grid grid-cols-2 gap-6 fade-in">
+<div class="bg-slate-800 p-6 rounded-2xl text-center">
+<div class="text-4xl font-bold text-blue-400 mb-2">5+</div>
+<div class="text-slate-400 text-sm">Лет на рынке</div>
+</div>
+<div class="bg-slate-800 p-6 rounded-2xl text-center">
+<div class="text-4xl font-bold text-purple-400 mb-2">10M+</div>
+<div class="text-slate-400 text-sm">Игроков</div>
+</div>
+<div class="bg-slate-800 p-6 rounded-2xl text-center">
+<div class="text-4xl font-bold text-green-400 mb-2">15+</div>
+<div class="text-slate-400 text-sm">Игр выпущено</div>
+</div>
+<div class="bg-slate-800 p-6 rounded-2xl text-center">
+<div class="text-4xl font-bold text-yellow-400 mb-2">50+</div>
+<div class="text-slate-400 text-sm">Наград</div>
+</div>
+</div>
+</div>
+</div>
+</section>
 
-    <section id="news">
-        <h2 class="section-title">Новости</h2>
-        <div class="news-grid">
-            <div class="news-card">
-                <p class="news-date">15 Января 2024</p>
-                <h3>Анонс новой игры</h3>
-                <p>Мы рады представить наш новый проект — эпическую RPG в открытом мире с революционной системой боя.</p>
-                <a href="#" onclick="openModal('news1'); return false;">Читать далее →</a>
-            </div>
-            <div class="news-card">
-                <p class="news-date">8 Января 2024</p>
-                <h3>Обновление Nexus-7</h3>
-                <p>Вышло крупное обновление с новыми картами, оружием и режимом игры для 64 игроков.</p>
-                <a href="#" onclick="openModal('news2'); return false;">Читать далее →</a>
-            </div>
-            <div class="news-card">
-                <p class="news-date">1 Января 2024</p>
-                <h3>Итоги года</h3>
-                <p>Благодарим всех игроков за поддержку! 2023 год стал для нас рекордным по всем показателям.</p>
-                <a href="#" onclick="openModal('news3'); return false;">Читать далее →</a>
-            </div>
-        </div>
-    </section>
+<!-- News Section - UPDATED -->
+<section id="news" class="py-20 px-4 bg-slate-800/50">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Новости</h2>
+<p class="text-slate-400 text-center mb-12 fade-in">Последние события из жизни студии</p>
+<div class="grid md:grid-cols-1 gap-8 max-w-3xl mx-auto">
+<!-- News 1 - Empire Tycoon Launch -->
+<div class="bg-slate-800 rounded-2xl p-6 fade-in border-2 border-blue-500/30">
+<div class="flex items-center gap-3 mb-3">
+<div class="text-blue-400 text-sm">17 Марта 2026</div>
+<span class="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-xs font-semibold">🎮 Новый релиз</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Empire Tycoon теперь доступна!</h3>
+<p class="text-slate-400 text-sm mb-4">Мы рады сообщить о запуске нашей новой веб-игры Empire Tycoon! Постройте свою бизнес-империю с нуля прямо в браузере. Игра полностью бесплатна и не требует регистрации. Покупайте бизнесы, нанимайте менеджеров и станьте самым богатым магнатом!</p>
+<div class="flex flex-wrap gap-3 mb-4">
+<span class="px-3 py-1 bg-slate-700 rounded-full text-xs">💼 Бизнес</span>
+<span class="px-3 py-1 bg-slate-700 rounded-full text-xs">📈 Стратегия</span>
+<span class="px-3 py-1 bg-slate-700 rounded-full text-xs">⏱️ Idle</span>
+</div>
+<a href="#webgames" class="text-blue-400 hover:text-blue-300 font-semibold inline-flex items-center gap-2">
+Играть сейчас <span>→</span>
+</a>
+</div>
+<!-- News 2 - Coming Soon -->
+<div class="bg-slate-800/50 rounded-2xl p-6 fade-in border border-slate-700">
+<div class="text-slate-500 text-sm mb-3">Скоро</div>
+<h3 class="text-xl font-bold mb-3 text-slate-400">Больше новостей впереди</h3>
+<p class="text-slate-500 text-sm">Следите за обновлениями! Мы готовим много интересного контента для наших игроков.</p>
+</div>
+</div>
+</div>
+</section>
 
-    <section id="support">
-        <h2 class="section-title">Поддержка</h2>
-        <div class="support-content">
-            <div class="faq-item">
-                <h4>Как связаться с поддержкой?</h4>
-                <p>Вы можете написать нам на email <a href="mailto:raites158@gmail.com">raites158@gmail.com</a> или использовать форму обратной связи на сайте. Мы отвечаем в течение 24 часов.</p>
-            </div>
-            <div class="faq-item">
-                <h4>Где скачать игры?</h4>
-                <p>Все наши игры доступны в Steam, Epic Games Store и на официальном сайте в разделе "Игры".</p>
-            </div>
-            <div class="faq-item">
-                <h4>Есть ли у игр системные требования?</h4>
-                <p>Да, полные системные требования указаны на странице каждой игры в магазинах и на нашем сайте.</p>
-            </div>
-            <div class="faq-item">
-                <h4>Можно ли вернуть игру?</h4>
-                <p>Возврат осуществляется согласно политике магазина, где была приобретена игра (обычно в течение 14 дней).</p>
-            </div>
-        </div>
-    </section>
+<!-- Support Section -->
+<section id="support" class="py-20 px-4">
+<div class="max-w-4xl mx-auto">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Поддержка</h2>
+<p class="text-slate-400 text-center mb-12 fade-in">Ответы на частые вопросы</p>
+<div class="space-y-6 fade-in">
+<div class="bg-slate-800 rounded-2xl p-6">
+<h3 class="text-lg font-bold mb-3">Как связаться с поддержкой?</h3>
+<p class="text-slate-400">Вы можете написать нам на email <a href="mailto:raites158@gmail.com" class="text-blue-400 hover:underline">raites158@gmail.com</a> или использовать форму обратной связи на сайте. Мы отвечаем в течение 24 часов.</p>
+</div>
+<div class="bg-slate-800 rounded-2xl p-6">
+<h3 class="text-lg font-bold mb-3">Где играть в веб-игры?</h3>
+<p class="text-slate-400">Все наши веб-игры доступны прямо в браузере в разделе "Веб-игры". Установка не требуется!</p>
+</div>
+<div class="bg-slate-800 rounded-2xl p-6">
+<h3 class="text-lg font-bold mb-3">Нужно ли регистрироваться?</h3>
+<p class="text-slate-400">Нет, все наши веб-игры полностью бесплатны и не требуют регистрации. Просто откройте и играйте!</p>
+</div>
+<div class="bg-slate-800 rounded-2xl p-6">
+<h3 class="text-lg font-bold mb-3">Будут ли новые игры?</h3>
+<p class="text-slate-400">Да! Мы постоянно работаем над новыми проектами. Следите за разделом "Новости" для получения последней информации.</p>
+</div>
+</div>
+</div>
+</section>
 
-    <section id="contact">
-        <h2 class="section-title">Контакты</h2>
-        <div class="contact-content">
-            <div class="contact-info">
-                <h3>Свяжитесь с нами</h3>
+<!-- Contact Section -->
+<section id="contact" class="py-20 px-4 bg-slate-800/50">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Контакты</h2>
+<p class="text-slate-400 text-center mb-12 fade-in">Свяжитесь с нами любым удобным способом</p>
+<div class="contact-content">
+<div class="contact-info">
+<h3>Свяжитесь с нами</h3>
+<div class="contact-info-item">
+<span>📧</span>
+<div>
+<p class="label">Email</p>
+<p><a href="mailto:raites158@gmail.com">raites158@gmail.com</a></p>
+<p style="font-size: 0.85rem; color: #a29bfe;">Отвечаем в течение 24 часов</p>
+</div>
+</div>
+<div class="contact-info-item">
+<span>📞</span>
+<div>
+<p class="label">Телефон</p>
+<p><a href="tel:+79022707213">+7 (902) 270-72-13</a></p>
+<p style="font-size: 0.85rem; color: #a29bfe;">Пн-Пт: 10:00 - 19:00 (МСК)</p>
+</div>
+</div>
+<div class="contact-info-item">
+<span>📍</span>
+<div>
+<p class="label">Адрес</p>
+<p>Москва, ул. Геймеров, д. 2024</p>
+<p style="font-size: 0.85rem; color: #a29bfe;">Офис 404, 4 этаж</p>
+</div>
+</div>
+<div class="contact-info-item">
+<span>🕐</span>
+<div>
+<p class="label">Режим работы</p>
+<p>Пн-Пт: 10:00 - 19:00</p>
+<p style="font-size: 0.85rem; color: #a29bfe;">Сб-Вс: Выходной</p>
+</div>
+</div>
+<div class="contact-social">
+<h4>Мы в социальных сетях</h4>
+<div class="contact-social-links">
+<a href="#" title="VKontakte">📘</a>
+<a href="#" title="Telegram">✈️</a>
+<a href="#" title="YouTube">📺</a>
+<a href="#" title="Discord">🎮</a>
+<a href="#" title="Twitter">🐦</a>
+</div>
+</div>
+<div class="contact-map">
+<p>🗺️ Посмотреть на карте</p>
+<a href="https://yandex.ru/maps" target="_blank">Открыть в Яндекс.Картах →</a>
+</div>
+<div class="contact-features">
+<div class="contact-feature">
+<span>⚡</span>
+<p>Быстрый ответ</p>
+</div>
+<div class="contact-feature">
+<span>🔒</span>
+<p>Конфиденциально</p>
+</div>
+<div class="contact-feature">
+<span>🌍</span>
+<p>Работаем worldwide</p>
+</div>
+<div class="contact-feature">
+<span>💬</span>
+<p>Поддержка 24/7</p>
+</div>
+</div>
+</div>
+<div class="contact-form">
+<h3>Отправить письмо на raites158@gmail.com</h3>
+<p class="form-desc">Заполните форму ниже и мы свяжемся с вами в ближайшее время. Все поля обязательны для заполнения.</p>
+<form id="contactForm">
+<div class="form-row">
+<div class="form-group">
+<label for="user_name">Ваше имя *</label>
+<input type="text" id="user_name" name="user_name" required placeholder="Иван Иванов">
+</div>
+<div class="form-group">
+<label for="user_email">Email *</label>
+<input type="email" id="user_email" name="user_email" required placeholder="example@mail.ru">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label for="user_phone">Телефон</label>
+<input type="tel" id="user_phone" name="user_phone" placeholder="+7 (___) ___-__-__" maxlength="18">
+</div>
+<div class="form-group">
+<label for="subject">Тема *</label>
+<select id="subject" name="subject" required>
+<option value="">Выберите тему</option>
+<option value="Техническая поддержка">Техническая поддержка</option>
+<option value="Сотрудничество">Сотрудничество</option>
+<option value="Обратная связь">Обратная связь</option>
+<option value="Пресса / СМИ">Пресса / СМИ</option>
+<option value="Другое">Другое</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label for="message">Сообщение *</label>
+<textarea id="message" name="message" required placeholder="Опишите ваш вопрос или предложение подробно..."></textarea>
+</div>
+<button type="submit" class="submit-btn" id="submitBtn">
+<span>📤</span> Отправить
+</button>
+<div class="form-status" id="formStatus"></div>
+</form>
+</div>
+</div>
+</div>
+</section>
 
-                <div class="contact-info-item">
-                    <span>📧</span>
-                    <div>
-                        <p class="label">Email</p>
-                        <p><a href="mailto:raites158@gmail.com">raites158@gmail.com</a></p>
-                        <p style="font-size: 0.85rem; color: #a29bfe;">Отвечаем в течение 24 часов</p>
-                    </div>
-                </div>
+<!-- Footer -->
+<footer class="bg-slate-900 border-t border-slate-800 py-12 px-4">
+<div class="max-w-7xl mx-auto">
+<div class="grid md:grid-cols-4 gap-8 mb-8">
+<div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold text-xl">R</div>
+<div>
+<div class="font-bold">RAITES</div>
+<div class="text-slate-400 text-sm">Создаём миры, в которые хочется возвращаться.</div>
+</div>
+</div>
+<div class="flex gap-3">
+<a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">📘</a>
+<a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-sky-500 transition-colors">🐦</a>
+<a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors">📷</a>
+<a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors">🎮</a>
+</div>
+</div>
+<div>
+<h4 class="font-bold mb-4">Игры</h4>
+<ul class="space-y-2 text-slate-400">
+<li class="text-slate-500">Скоро появятся</li>
+<li class="text-slate-500">Следите за обновлениями</li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4">Веб-Игры</h4>
+<ul class="space-y-2 text-slate-400">
+<li><a href="#webgames" class="hover:text-white transition-colors">Empire Tycoon</a></li>
+<li class="text-slate-500">Больше скоро</li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4">Компания</h4>
+<ul class="space-y-2 text-slate-400">
+<li><a href="#about" class="hover:text-white transition-colors">О нас</a></li>
+<li><a href="#" class="hover:text-white transition-colors">Карьера</a></li>
+<li><a href="#" class="hover:text-white transition-colors">Пресс-кит</a></li>
+<li><a href="#" class="hover:text-white transition-colors">Партнёрам</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-slate-400 text-sm">© 2026 Raites</p>
+<div class="flex gap-6 text-slate-400 text-sm">
+<a href="#" class="hover:text-white transition-colors">Политика конфиденциальности</a>
+<a href="#" class="hover:text-white transition-colors">Условия обслуживания</a>
+</div>
+</div>
+</div>
+</footer>
 
-                <div class="contact-info-item">
-                    <span>📞</span>
-                    <div>
-                        <p class="label">Телефон</p>
-                        <p><a href="tel:+79022707213">+7 (902) 270-72-13</a></p>
-                        <p style="font-size: 0.85rem; color: #a29bfe;">Пн-Пт: 10:00 - 19:00 (МСК)</p>
-                    </div>
-                </div>
+<!-- Game Transition Overlay -->
+<div class="game-transition" id="gameTransition">
+<div class="text-center">
+<div class="game-loader mx-auto"></div>
+<div class="game-title">Запуск Empire Tycoon...</div>
+</div>
+</div>
 
-                <div class="contact-info-item">
-                    <span>📍</span>
-                    <div>
-                        <p class="label">Адрес</p>
-                        <p>Москва, ул. Геймеров, д. 2024</p>
-                        <p style="font-size: 0.85rem; color: #a29bfe;">Офис 404, 4 этаж</p>
-                    </div>
-                </div>
+<script>
+// Scroll Animation
+const fadeElements = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('visible');
+}
+});
+}, { threshold: 0.1 });
+fadeElements.forEach(el => observer.observe(el));
 
-                <div class="contact-info-item">
-                    <span>🕐</span>
-                    <div>
-                        <p class="label">Режим работы</p>
-                        <p>Пн-Пт: 10:00 - 19:00</p>
-                        <p style="font-size: 0.85rem; color: #a29bfe;">Сб-Вс: Выходной</p>
-                    </div>
-                </div>
+// Game Launch Function with Transition
+function launchGame() {
+const transition = document.getElementById('gameTransition');
+transition.classList.add('active');
+setTimeout(() => {
+window.location.href = '../web-games/game-empire.html';
+}, 1500);
+}
 
-                <div class="contact-social">
-                    <h4>Мы в социальных сетях</h4>
-                    <div class="social-links">
-                        <a href="#" title="VKontakte">📘</a>
-                        <a href="#" title="Telegram">✈️</a>
-                        <a href="#" title="YouTube">📺</a>
-                        <a href="#" title="Discord">🎮</a>
-                        <a href="#" title="Twitter">🐦</a>
-                    </div>
-                </div>
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+const target = document.querySelector(this.getAttribute('href'));
+if (target) {
+target.scrollIntoView({ behavior: 'smooth' });
+}
+});
+});
 
-                <div class="contact-map">
-                    <p>🗺️ Посмотреть на карте</p>
-                    <a href="https://yandex.ru/maps" target="_blank">Открыть в Яндекс.Картах →</a>
-                </div>
+// Phone Mask +7 (___) ___-__-__
+const phoneInput = document.getElementById('user_phone');
+phoneInput.addEventListener('input', function(e) {
+let value = e.target.value.replace(/\D/g, '');
+if (value.length > 0) {
+if (value[0] === '7') {
+value = value.substring(1);
+}
+if (value[0] === '8') {
+value = value.substring(1);
+}
+}
+value = value.substring(0, 10);
+let formattedValue = '+7';
+if (value.length > 0) {
+formattedValue += ' (';
+formattedValue += value.substring(0, 3);
+}
+if (value.length > 3) {
+formattedValue += ') ';
+formattedValue += value.substring(3, 6);
+}
+if (value.length > 6) {
+formattedValue += '-';
+formattedValue += value.substring(6, 8);
+}
+if (value.length > 8) {
+formattedValue += '-';
+formattedValue += value.substring(8, 10);
+}
+e.target.value = formattedValue;
+});
 
-                <div class="contact-features">
-                    <div class="contact-feature">
-                        <span>⚡</span>
-                        <p>Быстрый ответ</p>
-                    </div>
-                    <div class="contact-feature">
-                        <span>🔒</span>
-                        <p>Конфиденциально</p>
-                    </div>
-                    <div class="contact-feature">
-                        <span>🌍</span>
-                        <p>Работаем worldwide</p>
-                    </div>
-                    <div class="contact-feature">
-                        <span>💬</span>
-                        <p>Поддержка 24/7</p>
-                    </div>
-                </div>
-            </div>
+phoneInput.addEventListener('keydown', function(e) {
+if ([8, 9, 13, 27, 46].indexOf(e.keyCode) !== -1 ||
+(e.keyCode === 65 && e.ctrlKey === true) ||
+(e.keyCode === 67 && e.ctrlKey === true) ||
+(e.keyCode === 86 && e.ctrlKey === true) ||
+(e.keyCode === 88 && e.ctrlKey === true) ||
+(e.keyCode >= 35 && e.keyCode <= 39)) {
+return;
+}
+if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) &&
+(e.keyCode < 96 || e.keyCode > 105)) {
+e.preventDefault();
+}
+});
 
-            <div class="contact-form">
-                <h3>Отправить письмо на raites158@gmail.com</h3>
-                <p class="form-desc">Заполните форму ниже и мы свяжемся с вами в ближайшее время. Все поля обязательны для заполнения.</p>
-                <form id="contactForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="user_name">Ваше имя *</label>
-                            <input type="text" id="user_name" name="user_name" required placeholder="Иван Иванов">
-                        </div>
-                        <div class="form-group">
-                            <label for="user_email">Email *</label>
-                            <input type="email" id="user_email" name="user_email" required placeholder="example@mail.ru">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="user_phone">Телефон</label>
-                            <input type="tel" id="user_phone" name="user_phone" placeholder="+7 (___) ___-__-__" maxlength="18">
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Тема *</label>
-                            <select id="subject" name="subject" required>
-                                <option value="">Выберите тему</option>
-                                <option value="Техническая поддержка">Техническая поддержка</option>
-                                <option value="Сотрудничество">Сотрудничество</option>
-                                <option value="Обратная связь">Обратная связь</option>
-                                <option value="Пресса / СМИ">Пресса / СМИ</option>
-                                <option value="Другое">Другое</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Сообщение *</label>
-                        <textarea id="message" name="message" required placeholder="Опишите ваш вопрос или предложение подробно..."></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn" id="submitBtn">
-                        <span>📤</span> Отправить
-                    </button>
-                    <div class="form-status" id="formStatus"></div>
-                </form>
-            </div>
-        </div>
-    </section>
+phoneInput.addEventListener('focus', function() {
+if (this.value === '') {
+this.value = '+7 (';
+}
+});
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>RAITES</h4>
-                <p style="color: #b2bec3;">Создаём миры, в которые хочется возвращаться.</p>
-                <div class="social-links" style="margin-top: 1rem;">
-                    <a href="#">📘</a>
-                    <a href="#">🐦</a>
-                    <a href="#">📷</a>
-                    <a href="#">🎮</a>
-                </div>
-            </div>
-            <div class="footer-section">
-                <h4>Игры</h4>
-                <ul>
-                    <li><a href="#" onclick="openModal('mystic'); return false;">Mystic Realms</a></li>
-                    <li><a href="#" onclick="openModal('nexus'); return false;">Nexus-7</a></li>
-                    <li><a href="#" onclick="openModal('neon'); return false;">Neon Racers</a></li>
-                    <li><a href="#games">Все игры</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Компания</h4>
-                <ul>
-                    <li><a href="#about">О нас</a></li>
-                    <li><a href="#">Карьера</a></li>
-                    <li><a href="#">Пресс-кит</a></li>
-                    <li><a href="#">Партнёрам</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Поддержка</h4>
-                <ul>
-                    <li><a href="#support">FAQ</a></li>
-                    <li><a href="#contact">Контакты</a></li>
-                    <li><a href="#">Форум</a></li>
-                    <li><a href="#">Статус серверов</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2024 Raites | <a href="#">Политика конфиденциальности</a> | <a href="#">Условия обслуживания</a></p>
-        </div>
-    </footer>
+phoneInput.addEventListener('blur', function() {
+if (this.value === '+7 (') {
+this.value = '';
+}
+});
 
-    <div class="modal" id="gameModal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <img id="modalImg" src="" alt="">
-            <h3 id="modalTitle"></h3>
-            <p id="modalDesc"></p>
-        </div>
-    </div>
-
-    <script>
-        // Маска для телефона +7 (___) ___-__-__
-        const phoneInput = document.getElementById('user_phone');
-
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, ''); // Удаляем все нецифровые символы
-
-            // Если начинаем вводить, добавляем 7 в начале
-            if (value.length > 0) {
-                if (value[0] === '7') {
-                    value = value.substring(1);
-                }
-                if (value[0] === '8') {
-                    value = value.substring(1);
-                }
-            }
-
-            // Ограничиваем до 10 цифр
-            value = value.substring(0, 10);
-
-            // Форматируем
-            let formattedValue = '+7';
-            if (value.length > 0) {
-                formattedValue += ' (';
-                formattedValue += value.substring(0, 3);
-            }
-            if (value.length > 3) {
-                formattedValue += ') ';
-                formattedValue += value.substring(3, 6);
-            }
-            if (value.length > 6) {
-                formattedValue += '-';
-                formattedValue += value.substring(6, 8);
-            }
-            if (value.length > 8) {
-                formattedValue += '-';
-                formattedValue += value.substring(8, 10);
-            }
-
-            e.target.value = formattedValue;
-        });
-
-        phoneInput.addEventListener('keydown', function(e) {
-            // Разрешаем backspace, delete, tab, escape, enter
-            if ([8, 9, 13, 27, 46].indexOf(e.keyCode) !== -1 ||
-                // Разрешаем Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
-                (e.keyCode === 65 && e.ctrlKey === true) ||
-                (e.keyCode === 67 && e.ctrlKey === true) ||
-                (e.keyCode === 86 && e.ctrlKey === true) ||
-                (e.keyCode === 88 && e.ctrlKey === true) ||
-                // Разрешаем home, end, left, right
-                (e.keyCode >= 35 && e.keyCode <= 39)) {
-                return;
-            }
-
-            // Запрещаем всё кроме цифр
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) &&
-                (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
-            }
-        });
-
-        phoneInput.addEventListener('focus', function() {
-            if (this.value === '') {
-                this.value = '+7 (';
-            }
-        });
-
-        phoneInput.addEventListener('blur', function() {
-            if (this.value === '+7 (') {
-                this.value = '';
-            }
-        });
-
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.getElementById('navMenu');
-
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-            });
-        });
-
-        const modalData = {
-            mystic: {
-                title: 'Mystic Realms',
-                img: 'https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1285226f1-2899-4563-8fcd-00d4177f8cc4.png',
-                desc: 'Погрузитесь в загадочный мир древней магии и кристальных земель. Эпическое приключение ждёт вас! Фэнтези RPG с открытым миром, где каждый выбор влияет на судьбу королевства.'
-            },
-            nexus: {
-                title: 'Nexus-7',
-                img: 'https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/17ba1f307-5055-4a79-a508-7e913f8c9f22.png',
-                desc: 'Научно-фантастический шутер в космических просторах. Сражайтесь за выживание человечества! Тактический шутер в космосе с многопользовательским режимом и эпическими битвами.'
-            },
-            neon: {
-                title: 'Neon Racers',
-                img: 'https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1c351e2e1-74c8-40bf-ab3c-5b471a3f88ce.png',
-                desc: 'Скоростные гонки в киберпанк городе будущего. Почувствуйте адреналин на неоновых трассах! Аркадные гонки в стиле киберпанк с невероятной графикой и динамичным геймплеем.'
-            },
-            news1: {
-                title: 'Анонс новой игры',
-                img: 'https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1285226f1-2899-4563-8fcd-00d4177f8cc4.png',
-                desc: '15 Января 2024. Мы рады представить наш новый проект — эпическую RPG в открытом мире с революционной системой боя. Следите за обновлениями!'
-            },
-            news2: {
-                title: 'Обновление Nexus-7',
-                img: 'https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/17ba1f307-5055-4a79-a508-7e913f8c9f22.png',
-                desc: '8 Января 2024. Вышло крупное обновление с новыми картами, оружием и режимом игры для 64 игроков. Обновляйтесь и наслаждайтесь новым контентом!'
-            },
-            news3: {
-                title: 'Итоги года',
-                img: 'https://image.qwenlm.ai/public_source/e852dab7-15d8-44d7-9406-0c76f1b76fb0/1c351e2e1-74c8-40bf-ab3c-5b471a3f88ce.png',
-                desc: '1 Января 2024. Благодарим всех игроков за поддержку! 2023 год стал для нас рекордным по всем показателям. Спасибо, что вы с нами!'
-            }
-        };
-
-        function openModal(key) {
-            const modal = document.getElementById('gameModal');
-            const data = modalData[key];
-            if (data) {
-                document.getElementById('modalImg').src = data.img;
-                document.getElementById('modalTitle').textContent = data.title;
-                document.getElementById('modalDesc').textContent = data.desc;
-                modal.classList.add('active');
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('gameModal').classList.remove('active');
-        }
-
-        document.getElementById('gameModal').addEventListener('click', (e) => {
-            if (e.target.id === 'gameModal') {
-                closeModal();
-            }
-        });
-
-        document.getElementById('contactForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const submitBtn = document.getElementById('submitBtn');
-            const formStatus = document.getElementById('formStatus');
-            const originalText = submitBtn.innerHTML;
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span>⏳</span> Отправка...';
-            formStatus.className = 'form-status';
-            formStatus.style.display = 'none';
-
-            emailjs.sendForm('service_6u5en3m', 'template_aj1z0ff', this)
-                .then(function() {
-                    console.log('SUCCESS!');
-                    submitBtn.innerHTML = '<span>✅</span> Отправлено!';
-                    formStatus.textContent = 'Спасибо! Ваше сообщение успешно отправлено. Мы ответим в течение 24 часов.';
-                    formStatus.className = 'form-status success';
-                    formStatus.style.display = 'block';
-                    document.getElementById('contactForm').reset();
-
-                    setTimeout(() => {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalText;
-                        formStatus.style.display = 'none';
-                    }, 5000);
-                }, function(error) {
-                    console.log('FAILED...', error);
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                    formStatus.textContent = 'Ошибка отправки. Пожалуйста, попробуйте позже или напишите нам напрямую на raites158@gmail.com';
-                    formStatus.className = 'form-status error';
-                    formStatus.style.display = 'block';
-                });
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                if (href !== '#') {
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                }
-            });
-        });
-
-        const carouselTrack = document.getElementById('carouselTrack');
-        const carouselPrev = document.getElementById('carouselPrev');
-        const carouselNext = document.getElementById('carouselNext');
-        let carouselIndex = 0;
-
-        carouselNext.addEventListener('click', () => {
-            const cards = document.querySelectorAll('.carousel-card');
-            carouselIndex = (carouselIndex + 1) % cards.length;
-            carouselTrack.style.transform = `translateX(-${carouselIndex * 100}%)`;
-        });
-
-        carouselPrev.addEventListener('click', () => {
-            const cards = document.querySelectorAll('.carousel-card');
-            carouselIndex = (carouselIndex - 1 + cards.length) % cards.length;
-            carouselTrack.style.transform = `translateX(-${carouselIndex * 100}%)`;
-        });
-    </script>
+// EmailJS Form Submission
+document.getElementById('contactForm').addEventListener('submit', function(event) {
+event.preventDefault();
+const submitBtn = document.getElementById('submitBtn');
+const formStatus = document.getElementById('formStatus');
+const originalText = submitBtn.innerHTML;
+submitBtn.disabled = true;
+submitBtn.innerHTML = '<span>⏳</span> Отправка...';
+formStatus.className = 'form-status';
+formStatus.style.display = 'none';
+emailjs.sendForm('service_6u5en3m', 'template_aj1z0ff', this)
+.then(function() {
+console.log('SUCCESS!');
+submitBtn.innerHTML = '<span>✅</span> Отправлено!';
+formStatus.textContent = 'Спасибо! Ваше сообщение успешно отправлено. Мы ответим в течение 24 часов.';
+formStatus.className = 'form-status success';
+formStatus.style.display = 'block';
+document.getElementById('contactForm').reset();
+setTimeout(() => {
+submitBtn.disabled = false;
+submitBtn.innerHTML = originalText;
+formStatus.style.display = 'none';
+}, 5000);
+}, function(error) {
+console.log('FAILED...', error);
+submitBtn.innerHTML = originalText;
+submitBtn.disabled = false;
+formStatus.textContent = 'Ошибка отправки. Пожалуйста, попробуйте позже или напишите нам напрямую на raites158@gmail.com';
+formStatus.className = 'form-status error';
+formStatus.style.display = 'block';
+});
+});
+</script>
 </body>
 </html>
+
