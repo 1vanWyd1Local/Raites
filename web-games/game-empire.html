@@ -2,10 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Empire Tycoon - Бизнес Империя</title>
     <style>
-        /* (стили без изменений, добавим только для нового модального окна) */
         * {
             margin: 0;
             padding: 0;
@@ -25,15 +24,24 @@
             margin: 0 auto;
         }
 
+        /* Верхняя панель с читами и кнопкой на главную */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
         .cheat-bar {
             display: flex;
-            justify-content: center;
             gap: 15px;
-            margin-bottom: 20px;
             padding: 15px;
             background: rgba(231, 76, 60, 0.2);
             border: 2px solid #e74c3c;
             border-radius: 15px;
+            flex-wrap: wrap;
         }
 
         .cheat-button {
@@ -51,6 +59,24 @@
         .cheat-button:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 20px rgba(231, 76, 60, 0.5);
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.5);
         }
 
         .header {
@@ -157,6 +183,7 @@
             color: #bdc3c7;
             cursor: pointer;
             font-weight: 600;
+            flex: 1 1 auto;
         }
 
         .tab-button:hover {
@@ -177,6 +204,20 @@
             display: block;
         }
 
+        /* Прокручиваемый список бизнесов */
+        #businesses {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* Для мобильных уменьшим высоту */
+        @media (max-width: 768px) {
+            #businesses {
+                max-height: 400px;
+            }
+        }
+
         .business-list, .upgrade-list {
             display: grid;
             gap: 15px;
@@ -190,10 +231,12 @@
             justify-content: space-between;
             align-items: center;
             border: 1px solid rgba(255,255,255,0.2);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .business-info {
-            flex: 1;
+            flex: 2 1 200px;
         }
 
         .business-name {
@@ -218,7 +261,6 @@
             border: none;
             border-radius: 5px;
             padding: 5px 10px;
-            margin-right: 10px;
             cursor: pointer;
             font-size: 1.2rem;
             transition: 0.2s;
@@ -238,6 +280,7 @@
             font-weight: 600;
             cursor: pointer;
             min-width: 150px;
+            font-size: 0.9rem;
         }
 
         .buy-button:disabled {
@@ -282,6 +325,7 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 20px;
         }
 
         .modal-overlay.active {
@@ -294,8 +338,10 @@
             border-radius: 20px;
             padding: 40px;
             max-width: 500px;
-            width: 90%;
+            width: 100%;
             text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-title {
@@ -309,6 +355,7 @@
             gap: 15px;
             justify-content: center;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
 
         .modal-button {
@@ -410,13 +457,49 @@
             color: #bdc3c7;
             margin-top: 15px;
         }
+
+        /* Дополнительная адаптация для очень маленьких экранов */
+        @media (max-width: 480px) {
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+            .stat-card {
+                padding: 10px;
+            }
+            .stat-value {
+                font-size: 1.2rem;
+            }
+            .click-button {
+                width: 150px;
+                height: 150px;
+                font-size: 1.2rem;
+            }
+            .click-button .icon {
+                font-size: 2rem;
+            }
+            .buy-button {
+                min-width: 120px;
+                padding: 8px 15px;
+            }
+            .tab-button {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            .business-card {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="cheat-bar">
-            <button class="cheat-button" id="cheatMoneyBtn">💰 +$1 Триллион</button>
-            <button class="cheat-button" id="cheatResetBtn">🔄 Сбросить Прогресс</button>
+        <!-- Верхняя панель: кнопка дома и читы -->
+        <div class="top-bar">
+            <a href="../index.html" class="home-button">← На главную</a>
+            <div class="cheat-bar">
+                <button class="cheat-button" id="cheatMoneyBtn">💰 +$1 Триллион</button>
+                <button class="cheat-button" id="cheatResetBtn">🔄 Сбросить Прогресс</button>
+            </div>
         </div>
 
         <header class="header">
@@ -458,7 +541,7 @@
             <div>
                 <div class="tabs">
                     <button class="tab-button active" data-tab="businesses">🏢 Бизнесы</button>
-                    <button class="tab-button" data-tab="upgrades">⚡ Глобальные улучшения</button>
+                    <button class="tab-button" data-tab="upgrades">⚡ Глобальные</button>
                     <button class="tab-button" data-tab="prestige">👑 Престиж</button>
                     <button class="tab-button" data-tab="stats">📊 Статистика</button>
                 </div>
@@ -569,69 +652,141 @@
         let clickValue = 1;
         let prestigeLevel = 0;
         let prestigeMultiplier = 1;
-        let bonusMultiplier = 1; // множитель за победу
+        let bonusMultiplier = 1;
         let totalClicks = 0;
         let totalEarned = 0;
-        let prestigeTargetIndex = 5; // банк
+        let prestigeTargetIndex = 5; // банк (индекс 5 в новом списке)
 
-        const MAX_PRESTIGE_LEVEL = 10; // максимальный уровень престижа для победы
+        const MAX_PRESTIGE_LEVEL = 10;
 
-        // ==================== BUSINESS DATA (с улучшениями) ====================
+        // ==================== BUSINESS DATA (18 бизнесов с улучшениями) ====================
         const businesses = [
-            {
+            // Существующие 8 бизнесов
+            { 
                 id: 0, name: '📰 Газетный киоск', baseCost: 15, baseIncome: 0.5, owned: 0,
                 upgrades: [
                     { name: 'Яркие заголовки', desc: '+50% доход от киосков', cost: 100, purchased: false, bonus: 0.5 },
                     { name: 'Расширение сети', desc: '+100% доход от киосков', cost: 500, purchased: false, bonus: 1.0 }
                 ]
             },
-            {
+            { 
                 id: 1, name: '🍕 Пиццерия', baseCost: 100, baseIncome: 3, owned: 0,
                 upgrades: [
                     { name: 'Новая печь', desc: '+50% доход от пиццерий', cost: 500, purchased: false, bonus: 0.5 },
                     { name: 'Франшиза', desc: '+100% доход от пиццерий', cost: 2000, purchased: false, bonus: 1.0 }
                 ]
             },
-            {
+            { 
                 id: 2, name: '🚗 Такси', baseCost: 500, baseIncome: 10, owned: 0,
                 upgrades: [
                     { name: 'Современный автопарк', desc: '+50% доход от такси', cost: 2500, purchased: false, bonus: 0.5 },
                     { name: 'Агрегатор', desc: '+100% доход от такси', cost: 10000, purchased: false, bonus: 1.0 }
                 ]
             },
-            {
+            { 
                 id: 3, name: '🏪 Супермаркет', baseCost: 2000, baseIncome: 40, owned: 0,
                 upgrades: [
                     { name: 'Складские помещения', desc: '+50% доход от супермаркетов', cost: 10000, purchased: false, bonus: 0.5 },
                     { name: 'Сеть магазинов', desc: '+100% доход от супермаркетов', cost: 40000, purchased: false, bonus: 1.0 }
                 ]
             },
-            {
+            { 
                 id: 4, name: '🏨 Отель', baseCost: 10000, baseIncome: 150, owned: 0,
                 upgrades: [
                     { name: 'SPA-комплекс', desc: '+50% доход от отелей', cost: 50000, purchased: false, bonus: 0.5 },
                     { name: 'Международная сеть', desc: '+100% доход от отелей', cost: 200000, purchased: false, bonus: 1.0 }
                 ]
             },
-            {
+            { 
                 id: 5, name: '🏦 Банк', baseCost: 50000, baseIncome: 500, owned: 0,
                 upgrades: [
                     { name: 'Инвестиционный отдел', desc: '+50% доход от банков', cost: 250000, purchased: false, bonus: 0.5 },
                     { name: 'Холдинг', desc: '+100% доход от банков', cost: 1000000, purchased: false, bonus: 1.0 }
                 ]
             },
-            {
+            { 
                 id: 6, name: '✈️ Авиакомпания', baseCost: 200000, baseIncome: 2000, owned: 0,
                 upgrades: [
                     { name: 'Новые маршруты', desc: '+50% доход от авиакомпаний', cost: 1000000, purchased: false, bonus: 0.5 },
                     { name: 'Авиаальянс', desc: '+100% доход от авиакомпаний', cost: 4000000, purchased: false, bonus: 1.0 }
                 ]
             },
-            {
+            { 
                 id: 7, name: '🚀 Космическая компания', baseCost: 1000000, baseIncome: 10000, owned: 0,
                 upgrades: [
                     { name: 'Орбитальная станция', desc: '+50% доход от космоса', cost: 5000000, purchased: false, bonus: 0.5 },
                     { name: 'Колонизация Марса', desc: '+100% доход от космоса', cost: 20000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            // Новые 10 бизнесов
+            { 
+                id: 8, name: '🌐 Интернет-провайдер', baseCost: 5000000, baseIncome: 50000, owned: 0,
+                upgrades: [
+                    { name: 'Оптоволокно', desc: '+50% доход от провайдера', cost: 25000000, purchased: false, bonus: 0.5 },
+                    { name: 'Спутниковый интернет', desc: '+100% доход от провайдера', cost: 100000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            { 
+                id: 9, name: '💊 Фармацевтика', baseCost: 20000000, baseIncome: 200000, owned: 0,
+                upgrades: [
+                    { name: 'Лаборатория', desc: '+50% доход от фармы', cost: 100000000, purchased: false, bonus: 0.5 },
+                    { name: 'Вакцина', desc: '+100% доход от фармы', cost: 500000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            { 
+                id: 10, name: '🚙 Электромобили', baseCost: 80000000, baseIncome: 800000, owned: 0,
+                upgrades: [
+                    { name: 'Автопилот', desc: '+50% доход от электро', cost: 400000000, purchased: false, bonus: 0.5 },
+                    { name: 'Гигафабрика', desc: '+100% доход от электро', cost: 2000000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            { 
+                id: 11, name: '🎰 Отель-казино', baseCost: 300000000, baseIncome: 3000000, owned: 0,
+                upgrades: [
+                    { name: 'Шоу-программа', desc: '+50% доход от казино', cost: 1500000000, purchased: false, bonus: 0.5 },
+                    { name: 'VIP-зона', desc: '+100% доход от казино', cost: 6000000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            { 
+                id: 12, name: '📺 Медиахолдинг', baseCost: 1000000000, baseIncome: 10000000, owned: 0,
+                upgrades: [
+                    { name: 'Стриминг', desc: '+50% доход от медиа', cost: 5000000000, purchased: false, bonus: 0.5 },
+                    { name: 'Киновселенная', desc: '+100% доход от медиа', cost: 20000000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            { 
+                id: 13, name: '🔬 Нанотехнологии', baseCost: 5000000000, baseIncome: 50000000, owned: 0,
+                upgrades: [
+                    { name: 'Наноботы', desc: '+50% доход от нано', cost: 25000000000, purchased: false, bonus: 0.5 },
+                    { name: 'Молекулярный ассемблер', desc: '+100% доход от нано', cost: 100000000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            { 
+                id: 14, name: '🧬 Генная инженерия', baseCost: 20000000000, baseIncome: 200000000, owned: 0,
+                upgrades: [
+                    { name: 'CRISPR', desc: '+50% доход от генной', cost: 100000000000, purchased: false, bonus: 0.5 },
+                    { name: 'Бессмертие', desc: '+100% доход от генной', cost: 500000000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            { 
+                id: 15, name: '🤖 Робототехника', baseCost: 80000000000, baseIncome: 800000000, owned: 0,
+                upgrades: [
+                    { name: 'Искусственный интеллект', desc: '+50% доход от роботов', cost: 400000000000, purchased: false, bonus: 0.5 },
+                    { name: 'Андроиды', desc: '+100% доход от роботов', cost: 2000000000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            { 
+                id: 16, name: '🪐 Терраформинг Марса', baseCost: 300000000000, baseIncome: 3000000000, owned: 0,
+                upgrades: [
+                    { name: 'Атмосфера', desc: '+50% доход от терраформинга', cost: 1500000000000, purchased: false, bonus: 0.5 },
+                    { name: 'Океаны', desc: '+100% доход от терраформинга', cost: 6000000000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            { 
+                id: 17, name: '🌌 Межгалактический транспорт', baseCost: 1000000000000, baseIncome: 10000000000, owned: 0,
+                upgrades: [
+                    { name: 'Варп-двигатель', desc: '+50% доход от транспорта', cost: 5000000000000, purchased: false, bonus: 0.5 },
+                    { name: 'Порталы', desc: '+100% доход от транспорта', cost: 20000000000000, purchased: false, bonus: 1.0 }
                 ]
             }
         ];
@@ -696,10 +851,11 @@
 
         // ==================== HELPER FUNCTIONS ====================
         function formatMoney(amount) {
-            if (amount >= 1000000000000) return '$' + (amount / 1000000000000).toFixed(2) + 'T';
-            else if (amount >= 1000000000) return '$' + (amount / 1000000000).toFixed(2) + 'B';
-            else if (amount >= 1000000) return '$' + (amount / 1000000).toFixed(2) + 'M';
-            else if (amount >= 1000) return '$' + (amount / 1000).toFixed(2) + 'K';
+            if (amount >= 1e15) return '$' + (amount / 1e15).toFixed(2) + 'Q';
+            if (amount >= 1e12) return '$' + (amount / 1e12).toFixed(2) + 'T';
+            if (amount >= 1e9) return '$' + (amount / 1e9).toFixed(2) + 'B';
+            if (amount >= 1e6) return '$' + (amount / 1e6).toFixed(2) + 'M';
+            if (amount >= 1e3) return '$' + (amount / 1e3).toFixed(2) + 'K';
             return '$' + amount.toFixed(2);
         }
 
@@ -721,7 +877,6 @@
 
         function recalculateIncome() {
             let totalIncome = 0;
-            // Доход от бизнесов с учётом их улучшений
             for (let i = 0; i < businesses.length; i++) {
                 const b = businesses[i];
                 let mult = 1;
@@ -730,7 +885,6 @@
                 }
                 totalIncome += b.baseIncome * b.owned * mult;
             }
-            // Глобальные улучшения
             for (let i = 0; i < upgrades.length; i++) {
                 if (upgrades[i].purchased) {
                     if (upgrades[i].effect === 'income10') totalIncome *= 1.1;
@@ -804,7 +958,6 @@
             updateUpgradeButtons();
         }
 
-        // Построение списка бизнесов (с кнопкой улучшений)
         function buildBusinessList() {
             elements.businessList.innerHTML = '';
             businessElements = [];
@@ -855,7 +1008,6 @@
             }
         }
 
-        // Построение списка глобальных улучшений
         function buildUpgradeList() {
             elements.upgradeList.innerHTML = '';
             upgradeElements = [];
@@ -899,7 +1051,6 @@
             }
         }
 
-        // Покупка бизнеса
         function buyBusiness(index) {
             const business = businesses[index];
             const cost = getBusinessCost(business);
@@ -917,7 +1068,6 @@
             }
         }
 
-        // Покупка глобального улучшения
         function buyUpgrade(index) {
             const upgrade = upgrades[index];
 
@@ -929,14 +1079,13 @@
                 else if (upgrade.effect === 'click5') clickValue += 5;
 
                 recalculateIncome();
-                buildUpgradeList(); // перестроить список улучшений
+                buildUpgradeList();
                 updateUI();
                 saveGame();
                 showNotification('Улучшение куплено: ' + upgrade.name + '!');
             }
         }
 
-        // Покупка улучшения бизнеса
         function buyBusinessUpgrade(businessIndex, upgradeIndex) {
             const business = businesses[businessIndex];
             const upgrade = business.upgrades[upgradeIndex];
@@ -949,13 +1098,11 @@
             upgrade.purchased = true;
             recalculateIncome();
             updateUI();
-            // Обновить модальное окно (оно открыто)
             showBusinessUpgradesModal(businessIndex);
             saveGame();
             showNotification(`Улучшение "${upgrade.name}" куплено!`);
         }
 
-        // Показать модальное окно с улучшениями для конкретного бизнеса
         function showBusinessUpgradesModal(businessIndex) {
             const business = businesses[businessIndex];
             elements.businessUpgradeModalTitle.textContent = `Улучшения для ${business.name}`;
@@ -981,7 +1128,6 @@
                 listDiv.innerHTML = '<p style="color: #bdc3c7;">Все улучшения для этого бизнеса куплены!</p>';
             }
 
-            // Добавляем обработчики на кнопки
             listDiv.querySelectorAll('.buy-button').forEach(btn => {
                 const bizIdx = parseInt(btn.dataset.business);
                 const upgIdx = parseInt(btn.dataset.upgrade);
@@ -998,7 +1144,6 @@
             elements.businessUpgradeModal.classList.add('active');
         }
 
-        // Клик по кнопке заработка
         function handleClick(event) {
             const earn = clickValue * prestigeMultiplier * bonusMultiplier;
             addMoney(earn);
@@ -1032,14 +1177,12 @@
             totalClicks = 0;
             totalEarned = 0;
 
-            // Сброс бизнесов и их улучшений
             for (let i = 0; i < businesses.length; i++) {
                 businesses[i].owned = 0;
                 if (businesses[i].upgrades) {
                     businesses[i].upgrades.forEach(u => u.purchased = false);
                 }
             }
-            // Сброс глобальных улучшений
             for (let i = 0; i < upgrades.length; i++) {
                 upgrades[i].purchased = false;
             }
@@ -1047,10 +1190,9 @@
             prestigeLevel++;
             prestigeMultiplier = Math.pow(2, prestigeLevel);
 
-            // Смена цели престижа (не зацикливаем на первый)
             if (prestigeTargetIndex < businesses.length - 1) {
                 prestigeTargetIndex++;
-            } // иначе остаётся на последнем
+            }
 
             recalculateIncome();
             buildBusinessList();
@@ -1060,20 +1202,16 @@
             elements.prestigeModal.classList.remove('active');
             showNotification(`Престиж выполнен! Множитель: x${prestigeMultiplier}. Новая цель: ${businesses[prestigeTargetIndex].name}`);
 
-            // Проверка на победу
             if (prestigeLevel >= MAX_PRESTIGE_LEVEL && prestigeTargetIndex === businesses.length - 1) {
                 showWinModal();
             }
         }
 
-        // Показать модальное окно победы
         function showWinModal() {
             elements.winModal.classList.add('active');
         }
 
-        // Начать заново с бонусом x5
         function winResetWithBonus() {
-            // Полный сброс, но с установкой бонуса
             balance = 0;
             incomePerSecond = 0;
             clickValue = 1;
@@ -1082,7 +1220,7 @@
             bonusMultiplier = 5;
             totalClicks = 0;
             totalEarned = 0;
-            prestigeTargetIndex = 5; // банк
+            prestigeTargetIndex = 5;
 
             for (let i = 0; i < businesses.length; i++) {
                 businesses[i].owned = 0;
@@ -1109,10 +1247,10 @@
             clickValue = 1;
             prestigeLevel = 0;
             prestigeMultiplier = 1;
-            bonusMultiplier = 1; // сбрасываем бонус
+            bonusMultiplier = 1;
             totalClicks = 0;
             totalEarned = 0;
-            prestigeTargetIndex = 5; // банк
+            prestigeTargetIndex = 5;
 
             for (let i = 0; i < businesses.length; i++) {
                 businesses[i].owned = 0;
@@ -1138,7 +1276,6 @@
             setTimeout(() => elements.notification.classList.remove('show'), 3000);
         }
 
-        // ==================== SAVE/LOAD ====================
         function saveGame() {
             const saveData = {
                 balance, incomePerSecond, clickValue, prestigeLevel, prestigeMultiplier, bonusMultiplier,
@@ -1191,7 +1328,6 @@
             }
         }
 
-        // ==================== CHEATS ====================
         function addCheatMoney() {
             addMoney(1000000000000);
             showNotification('💰 +$1 Триллион добавлено!');
@@ -1202,7 +1338,6 @@
             showNotification('🔄 Прогресс сброшен!');
         }
 
-        // ==================== TABS ====================
         function setupTabs() {
             elements.tabButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -1215,7 +1350,6 @@
             });
         }
 
-        // ==================== EVENT LISTENERS ====================
         function setupEventListeners() {
             elements.clickBtn.addEventListener('click', handleClick);
             elements.prestigeBtn.addEventListener('click', showPrestigeModal);
@@ -1240,14 +1374,12 @@
             setupTabs();
         }
 
-        // ==================== PASSIVE INCOME ====================
         function startPassiveIncome() {
             setInterval(() => {
                 if (incomePerSecond > 0) addMoney(incomePerSecond / 10);
             }, 100);
         }
 
-        // ==================== INIT ====================
         function init() {
             getElements();
             loadGame();
