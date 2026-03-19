@@ -5,103 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empire Tycoon - Бизнес Империя</title>
     <style>
+        /* (стили без изменений, добавим только для нового модального окна) */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
-            color: #ffffff;
-            overflow-x: hidden;
-            user-select: none;
-        }
-
-        .background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://image.qwenlm.ai/public_source/c2e53587-7a67-43dd-94d9-ef8f608fabdf/175543622-820a-4583-9e69-f9c0993862fa.png');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.15;
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            color: #fff;
             padding: 20px;
         }
 
-        header {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cheat-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(231, 76, 60, 0.2);
+            border: 2px solid #e74c3c;
+            border-radius: 15px;
+        }
+
+        .cheat-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cheat-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(231, 76, 60, 0.5);
+        }
+
+        .header {
             text-align: center;
-            padding: 30px 0;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            padding: 20px 0;
             margin-bottom: 30px;
         }
 
-        .logo {
-            font-size: 3rem;
-            font-weight: 800;
-            background: linear-gradient(45deg, #ffd700, #ffaa00);
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            margin-bottom: 10px;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: #888;
-            font-weight: 500;
-        }
-
-        .stats-container {
+        .stats-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 30px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.1);
             border-radius: 15px;
             padding: 20px;
             text-align: center;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: #888;
-            margin-bottom: 5px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .stat-value {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: #ffd700;
+            color: #2ecc71;
         }
 
-        .stat-value.balance {
-            font-size: 2.5rem;
-            background: linear-gradient(45deg, #00ff88, #00cc6a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .stat-label {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+            margin-top: 5px;
         }
 
-        .prestige-multiplier {
-            color: #ff6b6b;
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .click-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .click-button {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(145deg, #f39c12, #e67e22);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.4);
+        }
+
+        .click-button:active {
+            background: linear-gradient(145deg, #e67e22, #f39c12);
+        }
+
+        .click-button .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
         }
 
         .tabs {
@@ -109,381 +147,237 @@
             gap: 10px;
             margin-bottom: 20px;
             flex-wrap: wrap;
-            justify-content: center;
         }
 
-        .tab {
+        .tab-button {
             padding: 12px 25px;
-            background: rgba(255, 255, 255, 0.1);
             border: none;
             border-radius: 10px;
-            color: #888;
+            background: rgba(255,255,255,0.1);
+            color: #bdc3c7;
             cursor: pointer;
             font-weight: 600;
-            font-size: 1rem;
-            outline: none;
         }
 
-        .tab:focus {
-            outline: none;
+        .tab-button:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
         }
 
-        .tab.active {
-            background: linear-gradient(145deg, #ffd700, #ffaa00);
-            color: #1a1a2e;
+        .tab-button.active {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
         }
 
-        .tab-panel {
+        .content-section {
             display: none;
         }
 
-        .tab-panel.active {
+        .content-section.active {
             display: block;
         }
 
-        .section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #ffd700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .click-area {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .click-button {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #ffd700, #ffaa00);
-            border: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1a1a2e;
-            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.4);
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            outline: none;
-        }
-
-        .click-button:focus {
-            outline: none;
-        }
-
-        .click-button:active {
-            transform: scale(0.95);
-        }
-
-        .click-amount {
-            font-size: 1.2rem;
-            margin-top: 15px;
-            color: #00ff88;
-            font-weight: 600;
-        }
-
         .business-list, .upgrade-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .business-item, .upgrade-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 15px;
             display: grid;
-            grid-template-columns: 1fr auto;
-            align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
             gap: 15px;
         }
 
-        .business-info, .upgrade-info {
-            min-width: 0;
+        .business-card, .upgrade-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .business-name, .upgrade-name {
-            font-weight: 600;
+        .business-info {
+            flex: 1;
+        }
+
+        .business-name {
             font-size: 1.1rem;
+            font-weight: 700;
             margin-bottom: 5px;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
-        .business-count {
-            font-size: 0.85rem;
-            color: #888;
+        .business-income {
+            color: #2ecc71;
+            font-size: 0.9rem;
         }
 
-        .business-income, .upgrade-effect {
-            font-size: 0.85rem;
-            color: #00ff88;
+        .business-owned {
+            color: #f39c12;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .upgrade-business-btn {
+            background: rgba(241, 196, 15, 0.8);
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-right: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+
+        .upgrade-business-btn:hover {
+            background: rgba(241, 196, 15, 1);
+            transform: scale(1.05);
         }
 
         .buy-button {
-            background: linear-gradient(145deg, #00ff88, #00cc6a);
-            border: none;
             padding: 12px 25px;
-            border-radius: 8px;
-            color: #1a1a2e;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
             font-weight: 600;
             cursor: pointer;
-            min-width: 140px;
-            white-space: nowrap;
-            outline: none;
-            transition: all 0.3s ease;
+            min-width: 150px;
         }
 
-        .buy-button:focus {
-            outline: none;
-        }
-
-        .buy-button:disabled,
-        .buy-button.disabled {
-            background: linear-gradient(145deg, #555555, #444444);
-            color: #888888;
+        .buy-button:disabled {
+            background: #555;
             cursor: not-allowed;
-            opacity: 0.7;
+            opacity: 0.5;
         }
 
         .prestige-section {
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 65, 65, 0.2));
-            border: 2px solid rgba(255, 107, 107, 0.5);
-        }
-
-        .prestige-section.locked {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .prestige-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
             text-align: center;
-            padding: 20px;
-        }
-
-        .prestige-title {
-            font-size: 1.8rem;
-            color: #ff6b6b;
-            margin-bottom: 10px;
-        }
-
-        .prestige-description {
-            color: #888;
-            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .prestige-button {
-            background: linear-gradient(145deg, #ff6b6b, #ff4141);
-            border: none;
             padding: 15px 40px;
-            border-radius: 10px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
             color: white;
             font-size: 1.2rem;
             font-weight: 700;
             cursor: pointer;
-            outline: none;
-        }
-
-        .prestige-button:focus {
-            outline: none;
+            margin-top: 20px;
         }
 
         .prestige-button:disabled {
-            background: #444;
+            background: #555;
             cursor: not-allowed;
         }
 
-        .prestige-stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .prestige-stat {
-            text-align: center;
-        }
-
-        .prestige-stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ff6b6b;
-        }
-
-        .prestige-stat-label {
-            font-size: 0.9rem;
-            color: #888;
-        }
-
-        .modal {
-            display: none;
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
             justify-content: center;
             align-items: center;
+            z-index: 1000;
         }
 
-        .modal.active {
+        .modal-overlay.active {
             display: flex;
         }
 
-        .modal-content {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        .modal {
+            background: #1a1a2e;
+            border: 2px solid rgba(255,255,255,0.2);
             border-radius: 20px;
             padding: 40px;
             max-width: 500px;
             width: 90%;
             text-align: center;
-            border: 2px solid rgba(255, 107, 107, 0.5);
         }
 
         .modal-title {
-            font-size: 2rem;
-            color: #ff6b6b;
+            font-size: 1.5rem;
             margin-bottom: 20px;
-        }
-
-        .modal-text {
-            color: #888;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            color: #e74c3c;
         }
 
         .modal-buttons {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
-            flex-wrap: wrap;
+            margin-top: 30px;
         }
 
         .modal-button {
-            padding: 15px 30px;
+            padding: 12px 30px;
+            border: none;
             border-radius: 10px;
-            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            border: none;
-            outline: none;
-        }
-
-        .modal-button:focus {
-            outline: none;
-        }
-
-        .modal-button.confirm {
-            background: linear-gradient(145deg, #ff6b6b, #ff4141);
-            color: white;
         }
 
         .modal-button.cancel {
-            background: #444;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .modal-button.confirm {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
             color: white;
         }
 
-        .floating-text {
-            position: fixed;
-            pointer-events: none;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: #00ff88;
-            animation: floatUp 1s ease-out forwards;
-            z-index: 1000;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-        }
-
-        @keyframes floatUp {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(1.5);
-            }
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ffd700, #ffaa00);
-            transition: width 0.3s;
-        }
-
-        .empire-progress {
-            margin-top: 20px;
-        }
-
-        .empire-progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
+        .modal-button.win {
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            color: #1a1a2e;
         }
 
         .notification {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: rgba(0, 255, 136, 0.2);
-            border: 1px solid #00ff88;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
             padding: 15px 25px;
             border-radius: 10px;
-            color: #00ff88;
             font-weight: 600;
-            transform: translateX(150%);
-            transition: transform 0.3s;
-            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1001;
         }
 
         .notification.show {
-            transform: translateX(0);
+            opacity: 1;
         }
 
-        .upgrade-category {
-            margin-bottom: 25px;
-        }
-
-        .upgrade-category-title {
+        .floating-text {
+            position: absolute;
+            color: #2ecc71;
+            font-weight: 700;
             font-size: 1.2rem;
-            color: #ffd700;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            transition: width 0.5s ease;
         }
 
         .stats-grid {
@@ -493,229 +387,175 @@
             margin-top: 20px;
         }
 
-        .stat-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
+        .stat-item {
+            background: rgba(255,255,255,0.1);
             border-radius: 10px;
+            padding: 15px;
             text-align: center;
         }
 
-        .stat-box-value {
-            font-size: 1.5rem;
+        .stat-item-value {
+            font-size: 1.3rem;
             font-weight: 700;
-            color: #ffd700;
+            color: #f39c12;
         }
 
-        .stat-box-label {
+        .stat-item-label {
+            color: #bdc3c7;
             font-size: 0.85rem;
-            color: #888;
             margin-top: 5px;
         }
 
-        .reset-button {
-            background: linear-gradient(145deg, #ff4141, #cc0000);
-            border: none;
-            padding: 15px 40px;
-            border-radius: 10px;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 20px;
-            outline: none;
-        }
-
-        .reset-button:focus {
-            outline: none;
-        }
-
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2rem;
-            }
-            
-            .click-button {
-                width: 180px;
-                height: 180px;
-            }
-            
-            .prestige-stats {
-                gap: 20px;
-            }
-            
-            .business-item, .upgrade-item {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .buy-button {
-                width: 100%;
-            }
-            
-            .business-name, .upgrade-name {
-                white-space: normal;
-            }
+        .click-info {
+            color: #bdc3c7;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="background-image"></div>
-    
     <div class="container">
-        <header>
-            <h1 class="logo">🏛️ Empire Tycoon</h1>
-            <p class="subtitle">Построй свою бизнес империю</p>
+        <div class="cheat-bar">
+            <button class="cheat-button" id="cheatMoneyBtn">💰 +$1 Триллион</button>
+            <button class="cheat-button" id="cheatResetBtn">🔄 Сбросить Прогресс</button>
+        </div>
+
+        <header class="header">
+            <h1>🏛️ Empire Tycoon</h1>
+            <p>Построй свою бизнес империю</p>
         </header>
 
-        <div class="stats-container">
+        <div class="stats-bar">
             <div class="stat-card">
+                <div class="stat-value" id="balance">$0.00</div>
                 <div class="stat-label">💰 Баланс</div>
-                <div class="stat-value balance" id="balance">$0.00</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">📈 Доход/сек</div>
-                <div class="stat-value" id="incomePerSec">$0.00</div>
+                <div class="stat-value" id="incomePerSec">$0.00/сек</div>
+                <div class="stat-label">📈 Доход</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">🖱️ За клик</div>
                 <div class="stat-value" id="clickValue">$1.00</div>
+                <div class="stat-label">🖱️ За клик</div>
             </div>
             <div class="stat-card">
+                <div class="stat-value" id="prestigeMultiplier">x1.0</div>
                 <div class="stat-label">⭐ Престиж</div>
-                <div class="stat-value prestige-multiplier" id="prestigeMultiplier">x1.0</div>
             </div>
         </div>
 
-        <div class="tabs">
-            <button class="tab active" data-tab="work">💼 Работа</button>
-            <button class="tab" data-tab="business">🏢 Бизнесы</button>
-            <button class="tab" data-tab="upgrades">⚡ Улучшения</button>
-            <button class="tab" data-tab="prestige">👑 Престиж</button>
-        </div>
-
-        <div class="tab-panel active" id="work-panel">
-            <div class="section">
-                <h2 class="section-title">🖱️ Кликни чтобы заработать</h2>
-                <div class="click-area">
-                    <button class="click-button" id="clickButton">
-                        <span style="font-size: 3rem;">💰</span>
-                        <span style="margin-top: 10px;">КЛИК!</span>
-                    </button>
-                    <div class="click-amount" id="clickAmount">+$1.00 за клик</div>
+        <div class="game-area">
+            <div class="click-section">
+                <h2>🖱️ Кликни чтобы заработать</h2>
+                <button class="click-button" id="clickBtn">
+                    <span class="icon">💼</span>
+                    <span>КЛИК!</span>
+                </button>
+                <div class="click-info">
+                    +<span id="clickEarn">$1.00</span> за клик
                 </div>
             </div>
 
-            <div class="section">
-                <h2 class="section-title">📊 Статистика</h2>
-                <div class="empire-progress">
-                    <div class="empire-progress-label">
-                        <span>Прогресс империи</span>
-                        <span id="empireProgressText">0%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="empireProgress" style="width: 0%"></div>
-                    </div>
+            <div>
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="businesses">🏢 Бизнесы</button>
+                    <button class="tab-button" data-tab="upgrades">⚡ Глобальные улучшения</button>
+                    <button class="tab-button" data-tab="prestige">👑 Престиж</button>
+                    <button class="tab-button" data-tab="stats">📊 Статистика</button>
                 </div>
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-box-value" id="totalBusinesses">0</div>
-                        <div class="stat-box-label">Всего бизнесов</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-box-value" id="prestigeLevel">0</div>
-                        <div class="stat-box-label">Уровень престижа</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-box-value" id="totalClicks">0</div>
-                        <div class="stat-box-label">Всего кликов</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-box-value" id="totalEarned">$0</div>
-                        <div class="stat-box-label">Всего заработано</div>
-                    </div>
+
+                <div class="content-section active" id="businesses">
+                    <div class="business-list" id="businessList"></div>
                 </div>
-            </div>
-        </div>
 
-        <div class="tab-panel" id="business-panel">
-            <div class="section">
-                <h2 class="section-title">🏢 Мои Бизнесы</h2>
-                <div class="business-list" id="businessList"></div>
-            </div>
-        </div>
+                <div class="content-section" id="upgrades">
+                    <div class="upgrade-list" id="upgradeList"></div>
+                </div>
 
-        <div class="tab-panel" id="upgrades-panel">
-            <div class="section">
-                <h2 class="section-title">⚡ Улучшения</h2>
-                <div class="upgrade-list" id="upgradeList"></div>
-            </div>
-        </div>
-
-        <div class="tab-panel" id="prestige-panel">
-            <div class="section prestige-section" id="prestigeSection">
-                <div class="prestige-info">
-                    <h2 class="prestige-title">👑 Система Престижа</h2>
-                    <p class="prestige-description" id="prestigeDescription">
-                        Купите 10 банков, чтобы разблокировать престиж!
-                    </p>
-                    <button class="prestige-button" id="prestigeButton" disabled>
-                        Престиж (Требуется 10 банков)
-                    </button>
-                    <div class="prestige-stats">
-                        <div class="prestige-stat">
-                            <div class="prestige-stat-value" id="currentPrestige">0</div>
-                            <div class="prestige-stat-label">Уровень престижа</div>
+                <div class="content-section" id="prestige">
+                    <div class="prestige-section">
+                        <h3>👑 Система Престижа</h3>
+                        <p id="prestigeRequirement" style="color: #bdc3c7; margin: 15px 0;">Купите 10 банков, чтобы разблокировать престиж!</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="prestigeProgressBar" style="width: 0%"></div>
                         </div>
-                        <div class="prestige-stat">
-                            <div class="prestige-stat-value" id="currentMultiplier">x1.0</div>
-                            <div class="prestige-stat-label">Множитель</div>
+                        <p><span id="prestigeProgress">0/10</span> <span id="prestigeTargetName"></span> куплено</p>
+                        <p style="margin-top: 15px;">Уровень престижа: <span id="prestigeLevelDisplay" style="color: #f39c12;">0</span></p>
+                        <p>Множитель престижа: <span id="prestigeMultiplierDisplay" style="color: #2ecc71;">x1.0</span></p>
+                        <p>Бонус победы: <span id="bonusMultiplierDisplay" style="color: #f1c40f;">x1.0</span></p>
+                        <button class="prestige-button" id="prestigeBtn" disabled>🔄 Совершить Престиж</button>
+                    </div>
+                </div>
+
+                <div class="content-section" id="stats">
+                    <h3>📊 Статистика</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-item-value" id="statTotalBusinesses">0</div>
+                            <div class="stat-item-label">Всего бизнесов</div>
                         </div>
-                        <div class="prestige-stat">
-                            <div class="prestige-stat-value" id="banksOwned">0/10</div>
-                            <div class="prestige-stat-label">Банков куплено</div>
+                        <div class="stat-item">
+                            <div class="stat-item-value" id="statPrestigeLevel">0</div>
+                            <div class="stat-item-label">Уровень престижа</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-item-value" id="statTotalClicks">0</div>
+                            <div class="stat-item-label">Всего кликов</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-item-value" id="statTotalEarned">$0</div>
+                            <div class="stat-item-label">Всего заработано</div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div style="text-align: center;">
-            <button class="reset-button" id="resetButton">
-                🔄 Сбросить прогресс
-            </button>
-        </div>
-    </div>
-
-    <div class="modal" id="resetModal">
-        <div class="modal-content">
-            <h2 class="modal-title">⚠️ Сброс прогресса</h2>
-            <p class="modal-text">
-                Вы уверены, что хотите сбросить весь прогресс? 
-                Это действие нельзя отменить!
-            </p>
-            <div class="modal-buttons">
-                <button class="modal-button cancel" id="cancelReset">Отмена</button>
-                <button class="modal-button confirm" id="confirmReset">Сбросить</button>
             </div>
         </div>
     </div>
 
-    <div class="modal" id="prestigeModal">
-        <div class="modal-content">
-            <h2 class="modal-title">👑 Престиж</h2>
-            <p class="modal-text">
-                Вы собираетесь совершить престиж! Весь ваш прогресс будет сброшен, 
-                но вы получите <strong style="color: #ff6b6b;">x2 множитель</strong> к доходу!
-                <br><br>
-                Текущий уровень: <span id="prestigeModalCurrent">0</span>
-                <br>
-                Новый уровень: <span id="prestigeModalNew" style="color: #00ff88;">1</span>
-                <br>
-                Новый множитель: <span id="prestigeModalMultiplier" style="color: #ffd700;">x2.0</span>
-            </p>
+    <!-- Модальное окно для улучшений бизнеса -->
+    <div class="modal-overlay" id="businessUpgradeModal">
+        <div class="modal">
+            <div class="modal-title" id="businessUpgradeModalTitle">Улучшения для бизнеса</div>
+            <div id="businessUpgradeList" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;"></div>
             <div class="modal-buttons">
-                <button class="modal-button cancel" id="cancelPrestige">Отмена</button>
-                <button class="modal-button confirm" id="confirmPrestige">Престиж!</button>
+                <button class="modal-button cancel" id="businessUpgradeCloseBtn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно победы -->
+    <div class="modal-overlay" id="winModal">
+        <div class="modal">
+            <div class="modal-title">🏆 ПОБЕДА! 🏆</div>
+            <p style="font-size: 1.2rem; margin-bottom: 20px;">Вы достигли 10-го престижа и построили космическую империю!</p>
+            <p>Вы можете продолжить играть или начать заново с постоянным множителем x5.</p>
+            <div class="modal-buttons">
+                <button class="modal-button cancel" id="winContinueBtn">Продолжить</button>
+                <button class="modal-button win" id="winResetBtn">Начать заново с x5</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="resetModal">
+        <div class="modal">
+            <div class="modal-title">⚠️ Сброс прогресса</div>
+            <p>Вы уверены, что хотите сбросить весь прогресс? Это действие нельзя отменить!</p>
+            <div class="modal-buttons">
+                <button class="modal-button cancel" id="resetCancelBtn">Отмена</button>
+                <button class="modal-button confirm" id="resetConfirmBtn">Сбросить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="prestigeModal">
+        <div class="modal">
+            <div class="modal-title">👑 Престиж</div>
+            <p>Весь прогресс будет сброшен, но вы получите x2 множитель к доходу!</p>
+            <p style="margin-top: 15px;">Текущий уровень: <span id="modalCurrentLevel">0</span></p>
+            <p>Новый уровень: <span id="modalNewLevel">1</span></p>
+            <p>Новый множитель: <span id="modalNewMultiplier">x2.0</span></p>
+            <div class="modal-buttons">
+                <button class="modal-button cancel" id="prestigeCancelBtn">Отмена</button>
+                <button class="modal-button confirm" id="prestigeConfirmBtn">Престиж!</button>
             </div>
         </div>
     </div>
@@ -723,591 +563,702 @@
     <div class="notification" id="notification"></div>
 
     <script>
-        // Game State
-        let gameState = null;
-        let incomeInterval = null;
-        
-        // Epsilon for floating point comparison
-        const EPSILON = 0.01;
+        // ==================== GAME STATE ====================
+        let balance = 0;
+        let incomePerSecond = 0;
+        let clickValue = 1;
+        let prestigeLevel = 0;
+        let prestigeMultiplier = 1;
+        let bonusMultiplier = 1; // множитель за победу
+        let totalClicks = 0;
+        let totalEarned = 0;
+        let prestigeTargetIndex = 5; // банк
 
-        // Businesses Configuration
-        const businessesConfig = [
-            { id: 'lemonade', name: 'Лимонадная стойка', baseCost: 15, baseIncome: 0.5, icon: '🍋' },
-            { id: 'newspaper', name: 'Газетный киоск', baseCost: 100, baseIncome: 2, icon: '📰' },
-            { id: 'carwash', name: 'Автомойка', baseCost: 500, baseIncome: 8, icon: '🚗' },
-            { id: 'pizza', name: 'Пиццерия', baseCost: 1500, baseIncome: 20, icon: '🍕' },
-            { id: 'donut', name: 'Пончиковая', baseCost: 5000, baseIncome: 50, icon: '🍩' },
-            { id: 'burger', name: 'Бургерная', baseCost: 15000, baseIncome: 120, icon: '🍔' },
-            { id: 'cinema', name: 'Кинотеатр', baseCost: 50000, baseIncome: 300, icon: '🎬' },
-            { id: 'hotel', name: 'Отель', baseCost: 150000, baseIncome: 750, icon: '🏨' },
-            { id: 'restaurant', name: 'Ресторан', baseCost: 500000, baseIncome: 1800, icon: '🍽️' },
-            { id: 'bank', name: 'Банк', baseCost: 1500000, baseIncome: 4500, icon: '🏦' },
-            { id: 'casino', name: 'Казино', baseCost: 5000000, baseIncome: 12000, icon: '🎰' },
-            { id: 'oil', name: 'Нефтяная вышка', baseCost: 15000000, baseIncome: 30000, icon: '🛢️' },
-            { id: 'tech', name: 'IT Компания', baseCost: 50000000, baseIncome: 75000, icon: '💻' },
-            { id: 'space', name: 'Космическая программа', baseCost: 200000000, baseIncome: 200000, icon: '🚀' },
-            { id: 'empire', name: 'Бизнес Империя', baseCost: 1000000000, baseIncome: 500000, icon: '👑' }
-        ];
+        const MAX_PRESTIGE_LEVEL = 10; // максимальный уровень престижа для победы
 
-        // Upgrades Configuration
-        const upgradesConfig = [
-            { id: 'click1', name: 'Усиленный клик I', type: 'click', multiplier: 2, cost: 500, description: 'x2 к доходу за клик' },
-            { id: 'click2', name: 'Усиленный клик II', type: 'click', multiplier: 2, cost: 2500, description: 'x2 к доходу за клик' },
-            { id: 'click3', name: 'Усиленный клик III', type: 'click', multiplier: 2, cost: 10000, description: 'x2 к доходу за клик' },
-            { id: 'click4', name: 'Усиленный клик IV', type: 'click', multiplier: 2, cost: 50000, description: 'x2 к доходу за клик' },
-            { id: 'click5', name: 'Усиленный клик V', type: 'click', multiplier: 2, cost: 250000, description: 'x2 к доходу за клик' },
-            
-            { id: 'lemonade1', name: 'Лучшие лимоны', type: 'business', businessId: 'lemonade', multiplier: 2, cost: 200, description: 'x2 доход лимонадной стойки' },
-            { id: 'lemonade2', name: 'Реклама лимонада', type: 'business', businessId: 'lemonade', multiplier: 2, cost: 1000, description: 'x2 доход лимонадной стойки' },
-            
-            { id: 'newspaper1', name: 'Цветная печать', type: 'business', businessId: 'newspaper', multiplier: 2, cost: 1500, description: 'x2 доход газетного киоска' },
-            { id: 'newspaper2', name: 'Онлайн версия', type: 'business', businessId: 'newspaper', multiplier: 2, cost: 7500, description: 'x2 доход газетного киоска' },
-            
-            { id: 'carwash1', name: 'Автоматизация', type: 'business', businessId: 'carwash', multiplier: 2, cost: 7500, description: 'x2 доход автомойки' },
-            { id: 'carwash2', name: 'Премиум услуги', type: 'business', businessId: 'carwash', multiplier: 2, cost: 30000, description: 'x2 доход автомойки' },
-            
-            { id: 'pizza1', name: 'Секретный рецепт', type: 'business', businessId: 'pizza', multiplier: 2, cost: 20000, description: 'x2 доход пиццерии' },
-            { id: 'pizza2', name: 'Доставка 24/7', type: 'business', businessId: 'pizza', multiplier: 2, cost: 80000, description: 'x2 доход пиццерии' },
-            
-            { id: 'donut1', name: 'Новые вкусы', type: 'business', businessId: 'donut', multiplier: 2, cost: 60000, description: 'x2 доход пончиковой' },
-            { id: 'donut2', name: 'Франшиза', type: 'business', businessId: 'donut', multiplier: 2, cost: 250000, description: 'x2 доход пончиковой' },
-            
-            { id: 'burger1', name: 'Gourmet меню', type: 'business', businessId: 'burger', multiplier: 2, cost: 200000, description: 'x2 доход бургерной' },
-            { id: 'burger2', name: 'Сеть ресторанов', type: 'business', businessId: 'burger', multiplier: 2, cost: 800000, description: 'x2 доход бургерной' },
-            
-            { id: 'cinema1', name: 'IMAX залы', type: 'business', businessId: 'cinema', multiplier: 2, cost: 600000, description: 'x2 доход кинотеатра' },
-            { id: 'cinema2', name: 'VIP ложи', type: 'business', businessId: 'cinema', multiplier: 2, cost: 2500000, description: 'x2 доход кинотеатра' },
-            
-            { id: 'hotel1', name: '5 звёзд', type: 'business', businessId: 'hotel', multiplier: 2, cost: 2000000, description: 'x2 доход отеля' },
-            { id: 'hotel2', name: 'Сеть отелей', type: 'business', businessId: 'hotel', multiplier: 2, cost: 8000000, description: 'x2 доход отеля' },
-            
-            { id: 'restaurant1', name: 'Мишлен звезда', type: 'business', businessId: 'restaurant', multiplier: 2, cost: 6000000, description: 'x2 доход ресторана' },
-            { id: 'restaurant2', name: 'Франшиза', type: 'business', businessId: 'restaurant', multiplier: 2, cost: 25000000, description: 'x2 доход ресторана' },
-            
-            { id: 'bank1', name: 'Инвестиции', type: 'business', businessId: 'bank', multiplier: 2, cost: 20000000, description: 'x2 доход банка' },
-            { id: 'bank2', name: 'Международный банк', type: 'business', businessId: 'bank', multiplier: 2, cost: 80000000, description: 'x2 доход банка' },
-            
-            { id: 'casino1', name: 'VIP зал', type: 'business', businessId: 'casino', multiplier: 2, cost: 60000000, description: 'x2 доход казино' },
-            { id: 'casino2', name: 'Онлайн казино', type: 'business', businessId: 'casino', multiplier: 2, cost: 250000000, description: 'x2 доход казино' },
-            
-            { id: 'oil1', name: 'Новая скважина', type: 'business', businessId: 'oil', multiplier: 2, cost: 200000000, description: 'x2 доход нефтяной вышки' },
-            { id: 'oil2', name: 'Нефтяной концерн', type: 'business', businessId: 'oil', multiplier: 2, cost: 800000000, description: 'x2 доход нефтяной вышки' },
-            
-            { id: 'tech1', name: 'AI технологии', type: 'business', businessId: 'tech', multiplier: 2, cost: 600000000, description: 'x2 доход IT компании' },
-            { id: 'tech2', name: 'Глобальная сеть', type: 'business', businessId: 'tech', multiplier: 2, cost: 2500000000, description: 'x2 доход IT компании' },
-            
-            { id: 'space1', name: 'Луна база', type: 'business', businessId: 'space', multiplier: 2, cost: 2000000000, description: 'x2 доход космической программы' },
-            { id: 'space2', name: 'Марс колония', type: 'business', businessId: 'space', multiplier: 2, cost: 8000000000, description: 'x2 доход космической программы' },
-            
-            { id: 'empire1', name: 'Мировая империя', type: 'business', businessId: 'empire', multiplier: 2, cost: 10000000000, description: 'x2 доход бизнес империи' },
-            
-            { id: 'global1', name: 'Бизнес тренинг', type: 'global', multiplier: 1.5, cost: 1000000, description: 'x1.5 ко всем бизнесам' },
-            { id: 'global2', name: 'Маркетинг', type: 'global', multiplier: 1.5, cost: 5000000, description: 'x1.5 ко всем бизнесам' },
-            { id: 'global3', name: 'Оптимизация', type: 'global', multiplier: 1.5, cost: 25000000, description: 'x1.5 ко всем бизнесам' },
-            { id: 'global4', name: 'Автоматизация', type: 'global', multiplier: 1.5, cost: 100000000, description: 'x1.5 ко всем бизнесам' },
-            { id: 'global5', name: 'Искусственный интеллект', type: 'global', multiplier: 2, cost: 500000000, description: 'x2 ко всем бизнесам' }
-        ];
-
-        // Initialize game state
-        function initGameState() {
-            if (!gameState) {
-                gameState = {
-                    balance: 0,
-                    totalEarned: 0,
-                    clickCount: 0,
-                    prestigeLevel: 0,
-                    businesses: {},
-                    upgrades: {}
-                };
+        // ==================== BUSINESS DATA (с улучшениями) ====================
+        const businesses = [
+            {
+                id: 0, name: '📰 Газетный киоск', baseCost: 15, baseIncome: 0.5, owned: 0,
+                upgrades: [
+                    { name: 'Яркие заголовки', desc: '+50% доход от киосков', cost: 100, purchased: false, bonus: 0.5 },
+                    { name: 'Расширение сети', desc: '+100% доход от киосков', cost: 500, purchased: false, bonus: 1.0 }
+                ]
+            },
+            {
+                id: 1, name: '🍕 Пиццерия', baseCost: 100, baseIncome: 3, owned: 0,
+                upgrades: [
+                    { name: 'Новая печь', desc: '+50% доход от пиццерий', cost: 500, purchased: false, bonus: 0.5 },
+                    { name: 'Франшиза', desc: '+100% доход от пиццерий', cost: 2000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            {
+                id: 2, name: '🚗 Такси', baseCost: 500, baseIncome: 10, owned: 0,
+                upgrades: [
+                    { name: 'Современный автопарк', desc: '+50% доход от такси', cost: 2500, purchased: false, bonus: 0.5 },
+                    { name: 'Агрегатор', desc: '+100% доход от такси', cost: 10000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            {
+                id: 3, name: '🏪 Супермаркет', baseCost: 2000, baseIncome: 40, owned: 0,
+                upgrades: [
+                    { name: 'Складские помещения', desc: '+50% доход от супермаркетов', cost: 10000, purchased: false, bonus: 0.5 },
+                    { name: 'Сеть магазинов', desc: '+100% доход от супермаркетов', cost: 40000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            {
+                id: 4, name: '🏨 Отель', baseCost: 10000, baseIncome: 150, owned: 0,
+                upgrades: [
+                    { name: 'SPA-комплекс', desc: '+50% доход от отелей', cost: 50000, purchased: false, bonus: 0.5 },
+                    { name: 'Международная сеть', desc: '+100% доход от отелей', cost: 200000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            {
+                id: 5, name: '🏦 Банк', baseCost: 50000, baseIncome: 500, owned: 0,
+                upgrades: [
+                    { name: 'Инвестиционный отдел', desc: '+50% доход от банков', cost: 250000, purchased: false, bonus: 0.5 },
+                    { name: 'Холдинг', desc: '+100% доход от банков', cost: 1000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            {
+                id: 6, name: '✈️ Авиакомпания', baseCost: 200000, baseIncome: 2000, owned: 0,
+                upgrades: [
+                    { name: 'Новые маршруты', desc: '+50% доход от авиакомпаний', cost: 1000000, purchased: false, bonus: 0.5 },
+                    { name: 'Авиаальянс', desc: '+100% доход от авиакомпаний', cost: 4000000, purchased: false, bonus: 1.0 }
+                ]
+            },
+            {
+                id: 7, name: '🚀 Космическая компания', baseCost: 1000000, baseIncome: 10000, owned: 0,
+                upgrades: [
+                    { name: 'Орбитальная станция', desc: '+50% доход от космоса', cost: 5000000, purchased: false, bonus: 0.5 },
+                    { name: 'Колонизация Марса', desc: '+100% доход от космоса', cost: 20000000, purchased: false, bonus: 1.0 }
+                ]
             }
-            
-            businessesConfig.forEach(b => {
-                if (gameState.businesses[b.id] === undefined) {
-                    gameState.businesses[b.id] = 0;
+        ];
+
+        // ==================== GLOBAL UPGRADES ====================
+        const upgrades = [
+            { id: 0, name: '📈 Маркетинг', desc: '+10% ко всем доходам', cost: 500, purchased: false, effect: 'income10' },
+            { id: 1, name: '⚡ Авто-кликер', desc: '+$1 за клик', cost: 1000, purchased: false, effect: 'click1' },
+            { id: 2, name: '💎 Премиум офис', desc: '+50% ко всем доходам', cost: 5000, purchased: false, effect: 'income50' },
+            { id: 3, name: '🎯 Рекламная кампания', desc: '+$5 за клик', cost: 10000, purchased: false, effect: 'click5' },
+            { id: 4, name: '🌟 Глобальная экспансия', desc: '+100% ко всем доходам', cost: 50000, purchased: false, effect: 'income100' }
+        ];
+
+        // ==================== DOM ELEMENTS ====================
+        const elements = {};
+        let businessElements = [];
+        let upgradeElements = [];
+
+        function getElements() {
+            elements.balance = document.getElementById('balance');
+            elements.incomePerSec = document.getElementById('incomePerSec');
+            elements.clickValue = document.getElementById('clickValue');
+            elements.clickEarn = document.getElementById('clickEarn');
+            elements.prestigeMultiplier = document.getElementById('prestigeMultiplier');
+            elements.clickBtn = document.getElementById('clickBtn');
+            elements.businessList = document.getElementById('businessList');
+            elements.upgradeList = document.getElementById('upgradeList');
+            elements.prestigeLevelDisplay = document.getElementById('prestigeLevelDisplay');
+            elements.prestigeMultiplierDisplay = document.getElementById('prestigeMultiplierDisplay');
+            elements.bonusMultiplierDisplay = document.getElementById('bonusMultiplierDisplay');
+            elements.prestigeRequirement = document.getElementById('prestigeRequirement');
+            elements.prestigeProgress = document.getElementById('prestigeProgress');
+            elements.prestigeProgressBar = document.getElementById('prestigeProgressBar');
+            elements.prestigeTargetName = document.getElementById('prestigeTargetName');
+            elements.prestigeBtn = document.getElementById('prestigeBtn');
+            elements.statTotalBusinesses = document.getElementById('statTotalBusinesses');
+            elements.statPrestigeLevel = document.getElementById('statPrestigeLevel');
+            elements.statTotalClicks = document.getElementById('statTotalClicks');
+            elements.statTotalEarned = document.getElementById('statTotalEarned');
+            elements.resetModal = document.getElementById('resetModal');
+            elements.resetCancelBtn = document.getElementById('resetCancelBtn');
+            elements.resetConfirmBtn = document.getElementById('resetConfirmBtn');
+            elements.prestigeModal = document.getElementById('prestigeModal');
+            elements.prestigeCancelBtn = document.getElementById('prestigeCancelBtn');
+            elements.prestigeConfirmBtn = document.getElementById('prestigeConfirmBtn');
+            elements.modalCurrentLevel = document.getElementById('modalCurrentLevel');
+            elements.modalNewLevel = document.getElementById('modalNewLevel');
+            elements.modalNewMultiplier = document.getElementById('modalNewMultiplier');
+            elements.notification = document.getElementById('notification');
+            elements.tabButtons = document.querySelectorAll('.tab-button');
+            elements.contentSections = document.querySelectorAll('.content-section');
+            elements.cheatMoneyBtn = document.getElementById('cheatMoneyBtn');
+            elements.cheatResetBtn = document.getElementById('cheatResetBtn');
+            elements.businessUpgradeModal = document.getElementById('businessUpgradeModal');
+            elements.businessUpgradeList = document.getElementById('businessUpgradeList');
+            elements.businessUpgradeModalTitle = document.getElementById('businessUpgradeModalTitle');
+            elements.businessUpgradeCloseBtn = document.getElementById('businessUpgradeCloseBtn');
+            elements.winModal = document.getElementById('winModal');
+            elements.winContinueBtn = document.getElementById('winContinueBtn');
+            elements.winResetBtn = document.getElementById('winResetBtn');
+        }
+
+        // ==================== HELPER FUNCTIONS ====================
+        function formatMoney(amount) {
+            if (amount >= 1000000000000) return '$' + (amount / 1000000000000).toFixed(2) + 'T';
+            else if (amount >= 1000000000) return '$' + (amount / 1000000000).toFixed(2) + 'B';
+            else if (amount >= 1000000) return '$' + (amount / 1000000).toFixed(2) + 'M';
+            else if (amount >= 1000) return '$' + (amount / 1000).toFixed(2) + 'K';
+            return '$' + amount.toFixed(2);
+        }
+
+        function getBusinessCost(business) {
+            return business.baseCost * Math.pow(1.15, business.owned);
+        }
+
+        function canPrestige() {
+            return businesses[prestigeTargetIndex].owned >= 10;
+        }
+
+        // ==================== CORE FUNCTIONS ====================
+        function addMoney(amount) {
+            balance += amount;
+            totalEarned += amount;
+            updateUI();
+            saveGame();
+        }
+
+        function recalculateIncome() {
+            let totalIncome = 0;
+            // Доход от бизнесов с учётом их улучшений
+            for (let i = 0; i < businesses.length; i++) {
+                const b = businesses[i];
+                let mult = 1;
+                if (b.upgrades) {
+                    mult = 1 + b.upgrades.filter(u => u.purchased).reduce((sum, u) => sum + u.bonus, 0);
                 }
-            });
-            
-            upgradesConfig.forEach(u => {
-                if (gameState.upgrades[u.id] === undefined) {
-                    gameState.upgrades[u.id] = false;
+                totalIncome += b.baseIncome * b.owned * mult;
+            }
+            // Глобальные улучшения
+            for (let i = 0; i < upgrades.length; i++) {
+                if (upgrades[i].purchased) {
+                    if (upgrades[i].effect === 'income10') totalIncome *= 1.1;
+                    else if (upgrades[i].effect === 'income50') totalIncome *= 1.5;
+                    else if (upgrades[i].effect === 'income100') totalIncome *= 2;
                 }
-            });
+            }
+            totalIncome *= prestigeMultiplier;
+            totalIncome *= bonusMultiplier;
+            incomePerSecond = totalIncome;
         }
 
-        // Format number
-        function formatNumber(num) {
-            if (num >= 1e12) return '$' + (num / 1e12).toFixed(2) + 'T';
-            if (num >= 1e9) return '$' + (num / 1e9).toFixed(2) + 'B';
-            if (num >= 1e6) return '$' + (num / 1e6).toFixed(2) + 'M';
-            if (num >= 1e3) return '$' + (num / 1e3).toFixed(2) + 'K';
-            return '$' + num.toFixed(2);
+        function updateBusinessButtons() {
+            for (let i = 0; i < businesses.length; i++) {
+                const business = businesses[i];
+                const cost = getBusinessCost(business);
+                const btn = businessElements[i]?.button;
+                if (btn) {
+                    btn.disabled = balance < cost;
+                    btn.textContent = balance >= cost ? formatMoney(cost) : 'Не хватает';
+                }
+            }
         }
 
-        // Get prestige multiplier
-        function getPrestigeMultiplier() {
-            return Math.pow(2, gameState.prestigeLevel);
+        function updateUpgradeButtons() {
+            for (let i = 0; i < upgrades.length; i++) {
+                const upgrade = upgrades[i];
+                if (upgrade.purchased) continue;
+                const btn = upgradeElements[i]?.button;
+                if (btn) {
+                    btn.disabled = balance < upgrade.cost;
+                    btn.textContent = balance >= upgrade.cost ? formatMoney(upgrade.cost) : 'Не хватает';
+                }
+            }
         }
 
-        // Get click value
-        function getClickValue() {
-            let baseValue = 1;
-            upgradesConfig.filter(u => u.type === 'click' && gameState.upgrades[u.id]).forEach(u => {
-                baseValue *= u.multiplier;
-            });
-            return baseValue * getPrestigeMultiplier();
-        }
-
-        // Get business cost
-        function getBusinessCost(businessId) {
-            const business = businessesConfig.find(b => b.id === businessId);
-            const count = gameState.businesses[businessId];
-            return business.baseCost * Math.pow(1.15, count);
-        }
-
-        // Get business income
-        function getBusinessIncome(businessId) {
-            const business = businessesConfig.find(b => b.id === businessId);
-            let income = business.baseIncome;
-            
-            upgradesConfig.filter(u => u.type === 'business' && u.businessId === businessId && gameState.upgrades[u.id]).forEach(u => {
-                income *= u.multiplier;
-            });
-            
-            upgradesConfig.filter(u => u.type === 'global' && gameState.upgrades[u.id]).forEach(u => {
-                income *= u.multiplier;
-            });
-            
-            return income * getPrestigeMultiplier();
-        }
-
-        // Get total income per second
-        function getTotalIncome() {
-            let total = 0;
-            businessesConfig.forEach(b => {
-                total += getBusinessIncome(b.id) * gameState.businesses[b.id];
-            });
-            return total;
-        }
-
-        // Get total businesses owned
-        function getTotalBusinesses() {
-            return Object.values(gameState.businesses).reduce((a, b) => a + b, 0);
-        }
-
-        // Get empire progress
-        function getEmpireProgress() {
-            const total = getTotalBusinesses();
-            return Math.min(100, (total / 15) * 100);
-        }
-
-        // Check if prestige is unlocked
-        function isPrestigeUnlocked() {
-            return gameState.businesses['bank'] >= 10;
-        }
-
-        // Check if can afford
-        function canAfford(balance, cost) {
-            return balance >= cost - EPSILON;
-        }
-
-        // Update UI
         function updateUI() {
-            document.getElementById('balance').textContent = formatNumber(gameState.balance);
-            document.getElementById('incomePerSec').textContent = formatNumber(getTotalIncome()) + '/сек';
-            document.getElementById('clickValue').textContent = formatNumber(getClickValue());
-            document.getElementById('clickAmount').textContent = '+' + formatNumber(getClickValue()) + ' за клик';
-            
-            const prestigeMult = getPrestigeMultiplier();
-            document.getElementById('prestigeMultiplier').textContent = 'x' + prestigeMult.toFixed(1);
-            document.getElementById('currentPrestige').textContent = gameState.prestigeLevel;
-            document.getElementById('currentMultiplier').textContent = 'x' + prestigeMult.toFixed(1);
-            document.getElementById('banksOwned').textContent = gameState.businesses['bank'] + '/10';
-            document.getElementById('prestigeLevel').textContent = gameState.prestigeLevel;
-            
-            document.getElementById('totalBusinesses').textContent = getTotalBusinesses();
-            document.getElementById('empireProgressText').textContent = getEmpireProgress().toFixed(0) + '%';
-            document.getElementById('empireProgress').style.width = getEmpireProgress() + '%';
-            document.getElementById('totalClicks').textContent = gameState.clickCount;
-            document.getElementById('totalEarned').textContent = formatNumber(gameState.totalEarned);
-            
-            updateBusinessList();
-            updateUpgradeList();
-            updatePrestigeSection();
-        }
+            elements.balance.textContent = formatMoney(balance);
+            elements.incomePerSec.textContent = formatMoney(incomePerSecond) + '/сек';
+            elements.clickValue.textContent = formatMoney(clickValue * prestigeMultiplier * bonusMultiplier);
+            elements.clickEarn.textContent = formatMoney(clickValue * prestigeMultiplier * bonusMultiplier);
+            elements.prestigeMultiplier.textContent = 'x' + (prestigeMultiplier * bonusMultiplier).toFixed(1);
+            elements.prestigeLevelDisplay.textContent = prestigeLevel;
+            elements.prestigeMultiplierDisplay.textContent = 'x' + prestigeMultiplier.toFixed(1);
+            elements.bonusMultiplierDisplay.textContent = 'x' + bonusMultiplier.toFixed(1);
 
-        // Update business list
-        function updateBusinessList() {
-            const list = document.getElementById('businessList');
-            let html = '';
-            
-            businessesConfig.forEach(business => {
-                const cost = getBusinessCost(business.id);
-                const income = getBusinessIncome(business.id);
-                const count = gameState.businesses[business.id];
-                const afford = canAfford(gameState.balance, cost);
-                
-                html += `
-                    <div class="business-item">
-                        <div class="business-info">
-                            <div class="business-name">${business.icon} ${business.name}</div>
-                            <div class="business-count">Куплено: ${count}</div>
-                            <div class="business-income">+${formatNumber(income)}/сек каждый</div>
-                        </div>
-                        <button class="buy-button ${!afford ? 'disabled' : ''}" data-type="business" data-id="${business.id}">
-                            ${formatNumber(cost)}
-                        </button>
-                    </div>
-                `;
-            });
-            
-            list.innerHTML = html;
-            
-            // FIXED: Attach click handlers directly after rendering
-            list.querySelectorAll('.buy-button').forEach(btn => {
-                btn.onclick = function() {
-                    const businessId = this.getAttribute('data-id');
-                    if (businessId) {
-                        buyBusiness(businessId);
-                    }
-                };
-            });
-        }
+            const targetBusiness = businesses[prestigeTargetIndex];
+            const targetOwned = targetBusiness.owned;
+            elements.prestigeProgress.textContent = targetOwned + '/10';
+            elements.prestigeProgressBar.style.width = Math.min(targetOwned * 10, 100) + '%';
+            elements.prestigeTargetName.textContent = targetBusiness.name;
 
-        // Update upgrade list
-        function updateUpgradeList() {
-            const list = document.getElementById('upgradeList');
-            let html = '';
-            
-            const clickUpgrades = upgradesConfig.filter(u => u.type === 'click');
-            const businessUpgrades = upgradesConfig.filter(u => u.type === 'business');
-            const globalUpgrades = upgradesConfig.filter(u => u.type === 'global');
-            
-            if (clickUpgrades.some(u => !gameState.upgrades[u.id])) {
-                html += '<div class="upgrade-category"><div class="upgrade-category-title">💪 Улучшения клика</div>';
-                clickUpgrades.forEach(upgrade => {
-                    if (!gameState.upgrades[upgrade.id]) {
-                        const afford = canAfford(gameState.balance, upgrade.cost);
-                        html += `
-                            <div class="upgrade-item">
-                                <div class="upgrade-info">
-                                    <div class="upgrade-name">${upgrade.name}</div>
-                                    <div class="upgrade-effect">${upgrade.description}</div>
-                                </div>
-                                <button class="buy-button ${!afford ? 'disabled' : ''}" data-type="upgrade" data-id="${upgrade.id}">
-                                    ${formatNumber(upgrade.cost)}
-                                </button>
-                            </div>
-                        `;
-                    }
-                });
-                html += '</div>';
-            }
-            
-            if (businessUpgrades.some(u => !gameState.upgrades[u.id])) {
-                html += '<div class="upgrade-category"><div class="upgrade-category-title">🏢 Улучшения бизнесов</div>';
-                businessUpgrades.forEach(upgrade => {
-                    if (!gameState.upgrades[upgrade.id]) {
-                        const afford = canAfford(gameState.balance, upgrade.cost);
-                        const business = businessesConfig.find(b => b.id === upgrade.businessId);
-                        html += `
-                            <div class="upgrade-item">
-                                <div class="upgrade-info">
-                                    <div class="upgrade-name">${business.icon} ${upgrade.name}</div>
-                                    <div class="upgrade-effect">${upgrade.description}</div>
-                                </div>
-                                <button class="buy-button ${!afford ? 'disabled' : ''}" data-type="upgrade" data-id="${upgrade.id}">
-                                    ${formatNumber(upgrade.cost)}
-                                </button>
-                            </div>
-                        `;
-                    }
-                });
-                html += '</div>';
-            }
-            
-            if (globalUpgrades.some(u => !gameState.upgrades[u.id])) {
-                html += '<div class="upgrade-category"><div class="upgrade-category-title">🌟 Глобальные улучшения</div>';
-                globalUpgrades.forEach(upgrade => {
-                    if (!gameState.upgrades[upgrade.id]) {
-                        const afford = canAfford(gameState.balance, upgrade.cost);
-                        html += `
-                            <div class="upgrade-item">
-                                <div class="upgrade-info">
-                                    <div class="upgrade-name">${upgrade.name}</div>
-                                    <div class="upgrade-effect">${upgrade.description}</div>
-                                </div>
-                                <button class="buy-button ${!afford ? 'disabled' : ''}" data-type="upgrade" data-id="${upgrade.id}">
-                                    ${formatNumber(upgrade.cost)}
-                                </button>
-                            </div>
-                        `;
-                    }
-                });
-                html += '</div>';
-            }
-            
-            if (html === '') {
-                html = '<div style="text-align: center; color: #888; padding: 20px;">Все улучшения куплены! 🎉</div>';
-            }
-            
-            list.innerHTML = html;
-            
-            // FIXED: Attach click handlers directly after rendering
-            list.querySelectorAll('.buy-button').forEach(btn => {
-                btn.onclick = function() {
-                    const upgradeId = this.getAttribute('data-id');
-                    if (upgradeId) {
-                        buyUpgrade(upgradeId);
-                    }
-                };
-            });
-        }
-
-        // Update prestige section
-        function updatePrestigeSection() {
-            const section = document.getElementById('prestigeSection');
-            const button = document.getElementById('prestigeButton');
-            const description = document.getElementById('prestigeDescription');
-            
-            if (isPrestigeUnlocked()) {
-                section.classList.remove('locked');
-                button.disabled = false;
-                button.textContent = '👑 Престиж (x2 множитель)';
-                description.textContent = 'Престиж сбросит ваш прогресс, но даст x2 множитель к доходу навсегда!';
+            if (canPrestige()) {
+                elements.prestigeRequirement.textContent = '✅ Престиж доступен!';
+                elements.prestigeRequirement.style.color = '#2ecc71';
+                elements.prestigeBtn.disabled = false;
             } else {
-                section.classList.add('locked');
-                button.disabled = true;
-                const needed = 10 - gameState.businesses['bank'];
-                button.textContent = `Требуется ещё ${needed} банков`;
-                description.textContent = `Купите 10 банков, чтобы разблокировать престиж! (Куплено: ${gameState.businesses['bank']})`;
+                elements.prestigeRequirement.textContent = `Купите 10 ${targetBusiness.name}, чтобы разблокировать престиж! (${targetOwned}/10)`;
+                elements.prestigeRequirement.style.color = '#bdc3c7';
+                elements.prestigeBtn.disabled = true;
+            }
+
+            let totalBusinesses = 0;
+            for (let i = 0; i < businesses.length; i++) totalBusinesses += businesses[i].owned;
+            elements.statTotalBusinesses.textContent = totalBusinesses;
+            elements.statPrestigeLevel.textContent = prestigeLevel;
+            elements.statTotalClicks.textContent = totalClicks;
+            elements.statTotalEarned.textContent = formatMoney(totalEarned);
+
+            updateBusinessButtons();
+            updateUpgradeButtons();
+        }
+
+        // Построение списка бизнесов (с кнопкой улучшений)
+        function buildBusinessList() {
+            elements.businessList.innerHTML = '';
+            businessElements = [];
+
+            for (let i = 0; i < businesses.length; i++) {
+                const business = businesses[i];
+                const cost = getBusinessCost(business);
+                const canAfford = balance >= cost;
+
+                const card = document.createElement('div');
+                card.className = 'business-card';
+
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'business-info';
+                infoDiv.innerHTML = `
+                    <div class="business-name">${business.name}</div>
+                    <div class="business-income">+${formatMoney(business.baseIncome)}/сек каждый</div>
+                    <div class="business-owned">Куплено: ${business.owned}</div>
+                `;
+
+                const upgradeBtn = document.createElement('button');
+                upgradeBtn.className = 'upgrade-business-btn';
+                upgradeBtn.textContent = '⚡';
+                upgradeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showBusinessUpgradesModal(i);
+                });
+
+                const buyBtn = document.createElement('button');
+                buyBtn.className = 'buy-button';
+                buyBtn.disabled = !canAfford;
+                buyBtn.textContent = canAfford ? formatMoney(cost) : 'Не хватает';
+                buyBtn.dataset.index = i;
+                buyBtn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index);
+                    buyBusiness(idx);
+                });
+
+                card.appendChild(infoDiv);
+                card.appendChild(upgradeBtn);
+                card.appendChild(buyBtn);
+                elements.businessList.appendChild(card);
+
+                businessElements[i] = {
+                    button: buyBtn,
+                    ownedSpan: infoDiv.querySelector('.business-owned')
+                };
             }
         }
 
-        // Buy business - FIXED: Works on first click
-        function buyBusiness(businessId) {
-            const cost = getBusinessCost(businessId);
-            
-            if (canAfford(gameState.balance, cost)) {
-                gameState.balance = Math.round((gameState.balance - cost) * 100) / 100;
-                gameState.businesses[businessId]++;
-                updateUI();
-                saveGame();
-                return true;
+        // Построение списка глобальных улучшений
+        function buildUpgradeList() {
+            elements.upgradeList.innerHTML = '';
+            upgradeElements = [];
+            let hasUpgrades = false;
+
+            for (let i = 0; i < upgrades.length; i++) {
+                const upgrade = upgrades[i];
+                if (upgrade.purchased) continue;
+                hasUpgrades = true;
+
+                const canAfford = balance >= upgrade.cost;
+                const card = document.createElement('div');
+                card.className = 'upgrade-card';
+
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'upgrade-info';
+                infoDiv.innerHTML = `
+                    <div class="upgrade-name">${upgrade.name}</div>
+                    <div class="upgrade-desc">${upgrade.desc}</div>
+                `;
+
+                const btn = document.createElement('button');
+                btn.className = 'buy-button';
+                btn.disabled = !canAfford;
+                btn.textContent = canAfford ? formatMoney(upgrade.cost) : 'Не хватает';
+                btn.dataset.index = i;
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index);
+                    buyUpgrade(idx);
+                });
+
+                card.appendChild(infoDiv);
+                card.appendChild(btn);
+                elements.upgradeList.appendChild(card);
+
+                upgradeElements[i] = { button: btn };
             }
-            return false;
+
+            if (!hasUpgrades) {
+                elements.upgradeList.innerHTML = '<p style="color: #bdc3c7; text-align: center;">Все улучшения куплены!</p>';
+            }
         }
 
-        // Buy upgrade - FIXED: Works on first click
-        function buyUpgrade(upgradeId) {
-            const upgrade = upgradesConfig.find(u => u.id === upgradeId);
-            if (!upgrade) return false;
-            
-            if (canAfford(gameState.balance, upgrade.cost) && !gameState.upgrades[upgradeId]) {
-                gameState.balance = Math.round((gameState.balance - upgrade.cost) * 100) / 100;
-                gameState.upgrades[upgradeId] = true;
-                updateUI();
-                saveGame();
-                return true;
-            }
-            return false;
-        }
+        // Покупка бизнеса
+        function buyBusiness(index) {
+            const business = businesses[index];
+            const cost = getBusinessCost(business);
 
-        // Click handler
-        function handleClick(e) {
-            e.preventDefault();
-            const value = getClickValue();
-            gameState.balance = Math.round((gameState.balance + value) * 100) / 100;
-            gameState.totalEarned = Math.round((gameState.totalEarned + value) * 100) / 100;
-            gameState.clickCount++;
-            
-            const floatingText = document.createElement('div');
-            floatingText.className = 'floating-text';
-            floatingText.textContent = '+' + formatNumber(value);
-            floatingText.style.left = (e.clientX - 50) + 'px';
-            floatingText.style.top = (e.clientY - 30) + 'px';
-            document.body.appendChild(floatingText);
-            
-            setTimeout(() => {
-                if (floatingText.parentNode) {
-                    floatingText.remove();
+            if (balance >= cost) {
+                balance -= cost;
+                business.owned++;
+                if (businessElements[index] && businessElements[index].ownedSpan) {
+                    businessElements[index].ownedSpan.textContent = 'Куплено: ' + business.owned;
                 }
-            }, 1000);
-            
-            updateUI();
+                recalculateIncome();
+                updateUI();
+                saveGame();
+                showNotification('Куплено: ' + business.name + '!');
+            }
         }
 
-        // Prestige handler
+        // Покупка глобального улучшения
+        function buyUpgrade(index) {
+            const upgrade = upgrades[index];
+
+            if (balance >= upgrade.cost && !upgrade.purchased) {
+                balance -= upgrade.cost;
+                upgrade.purchased = true;
+
+                if (upgrade.effect === 'click1') clickValue += 1;
+                else if (upgrade.effect === 'click5') clickValue += 5;
+
+                recalculateIncome();
+                buildUpgradeList(); // перестроить список улучшений
+                updateUI();
+                saveGame();
+                showNotification('Улучшение куплено: ' + upgrade.name + '!');
+            }
+        }
+
+        // Покупка улучшения бизнеса
+        function buyBusinessUpgrade(businessIndex, upgradeIndex) {
+            const business = businesses[businessIndex];
+            const upgrade = business.upgrades[upgradeIndex];
+            if (!upgrade || upgrade.purchased) return;
+            if (balance < upgrade.cost) {
+                showNotification('Недостаточно средств!');
+                return;
+            }
+            balance -= upgrade.cost;
+            upgrade.purchased = true;
+            recalculateIncome();
+            updateUI();
+            // Обновить модальное окно (оно открыто)
+            showBusinessUpgradesModal(businessIndex);
+            saveGame();
+            showNotification(`Улучшение "${upgrade.name}" куплено!`);
+        }
+
+        // Показать модальное окно с улучшениями для конкретного бизнеса
+        function showBusinessUpgradesModal(businessIndex) {
+            const business = businesses[businessIndex];
+            elements.businessUpgradeModalTitle.textContent = `Улучшения для ${business.name}`;
+            const listDiv = elements.businessUpgradeList;
+            listDiv.innerHTML = '';
+
+            business.upgrades.forEach((upgrade, idx) => {
+                if (upgrade.purchased) return;
+                const card = document.createElement('div');
+                card.className = 'upgrade-card';
+                card.style.marginBottom = '10px';
+                card.innerHTML = `
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">${upgrade.name}</div>
+                        <div class="upgrade-desc">${upgrade.desc}</div>
+                    </div>
+                    <button class="buy-button" data-business="${businessIndex}" data-upgrade="${idx}">${formatMoney(upgrade.cost)}</button>
+                `;
+                listDiv.appendChild(card);
+            });
+
+            if (listDiv.children.length === 0) {
+                listDiv.innerHTML = '<p style="color: #bdc3c7;">Все улучшения для этого бизнеса куплены!</p>';
+            }
+
+            // Добавляем обработчики на кнопки
+            listDiv.querySelectorAll('.buy-button').forEach(btn => {
+                const bizIdx = parseInt(btn.dataset.business);
+                const upgIdx = parseInt(btn.dataset.upgrade);
+                const cost = businesses[bizIdx].upgrades[upgIdx].cost;
+                btn.disabled = balance < cost;
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const bIdx = parseInt(this.dataset.business);
+                    const uIdx = parseInt(this.dataset.upgrade);
+                    buyBusinessUpgrade(bIdx, uIdx);
+                });
+            });
+
+            elements.businessUpgradeModal.classList.add('active');
+        }
+
+        // Клик по кнопке заработка
+        function handleClick(event) {
+            const earn = clickValue * prestigeMultiplier * bonusMultiplier;
+            addMoney(earn);
+            totalClicks++;
+            createFloatingText(event, '+' + formatMoney(earn));
+            saveGame();
+        }
+
+        function createFloatingText(event, text) {
+            const el = document.createElement('div');
+            el.className = 'floating-text';
+            el.textContent = text;
+            el.style.left = event.clientX + 'px';
+            el.style.top = event.clientY + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000);
+        }
+
+        function showPrestigeModal() {
+            if (!canPrestige()) return;
+            elements.modalCurrentLevel.textContent = prestigeLevel;
+            elements.modalNewLevel.textContent = prestigeLevel + 1;
+            elements.modalNewMultiplier.textContent = 'x' + (prestigeMultiplier * 2).toFixed(1);
+            elements.prestigeModal.classList.add('active');
+        }
+
         function doPrestige() {
-            gameState.prestigeLevel++;
-            gameState.balance = 0;
-            gameState.businesses = {};
-            gameState.upgrades = {};
-            businessesConfig.forEach(b => {
-                gameState.businesses[b.id] = 0;
-            });
-            upgradesConfig.forEach(u => {
-                gameState.upgrades[u.id] = false;
-            });
-            
+            balance = 0;
+            incomePerSecond = 0;
+            clickValue = 1;
+            totalClicks = 0;
+            totalEarned = 0;
+
+            // Сброс бизнесов и их улучшений
+            for (let i = 0; i < businesses.length; i++) {
+                businesses[i].owned = 0;
+                if (businesses[i].upgrades) {
+                    businesses[i].upgrades.forEach(u => u.purchased = false);
+                }
+            }
+            // Сброс глобальных улучшений
+            for (let i = 0; i < upgrades.length; i++) {
+                upgrades[i].purchased = false;
+            }
+
+            prestigeLevel++;
+            prestigeMultiplier = Math.pow(2, prestigeLevel);
+
+            // Смена цели престижа (не зацикливаем на первый)
+            if (prestigeTargetIndex < businesses.length - 1) {
+                prestigeTargetIndex++;
+            } // иначе остаётся на последнем
+
+            recalculateIncome();
+            buildBusinessList();
+            buildUpgradeList();
             updateUI();
             saveGame();
-            
-            document.getElementById('prestigeModal').classList.remove('active');
-            showNotification('👑 Престиж совершён! Множитель: x' + getPrestigeMultiplier().toFixed(1));
+            elements.prestigeModal.classList.remove('active');
+            showNotification(`Престиж выполнен! Множитель: x${prestigeMultiplier}. Новая цель: ${businesses[prestigeTargetIndex].name}`);
+
+            // Проверка на победу
+            if (prestigeLevel >= MAX_PRESTIGE_LEVEL && prestigeTargetIndex === businesses.length - 1) {
+                showWinModal();
+            }
         }
 
-        // Reset game
-        function resetGame() {
-            gameState = {
-                balance: 0,
-                totalEarned: 0,
-                clickCount: 0,
-                prestigeLevel: 0,
-                businesses: {},
-                upgrades: {}
-            };
-            initGameState();
+        // Показать модальное окно победы
+        function showWinModal() {
+            elements.winModal.classList.add('active');
+        }
+
+        // Начать заново с бонусом x5
+        function winResetWithBonus() {
+            // Полный сброс, но с установкой бонуса
+            balance = 0;
+            incomePerSecond = 0;
+            clickValue = 1;
+            prestigeLevel = 0;
+            prestigeMultiplier = 1;
+            bonusMultiplier = 5;
+            totalClicks = 0;
+            totalEarned = 0;
+            prestigeTargetIndex = 5; // банк
+
+            for (let i = 0; i < businesses.length; i++) {
+                businesses[i].owned = 0;
+                if (businesses[i].upgrades) {
+                    businesses[i].upgrades.forEach(u => u.purchased = false);
+                }
+            }
+            for (let i = 0; i < upgrades.length; i++) {
+                upgrades[i].purchased = false;
+            }
+
+            recalculateIncome();
+            buildBusinessList();
+            buildUpgradeList();
             updateUI();
             saveGame();
-            
-            document.getElementById('resetModal').classList.remove('active');
+            elements.winModal.classList.remove('active');
+            showNotification('Новая игра с бонусом x5 начата!');
         }
 
-        // Show notification
+        function hardReset() {
+            balance = 0;
+            incomePerSecond = 0;
+            clickValue = 1;
+            prestigeLevel = 0;
+            prestigeMultiplier = 1;
+            bonusMultiplier = 1; // сбрасываем бонус
+            totalClicks = 0;
+            totalEarned = 0;
+            prestigeTargetIndex = 5; // банк
+
+            for (let i = 0; i < businesses.length; i++) {
+                businesses[i].owned = 0;
+                if (businesses[i].upgrades) {
+                    businesses[i].upgrades.forEach(u => u.purchased = false);
+                }
+            }
+            for (let i = 0; i < upgrades.length; i++) {
+                upgrades[i].purchased = false;
+            }
+
+            recalculateIncome();
+            buildBusinessList();
+            buildUpgradeList();
+            updateUI();
+            saveGame();
+            showNotification('Прогресс сброшен!');
+        }
+
         function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.classList.add('show');
-            setTimeout(() => notification.classList.remove('show'), 3000);
+            elements.notification.textContent = message;
+            elements.notification.classList.add('show');
+            setTimeout(() => elements.notification.classList.remove('show'), 3000);
         }
 
-        // Save game
+        // ==================== SAVE/LOAD ====================
         function saveGame() {
-            try {
-                localStorage.setItem('empireTycoonSave', JSON.stringify(gameState));
-            } catch (e) {
-                console.error('Failed to save game:', e);
-            }
+            const saveData = {
+                balance, incomePerSecond, clickValue, prestigeLevel, prestigeMultiplier, bonusMultiplier,
+                totalClicks, totalEarned, prestigeTargetIndex,
+                businesses: businesses.map(b => b.owned),
+                upgrades: upgrades.map(u => u.purchased),
+                businessUpgrades: businesses.map(b => b.upgrades ? b.upgrades.map(u => u.purchased) : [])
+            };
+            localStorage.setItem('empireTycoonSave', JSON.stringify(saveData));
         }
 
-        // Load game
         function loadGame() {
+            const saved = localStorage.getItem('empireTycoonSave');
+            if (!saved) return;
             try {
-                const saved = localStorage.getItem('empireTycoonSave');
-                if (saved) {
-                    const loaded = JSON.parse(saved);
-                    gameState = loaded;
-                    initGameState();
-                } else {
-                    initGameState();
+                const data = JSON.parse(saved);
+                balance = data.balance || 0;
+                incomePerSecond = data.incomePerSecond || 0;
+                clickValue = data.clickValue || 1;
+                prestigeLevel = data.prestigeLevel || 0;
+                prestigeMultiplier = data.prestigeMultiplier || 1;
+                bonusMultiplier = data.bonusMultiplier || 1;
+                totalClicks = data.totalClicks || 0;
+                totalEarned = data.totalEarned || 0;
+                prestigeTargetIndex = data.prestigeTargetIndex !== undefined ? data.prestigeTargetIndex : 5;
+
+                if (data.businesses) {
+                    for (let i = 0; i < data.businesses.length && i < businesses.length; i++) {
+                        businesses[i].owned = data.businesses[i];
+                    }
                 }
+                if (data.upgrades) {
+                    for (let i = 0; i < data.upgrades.length && i < upgrades.length; i++) {
+                        upgrades[i].purchased = data.upgrades[i];
+                    }
+                }
+                if (data.businessUpgrades) {
+                    for (let i = 0; i < data.businessUpgrades.length && i < businesses.length; i++) {
+                        const biz = businesses[i];
+                        if (biz.upgrades) {
+                            for (let j = 0; j < data.businessUpgrades[i].length && j < biz.upgrades.length; j++) {
+                                biz.upgrades[j].purchased = data.businessUpgrades[i][j];
+                            }
+                        }
+                    }
+                }
+                recalculateIncome();
             } catch (e) {
-                console.error('Failed to load game:', e);
-                initGameState();
+                console.error('Load error', e);
             }
         }
 
-        // Tab switching
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            
-            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-            document.getElementById(`${tabId}-panel`).classList.add('active');
+        // ==================== CHEATS ====================
+        function addCheatMoney() {
+            addMoney(1000000000000);
+            showNotification('💰 +$1 Триллион добавлено!');
         }
 
-        // Income loop
-        function startIncomeLoop() {
-            if (incomeInterval) {
-                clearInterval(incomeInterval);
-            }
-            
-            incomeInterval = setInterval(() => {
-                const income = getTotalIncome() / 10;
-                if (income > 0) {
-                    gameState.balance = Math.round((gameState.balance + income) * 100) / 100;
-                    gameState.totalEarned = Math.round((gameState.totalEarned + income) * 100) / 100;
-                    updateUI();
-                }
+        function cheatReset() {
+            hardReset();
+            showNotification('🔄 Прогресс сброшен!');
+        }
+
+        // ==================== TABS ====================
+        function setupTabs() {
+            elements.tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    elements.tabButtons.forEach(b => b.classList.remove('active'));
+                    elements.contentSections.forEach(s => s.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        function setupEventListeners() {
+            elements.clickBtn.addEventListener('click', handleClick);
+            elements.prestigeBtn.addEventListener('click', showPrestigeModal);
+            elements.cheatMoneyBtn.addEventListener('click', addCheatMoney);
+            elements.cheatResetBtn.addEventListener('click', cheatReset);
+            elements.resetConfirmBtn.addEventListener('click', () => {
+                hardReset();
+                elements.resetModal.classList.remove('active');
+            });
+            elements.resetCancelBtn.addEventListener('click', () => elements.resetModal.classList.remove('active'));
+            elements.prestigeCancelBtn.addEventListener('click', () => elements.prestigeModal.classList.remove('active'));
+            elements.prestigeConfirmBtn.addEventListener('click', doPrestige);
+            elements.businessUpgradeCloseBtn.addEventListener('click', () => elements.businessUpgradeModal.classList.remove('active'));
+            elements.businessUpgradeModal.addEventListener('click', (e) => {
+                if (e.target === elements.businessUpgradeModal) elements.businessUpgradeModal.classList.remove('active');
+            });
+            elements.winContinueBtn.addEventListener('click', () => elements.winModal.classList.remove('active'));
+            elements.winResetBtn.addEventListener('click', winResetWithBonus);
+            elements.winModal.addEventListener('click', (e) => {
+                if (e.target === elements.winModal) elements.winModal.classList.remove('active');
+            });
+            setupTabs();
+        }
+
+        // ==================== PASSIVE INCOME ====================
+        function startPassiveIncome() {
+            setInterval(() => {
+                if (incomePerSecond > 0) addMoney(incomePerSecond / 10);
             }, 100);
         }
 
-        // Auto-save every 30 seconds
-        function startAutoSave() {
-            setInterval(() => {
-                saveGame();
-            }, 30000);
-        }
-
-        // Initialize
+        // ==================== INIT ====================
         function init() {
+            getElements();
             loadGame();
+            buildBusinessList();
+            buildUpgradeList();
+            setupEventListeners();
             updateUI();
-            startIncomeLoop();
-            startAutoSave();
+            startPassiveIncome();
         }
 
-        // Event listeners - FIXED: Using direct handlers
-        document.getElementById('clickButton').addEventListener('mousedown', function(e) {
-            handleClick(e);
-        });
-
-        document.getElementById('clickButton').addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            const touch = e.touches[0];
-            handleClick({ 
-                clientX: touch.clientX, 
-                clientY: touch.clientY, 
-                preventDefault: () => {} 
-            });
-        }, { passive: false });
-        
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                switchTab(this.dataset.tab);
-            });
-        });
-
-        document.getElementById('resetButton').addEventListener('click', function() {
-            document.getElementById('resetModal').classList.add('active');
-        });
-
-        document.getElementById('cancelReset').addEventListener('click', function() {
-            document.getElementById('resetModal').classList.remove('active');
-        });
-
-        document.getElementById('confirmReset').addEventListener('click', resetGame);
-
-        document.getElementById('prestigeButton').addEventListener('click', function() {
-            if (isPrestigeUnlocked()) {
-                document.getElementById('prestigeModalCurrent').textContent = gameState.prestigeLevel;
-                document.getElementById('prestigeModalNew').textContent = gameState.prestigeLevel + 1;
-                document.getElementById('prestigeModalMultiplier').textContent = 'x' + Math.pow(2, gameState.prestigeLevel + 1).toFixed(1);
-                document.getElementById('prestigeModal').classList.add('active');
-            }
-        });
-
-        document.getElementById('cancelPrestige').addEventListener('click', function() {
-            document.getElementById('prestigeModal').classList.remove('active');
-        });
-
-        document.getElementById('confirmPrestige').addEventListener('click', doPrestige);
-
-        // Close modals on outside click
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
-            });
-        });
-
-        // Start the game when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
+        init();
     </script>
 </body>
 </html>
