@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Игровая Компания Raites | Создаём миры</title>
+<!-- Favicon -->
+<link rel="icon" type="image/jpeg" href="assets/images/raites.jpg">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Remix Icon CDN -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<!-- EmailJS CDN -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+(function() {
+emailjs.init("ugovLRn3G9yRvbUfG");
+})();
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+scroll-behavior: smooth;
+}
+body {
+font-family: 'Inter', sans-serif;
+background: #0f172a;
+color: #ffffff;
+line-height: 1.5;
+}
+/* Game Transition Overlay */
+.game-transition {
+position: fixed;
+inset: 0;
+background: #0f172a;
+z-index: 9999;
+display: flex;
+align-items: center;
+justify-content: center;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.5s ease;
+}
+.game-transition.active {
+opacity: 1;
+pointer-events: all;
+}
+.game-loader {
+width: 80px;
+height: 80px;
+border: 4px solid #1e293b;
+border-top-color: #3b82f6;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+.game-transition-title {
+margin-top: 20px;
+color: #e2e8f0;
+font-size: 1.5rem;
+font-weight: 600;
+opacity: 0;
+transform: translateY(20px);
+transition: all 0.3s ease 0.3s;
+}
+.game-transition.active .game-transition-title {
+opacity: 1;
+transform: translateY(0);
+}
+/* Hover Effects */
+.game-card {
+transition: all 0.3s ease;
+}
+.game-card:hover {
+transform: translateY(-8px);
+box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+}
+.play-btn {
+position: relative;
+overflow: hidden;
+}
+.play-btn::before {
+content: '';
+position: absolute;
+inset: 0;
+background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+transform: translateX(-100%);
+transition: transform 0.5s ease;
+}
+.play-btn:hover::before {
+transform: translateX(100%);
+}
+/* Scroll Animations */
+.fade-in {
+opacity: 0;
+transform: translateY(30px);
+transition: all 0.6s ease;
+}
+.fade-in.visible {
+opacity: 1;
+transform: translateY(0);
+}
+/* ========== НАВИГАЦИЯ ========== */
+.navbar {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+z-index: 50;
+background: rgba(15, 23, 42, 0.95);
+backdrop-filter: blur(8px);
+border-bottom: 1px solid #1e293b;
+}
+.nav-container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 1rem 1.5rem;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+.logo {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+}
+.logo-icon {
+width: 2.5rem;
+height: 2.5rem;
+border-radius: 0.5rem;
+overflow: hidden;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.logo-icon img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+.logo-text {
+font-size: 1.25rem;
+font-weight: 700;
+}
+.nav-links {
+display: flex;
+gap: 2rem;
+}
+.nav-links a {
+color: #cbd5e1;
+transition: color 0.2s;
+text-decoration: none;
+font-size: 1rem;
+}
+.nav-links a:hover {
+color: #ffffff;
+}
+.mobile-menu-btn {
+display: none;
+background: none;
+border: none;
+color: white;
+cursor: pointer;
+font-size: 1.5rem;
+width: 40px;
+height: 40px;
+align-items: center;
+justify-content: center;
+border-radius: 8px;
+transition: background 0.2s;
+z-index: 100;
+}
+.mobile-menu-btn:hover {
+background: rgba(255, 255, 255, 0.1);
+}
+@media (max-width: 768px) {
+.nav-links {
+position: fixed;
+top: 70px;
+right: -100%;
+width: 220px;
+background: rgba(15, 23, 42, 0.98);
+backdrop-filter: blur(12px);
+flex-direction: column;
+gap: 0;
+transition: right 0.3s ease;
+z-index: 99;
+display: flex;
+margin: 0;
+padding: 0;
+border-radius: 12px;
+border: 1px solid rgba(255, 255, 255, 0.1);
+overflow: hidden;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+.mobile-menu-btn {
+display: flex;
+}
+.nav-links.active {
+right: 20px;
+}
+.nav-links a {
+color: #e2e8f0;
+font-size: 0.95rem;
+padding: 12px 20px;
+width: 100%;
+text-align: left;
+border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+transition: all 0.2s;
+}
+.nav-links a:last-child {
+border-bottom: none;
+}
+.nav-links a:hover {
+color: #60a5fa;
+background: rgba(96, 165, 250, 0.1);
+padding-left: 24px;
+}
+}
+/* ========== ФИЛЬТРЫ - СТИЛЬНОЕ РАСПОЛОЖЕНИЕ ========== */
+.filters-section {
+margin-bottom: 48px;
+}
+.filter-buttons-wrapper {
+display: flex;
+justify-content: center;
+margin-bottom: 32px;
+}
+.filter-buttons {
+display: flex;
+flex-wrap: wrap;
+gap: 16px;
+justify-content: center;
+background: rgba(30, 41, 59, 0.4);
+backdrop-filter: blur(4px);
+padding: 12px 24px;
+border-radius: 80px;
+border: 1px solid rgba(59, 130, 246, 0.2);
+}
+.filter-btn {
+padding: 12px 28px;
+background: rgba(255, 255, 255, 0.05);
+border: 1px solid rgba(255, 255, 255, 0.15);
+border-radius: 60px;
+color: #e2e8f0;
+font-weight: 600;
+font-size: 0.95rem;
+cursor: pointer;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+letter-spacing: 0.3px;
+backdrop-filter: blur(4px);
+}
+.filter-btn:hover {
+background: rgba(59, 130, 246, 0.25);
+border-color: #3b82f6;
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+.filter-btn.active {
+background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+border-color: transparent;
+color: white;
+box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+.search-panel {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+justify-content: center;
+max-width: 800px;
+margin: 0 auto;
+}
+.search-box {
+flex: 2;
+min-width: 240px;
+}
+.search-box input {
+width: 100%;
+padding: 14px 20px;
+background: rgba(15, 23, 42, 0.8);
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 60px;
+color: white;
+font-size: 0.95rem;
+transition: all 0.3s;
+backdrop-filter: blur(4px);
+}
+.search-box input:focus {
+outline: none;
+border-color: #3b82f6;
+background: rgba(15, 23, 42, 1);
+box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+.genre-select {
+flex: 1;
+min-width: 200px;
+}
+.genre-select select {
+width: 100%;
+padding: 14px 20px;
+background: rgba(15, 23, 42, 0.8);
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 60px;
+color: white;
+font-size: 0.95rem;
+cursor: pointer;
+transition: all 0.3s;
+backdrop-filter: blur(4px);
+}
+.genre-select select:focus {
+outline: none;
+border-color: #3b82f6;
+background: rgba(15, 23, 42, 1);
+box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+@media (max-width: 768px) {
+.filter-buttons {
+padding: 12px 20px;
+gap: 12px;
+border-radius: 60px;
+width: 100%;
+}
+.filter-btn {
+padding: 8px 18px;
+font-size: 0.85rem;
+}
+.search-panel {
+padding: 0 12px;
+}
+}
+/* ========== СЕТКА ИГР ========== */
+.games-grid {
+display: grid;
+grid-template-columns: 1fr;
+gap: 32px;
+margin-top: 32px;
+}
+@media (min-width: 768px) {
+.games-grid {
+grid-template-columns: repeat(2, 1fr);
+}
+}
+@media (min-width: 1024px) {
+.games-grid {
+grid-template-columns: repeat(3, 1fr);
+}
+}
+/* ========== КАРТОЧКА ИГРЫ ========== */
+.game-card-new {
+background: linear-gradient(135deg, #1e293b, #0f172a);
+border-radius: 1.5rem;
+overflow: hidden;
+border: 1px solid rgba(255, 255, 255, 0.1);
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+display: flex;
+flex-direction: column;
+height: 100%;
+position: relative;
+}
+.game-card-new:hover {
+transform: translateY(-8px);
+box-shadow: 0 25px 40px rgba(0, 0, 0, 0.4);
+border-color: rgba(59, 130, 246, 0.6);
+}
+.game-card-image {
+position: relative;
+height: 200px;
+overflow: hidden;
+background: linear-gradient(135deg, #2d3748, #1e293b);
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.game-image-placeholder {
+font-size: 4rem;
+color: #94a3b8;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+height: 100%;
+background: linear-gradient(135deg, #1f2937, #111827);
+}
+.game-card-image img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+.game-badge {
+position: absolute;
+top: 12px;
+left: 12px;
+padding: 4px 12px;
+border-radius: 20px;
+font-size: 0.7rem;
+font-weight: 600;
+z-index: 10;
+color: white;
+}
+.game-badge.web { background: linear-gradient(135deg, #10b981, #059669); }
+.game-badge.pc { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.game-badge.mobile { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.coming-soon-badge {
+position: absolute;
+top: 12px;
+right: 12px;
+left: auto;
+background: linear-gradient(135deg, #ef4444, #dc2626);
+padding: 4px 12px;
+border-radius: 20px;
+font-size: 0.7rem;
+font-weight: 600;
+z-index: 10;
+color: white;
+}
+.game-card-content {
+padding: 24px;
+flex: 1;
+display: flex;
+flex-direction: column;
+background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+/* ========== НАЗВАНИЯ ИГР - БЕЛЫЕ С ПОДСВЕТКОЙ ========== */
+.game-card-content .game-title {
+font-size: 1.35rem;
+font-weight: 800;
+margin-bottom: 0.75rem;
+color: #ffffff;
+display: block;
+line-height: 1.3;
+text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.3);
+letter-spacing: -0.2px;
+transition: text-shadow 0.3s ease;
+}
+.game-card-new:hover .game-title {
+text-shadow: 0 0 12px rgba(255, 255, 255, 0.5), 0 0 8px rgba(96, 165, 250, 0.4);
+}
+.game-description {
+color: #94a3b8;
+font-size: 0.875rem;
+margin-bottom: 1rem;
+line-height: 1.5;
+}
+.game-tags {
+display: flex;
+flex-wrap: wrap;
+gap: 0.5rem;
+margin-bottom: 0.75rem;
+}
+.tag {
+padding: 0.25rem 0.75rem;
+background: #334155;
+border-radius: 9999px;
+font-size: 0.7rem;
+color: #e2e8f0;
+}
+.game-genres {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin-bottom: 1rem;
+}
+.genre-tag {
+padding: 4px 10px;
+background: rgba(59, 130, 246, 0.2);
+border-radius: 20px;
+font-size: 0.7rem;
+color: #60a5fa;
+}
+.play-btn {
+width: 100%;
+padding: 12px;
+background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+border: none;
+border-radius: 12px;
+color: white;
+font-weight: 600;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+transition: all 0.3s;
+margin-top: auto;
+}
+.play-btn:hover {
+transform: scale(1.02);
+box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+}
+.download-btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+width: 100%;
+padding: 12px;
+background: linear-gradient(135deg, #10b981, #059669);
+border: none;
+border-radius: 12px;
+color: white;
+font-weight: 600;
+text-decoration: none;
+transition: all 0.3s;
+margin-top: auto;
+}
+.download-btn:hover {
+transform: scale(1.02);
+box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+}
+.btn-coming-soon {
+width: 100%;
+padding: 12px;
+background: rgba(100, 100, 100, 0.5);
+border: none;
+border-radius: 12px;
+color: #94a3b8;
+font-weight: 600;
+cursor: not-allowed;
+margin-top: auto;
+}
+.no-results {
+text-align: center;
+padding: 60px 20px;
+background: rgba(30, 41, 59, 0.3);
+border-radius: 1rem;
+}
+.no-results-icon {
+font-size: 4rem;
+margin-bottom: 1rem;
+}
+.no-results h3 {
+font-size: 1.5rem;
+margin-bottom: 0.5rem;
+color: #e2e8f0;
+}
+.no-results p {
+color: #94a3b8;
+}
+/* ========== КОНТАКТЫ ========== */
+.contact-content {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 3rem;
+}
+.contact-info {
+background: #0f0f1a;
+padding: 2rem;
+border-radius: 15px;
+border: 1px solid #6c5ce7;
+}
+.contact-info h3 {
+color: #6c5ce7;
+margin-bottom: 1.5rem;
+font-size: 1.5rem;
+}
+.contact-info-item {
+display: flex;
+align-items: flex-start;
+gap: 1rem;
+margin-bottom: 1.5rem;
+padding: 1rem;
+background: rgba(108, 92, 231, 0.1);
+border-radius: 10px;
+transition: background 0.3s;
+}
+.contact-info-item:hover {
+background: rgba(108, 92, 231, 0.2);
+}
+.contact-info-item span {
+font-size: 1.8rem;
+min-width: 40px;
+}
+.contact-info-item .label {
+font-size: 0.85rem;
+color: #a29bfe;
+text-transform: uppercase;
+letter-spacing: 1px;
+margin-bottom: 0.25rem;
+}
+.contact-social {
+margin-top: 2rem;
+padding-top: 1.5rem;
+border-top: 1px solid rgba(108, 92, 231, 0.3);
+}
+.contact-social h4 {
+color: #6c5ce7;
+margin-bottom: 1rem;
+font-size: 1.1rem;
+}
+.contact-social-links {
+display: flex;
+gap: 1rem;
+flex-wrap: wrap;
+}
+.contact-social-links a {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 44px;
+height: 44px;
+background: rgba(108, 92, 231, 0.2);
+border-radius: 50%;
+font-size: 1.3rem;
+text-decoration: none;
+transition: all 0.3s;
+border: 1px solid rgba(108, 92, 231, 0.3);
+color: white;
+}
+.contact-social-links a:hover {
+background: #6c5ce7;
+transform: translateY(-3px);
+box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+}
+.contact-form {
+background: #0f0f1a;
+padding: 2rem;
+border-radius: 15px;
+border: 1px solid #6c5ce7;
+}
+.contact-form h3 {
+color: #6c5ce7;
+margin-bottom: 1.5rem;
+font-size: 1.5rem;
+}
+.form-group {
+margin-bottom: 1.5rem;
+}
+.form-group label {
+display: block;
+margin-bottom: 0.5rem;
+color: #b2bec3;
+font-weight: 500;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+width: 100%;
+padding: 1rem;
+background: #1a1a2e;
+border: 1px solid #6c5ce7;
+border-radius: 10px;
+color: #ffffff;
+font-size: 1rem;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+outline: none;
+border-color: #a29bfe;
+box-shadow: 0 0 10px rgba(108, 92, 231, 0.3);
+}
+.form-group textarea {
+height: 150px;
+resize: none;
+}
+.form-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1rem;
+}
+.submit-btn {
+width: 100%;
+padding: 1rem;
+background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+color: #ffffff;
+border: none;
+border-radius: 10px;
+font-size: 1rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0.5rem;
+}
+.submit-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
+}
+.form-status {
+margin-top: 1rem;
+padding: 1rem;
+border-radius: 10px;
+display: none;
+font-weight: 500;
+}
+.form-status.success {
+display: block;
+background: rgba(46, 204, 113, 0.2);
+color: #2ecc71;
+border: 1px solid #2ecc71;
+}
+.form-status.error {
+display: block;
+background: rgba(231, 76, 60, 0.2);
+color: #e74c3c;
+border: 1px solid #e74c3c;
+}
+.contact-features {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 1rem;
+margin-top: 2rem;
+padding-top: 1.5rem;
+border-top: 1px solid rgba(108, 92, 231, 0.3);
+}
+.contact-feature {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+padding: 0.75rem;
+background: rgba(108, 92, 231, 0.1);
+border-radius: 8px;
+}
+.footer {
+background: #0f172a;
+border-top: 1px solid #1e293b;
+padding: 3rem 1rem;
+margin-top: 3rem;
+}
+.footer-grid {
+display: grid;
+grid-template-columns: 1fr;
+gap: 2rem;
+}
+@media (min-width: 768px) {
+.footer-grid {
+grid-template-columns: repeat(4, 1fr);
+}
+}
+.footer-links a {
+color: #94a3b8;
+transition: color 0.2s;
+text-decoration: none;
+font-size: 0.875rem;
+}
+.footer-links a:hover {
+color: white;
+}
+.footer-bottom {
+border-top: 1px solid #1e293b;
+padding-top: 2rem;
+margin-top: 2rem;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 1rem;
+text-align: center;
+}
+@media (min-width: 768px) {
+.footer-bottom {
+flex-direction: row;
+justify-content: space-between;
+}
+}
+.section {
+padding: 80px 0;
+}
+.section-alt {
+background: rgba(30, 41, 59, 0.3);
+}
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 24px;
+}
+.grid-2 {
+display: grid;
+grid-template-columns: 1fr;
+gap: 2rem;
+}
+@media (min-width: 768px) {
+.grid-2 {
+grid-template-columns: 1fr 1fr;
+gap: 3rem;
+}
+}
+.grid-4 {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 1.5rem;
+}
+@media (min-width: 768px) {
+.grid-4 {
+grid-template-columns: repeat(4, 1fr);
+gap: 2rem;
+}
+}
+.stat-card {
+background: #1e293b;
+padding: 1.5rem;
+border-radius: 1rem;
+text-align: center;
+}
+.stat-number {
+font-size: 2rem;
+font-weight: 700;
+margin-bottom: 0.5rem;
+}
+.stat-number.blue { color: #60a5fa; }
+.stat-number.purple { color: #c084fc; }
+.stat-number.green { color: #4ade80; }
+.stat-number.yellow { color: #facc15; }
+.news-card {
+background: #1e293b;
+border-radius: 1rem;
+padding: 1.5rem;
+margin-bottom: 1.5rem;
+}
+.news-card.featured {
+border: 2px solid rgba(59, 130, 246, 0.3);
+}
+.faq-item {
+background: #1e293b;
+border-radius: 1rem;
+padding: 1.5rem;
+margin-bottom: 1.5rem;
+}
+@media (max-width: 768px) {
+.section {
+padding: 60px 0;
+}
+.contact-content {
+grid-template-columns: 1fr;
+}
+.form-row {
+grid-template-columns: 1fr;
+}
+.contact-features {
+grid-template-columns: 1fr;
+}
+.container {
+padding: 0 20px;
+}
+}
+</style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar">
+<div class="nav-container">
+<div class="logo">
+<div class="logo-icon">
+<img src="assets/images/raites.jpg" alt="Raites Logo">
+</div>
+<span class="logo-text">RAITES</span>
+</div>
+<div class="nav-links">
+<a href="#games">Игры</a>
+<a href="#about">О компании</a>
+<a href="#news">Новости</a>
+<a href="#support">Поддержка</a>
+<a href="#contact">Контакты</a>
+</div>
+<button class="mobile-menu-btn">☰</button>
+</div>
+</nav>
+
+<!-- Hero Section -->
+<section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+<div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-slate-900 to-purple-900/20"></div>
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+<div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+<div class="inline-block px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400 text-sm mb-6 fade-in">
+🎮 Теперь и веб-игры доступны!
+</div>
+<h1 class="text-5xl md:text-7xl font-bold mb-6 fade-in" style="transition-delay: 0.1s">
+Создаём <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">миры</span>
+</h1>
+<p class="text-xl text-slate-400 mb-8 fade-in" style="transition-delay: 0.2s">
+Погрузитесь в миры, созданные с любовью
+</p>
+<div class="flex flex-wrap gap-4 justify-center fade-in" style="transition-delay: 0.3s">
+<a href="#games" class="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold hover:shadow-lg hover:shadow-blue-500/30 transition-all hover:scale-105">
+Играть сейчас
+</a>
+<a href="#contact" class="px-8 py-4 bg-slate-800 border border-slate-700 rounded-full font-semibold hover:bg-slate-700 transition-all hover:scale-105">
+Контакты
+</a>
+</div>
+</div>
+</section>
+
+<!-- Games Section -->
+<section id="games" class="section">
+<div class="container">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Наши Игры</h2>
+<p class="text-slate-400 text-center mb-8 fade-in">Полноценные проекты для всех платформ</p>
+<!-- Фильтры и поиск - стильное расположение -->
+<div class="filters-section fade-in">
+<div class="filter-buttons-wrapper">
+<div class="filter-buttons">
+<button class="filter-btn active" data-filter="all">Все игры</button>
+<button class="filter-btn" data-filter="web">🌐 Веб-игры</button>
+<button class="filter-btn" data-filter="pc">💻 ПК игры</button>
+<button class="filter-btn" data-filter="mobile">📱 Мобильные игры</button>
+</div>
+</div>
+<div class="search-panel">
+<div class="search-box">
+<input type="text" id="gameSearch" placeholder="🔍 Поиск по названию...">
+</div>
+<div class="genre-select">
+<select id="genreSelect">
+<option value="all">🎮 Все жанры</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Список игр -->
+<div class="games-grid" id="gamesGrid"></div>
+</div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="section">
+<div class="container">
+<div class="grid-2">
+<div class="fade-in">
+<h2 class="text-3xl md:text-4xl font-bold mb-6">О Компании</h2>
+<p class="text-slate-400 mb-6">Raites — новая инновационная игровая компания, основанная в 2026 году. Наша миссия — дарить игрокам незабываемые эмоции через качественные игры.</p>
+<p class="text-slate-400 mb-6">Мы объединяем талантливых разработчиков, художников и дизайнеров со всего мира, чтобы создавать игры, которые вдохновляют и развлекают миллионы игроков.</p>
+<p class="text-slate-400">Наша команда постоянно экспериментирует с новыми технологиями и игровыми механиками, чтобы каждый наш проект был уникальным.</p>
+</div>
+<div class="fade-in" style="display: flex; align-items: center; justify-content: center;">
+<div style="width: 100%; max-width: 400px; aspect-ratio: 1; border-radius: 1.5rem; overflow: hidden; border: 2px solid rgba(108, 92, 231, 0.3); box-shadow: 0 20px 40px rgba(108, 92, 231, 0.2);">
+<img src="assets/images/raites.jpg" alt="Raites Company" style="width: 100%; height: 100%; object-fit: cover;">
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- News Section -->
+<section id="news" class="section section-alt">
+<div class="container">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Новости</h2>
+<p class="text-slate-400 text-center mb-8 fade-in">Последние события из жизни студии</p>
+<div class="max-w-3xl mx-auto">
+<div class="news-card featured fade-in">
+<div class="flex items-center gap-3 mb-3">
+<span class="text-blue-400 text-sm">17 Марта 2026</span>
+<span class="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-xs font-semibold">🎮 Бета-тест</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Empire Tycoon — запущен бета-тест!</h3>
+<p class="text-slate-400 text-sm mb-4">Мы рады сообщить о запуске бета-теста нашей новой веб-игры Empire Tycoon! Постройте свою бизнес-империю с нуля прямо в браузере. Игра полностью бесплатна и не требует регистрации. Присоединяйтесь к тестированию и помогите нам сделать игру лучше!</p>
+<a href="#games" class="text-blue-400 hover:text-blue-300 font-semibold inline-flex items-center gap-2" data-game="empire">Играть сейчас →</a>
+</div>
+<div class="news-card coming fade-in">
+<div class="text-slate-500 text-sm mb-3">Скоро</div>
+<h3 class="text-xl font-bold mb-3 text-slate-400">Анонс новой игры</h3>
+<p class="text-slate-500 text-sm">Мы готовим что-то особенное! Скоро раскроем детали нашего нового проекта.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Support Section -->
+<section id="support" class="section">
+<div class="container container-small">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Поддержка</h2>
+<p class="text-slate-400 text-center mb-8 fade-in">Ответы на частые вопросы</p>
+<div class="space-y-6">
+<div class="faq-item">
+<h3 class="text-lg font-bold mb-3">Как связаться с поддержкой?</h3>
+<p class="text-slate-400">Вы можете написать нам на email <a href="mailto:raites158@gmail.com" class="text-blue-400 hover:underline">raites158@gmail.com</a> или использовать форму обратной связи на сайте.</p>
+</div>
+<div class="faq-item">
+<h3 class="text-lg font-bold mb-3">Где скачать ваши игры?</h3>
+<p class="text-slate-400">Все наши игры доступны в разделе "Наши игры". Веб-игры запускаются прямо в браузере.</p>
+</div>
+<div class="faq-item">
+<h3 class="text-lg font-bold mb-3">Нужно ли регистрироваться?</h3>
+<p class="text-slate-400">Нет, все наши веб-игры полностью бесплатны и не требуют регистрации.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="section section-alt">
+<div class="container">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Контакты</h2>
+<p class="text-slate-400 text-center mb-8 fade-in">Свяжитесь с нами любым удобным способом</p>
+<div class="contact-content">
+<div class="contact-info">
+<h3>Свяжитесь с нами</h3>
+<div class="contact-info-item">
+<span>📧</span>
+<div>
+<p class="label">Email</p>
+<p><a href="mailto:raites158@gmail.com">raites158@gmail.com</a></p>
+<p class="text-xs text-purple-300">Отвечаем в течение 24 часов</p>
+</div>
+</div>
+<div class="contact-info-item">
+<span>📞</span>
+<div>
+<p class="label">Телефон</p>
+<p><a href="tel:+79022707213">+7 (902) 270-72-13</a></p>
+<p class="text-xs text-purple-300">Пн-Пт: 10:00 - 19:00 (МСК)</p>
+</div>
+</div>
+<div class="contact-social">
+<h4>Мы в социальных сетях</h4>
+<div class="contact-social-links">
+<a href="#" title="VKontakte">📘</a>
+<a href="#" title="Telegram">✈️</a>
+<a href="#" title="YouTube">📺</a>
+<a href="#" title="Discord">🎮</a>
+</div>
+</div>
+<div class="contact-features">
+<div class="contact-feature"><span>⚡</span><p>Быстрый ответ</p></div>
+<div class="contact-feature"><span>🔒</span><p>Конфиденциально</p></div>
+<div class="contact-feature"><span>🌍</span><p>Работаем worldwide</p></div>
+<div class="contact-feature"><span>💬</span><p>Поддержка 24/7</p></div>
+</div>
+</div>
+<div class="contact-form">
+<h3>Отправить письмо</h3>
+<form id="contactForm">
+<div class="form-row">
+<div class="form-group">
+<label for="user_name">Ваше имя *</label>
+<input type="text" id="user_name" name="user_name" required placeholder="Иван Иванов">
+</div>
+<div class="form-group">
+<label for="user_email">Email *</label>
+<input type="email" id="user_email" name="user_email" required placeholder="example@mail.ru">
+</div>
+</div>
+<div class="form-group">
+<label for="user_phone">Телефон</label>
+<input type="tel" id="user_phone" name="user_phone" placeholder="+7 (___) ___-__-__">
+</div>
+<div class="form-group">
+<label for="subject">Тема *</label>
+<select id="subject" name="subject" required>
+<option value="">Выберите тему</option>
+<option value="Техническая поддержка">Техническая поддержка</option>
+<option value="Сотрудничество">Сотрудничество</option>
+<option value="Обратная связь">Обратная связь</option>
+</select>
+</div>
+<div class="form-group">
+<label for="message">Сообщение *</label>
+<textarea id="message" name="message" required placeholder="Опишите ваш вопрос..."></textarea>
+</div>
+<button type="submit" class="submit-btn" id="submitBtn">📤 Отправить</button>
+<div class="form-status" id="formStatus"></div>
+</form>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+<div class="container">
+<div class="footer-grid">
+<div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+<img src="assets/images/raites.jpg" alt="Raites Logo" style="width: 100%; height: 100%; object-fit: cover;">
+</div>
+<div>
+<div class="font-bold">RAITES</div>
+<div class="text-slate-400 text-sm">Создаём миры, в которые хочется возвращаться.</div>
+</div>
+</div>
+</div>
+<div>
+<h4 class="font-bold mb-4">Игры</h4>
+<ul class="footer-links space-y-2">
+<li><a href="#games">Все игры</a></li>
+<li><a href="#games" data-filter="web">Веб-игры</a></li>
+<li><a href="#games" data-filter="pc">ПК игры</a></li>
+<li><a href="#games" data-filter="mobile">Мобильные игры</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4">Компания</h4>
+<ul class="footer-links space-y-2">
+<li><a href="#about">О нас</a></li>
+<li><a href="#">Карьера</a></li>
+<li><a href="#">Пресс-кит</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4">Помощь</h4>
+<ul class="footer-links space-y-2">
+<li><a href="#support">Поддержка</a></li>
+<li><a href="#contact">Контакты</a></li>
+<li><a href="#">FAQ</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<p>© 2026 Raites</p>
+<div class="flex gap-6">
+<a href="#" class="text-slate-400 text-sm hover:text-white">Политика конфиденциальности</a>
+<a href="#" class="text-slate-400 text-sm hover:text-white">Условия обслуживания</a>
+</div>
+</div>
+</div>
+</footer>
+
+<!-- Game Transition Overlay -->
+<div class="game-transition" id="gameTransition">
+<div class="text-center">
+<div class="game-loader mx-auto"></div>
+<div class="game-transition-title">Запуск Empire Tycoon...</div>
+</div>
+</div>
+
+<script>
+// Данные игр - ТОЛЬКО EMPIRE TYCOON
+const gamesData = [
+{ id: 1, name: '🏢 Empire Tycoon', description: 'Построй свою бизнес-империю с нуля! Начинай с маленького ларька и стань магнатом. Покупай бизнесы, нанимай менеджеров, получай пассивный доход и стань самым богатым предпринимателем!', platform: 'web', genres: ['Бизнес', 'Стратегия', 'Idle', 'Экономика'], image: 'assets/images/empire-tycoon.jpg', playLink: 'web-games/game-empire.html', tags: ['💼 Бизнес', '📈 Стратегия', '⏱️ Idle'], comingSoon: false }
+];
+
+function getAllGenres() { const genres = new Set(); gamesData.forEach(game => { game.genres.forEach(genre => genres.add(genre)); }); return Array.from(genres).sort(); }
+function updateGenreSelect() { const genreSelect = document.getElementById('genreSelect'); if (!genreSelect) return; const genres = getAllGenres(); genreSelect.innerHTML = '<option value="all">🎮 Все жанры</option>'; genres.forEach(genre => { genreSelect.innerHTML += `<option value="${genre}">🎯 ${genre}</option>`; }); }
+function renderGames() {
+const gamesGrid = document.getElementById('gamesGrid'); if (!gamesGrid) return;
+const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+const searchQuery = document.getElementById('gameSearch')?.value.toLowerCase().trim() || '';
+const selectedGenre = document.getElementById('genreSelect')?.value || 'all';
+let filteredGames = [...gamesData];
+if (activeFilter !== 'all') filteredGames = filteredGames.filter(game => game.platform === activeFilter);
+if (searchQuery) filteredGames = filteredGames.filter(game => game.name.toLowerCase().includes(searchQuery) || game.genres.some(genre => genre.toLowerCase().includes(searchQuery)) || game.tags.some(tag => tag.toLowerCase().includes(searchQuery)));
+if (selectedGenre !== 'all') filteredGames = filteredGames.filter(game => game.genres.includes(selectedGenre));
+if (filteredGames.length === 0) { gamesGrid.innerHTML = `<div class="no-results"><div class="no-results-icon">🔍</div><h3>Игры не найдены</h3><p>Попробуйте изменить фильтр или поисковый запрос</p></div>`; return; }
+gamesGrid.innerHTML = filteredGames.map(game => { const isImageUrl = game.image && game.image.startsWith('assets/'); return `<div class="game-card-new" data-platform="${game.platform}"><div class="game-card-image">${isImageUrl ? `<img src="${game.image}" alt="${game.name}">` : `<div class="game-image-placeholder">${game.image}</div>`}<span class="game-badge ${game.platform === 'web' ? 'web' : game.platform === 'pc' ? 'pc' : 'mobile'}">${game.platform === 'web' ? '🌐 Браузер' : game.platform === 'pc' ? '💻 ПК' : '📱 Мобильная'}</span>${game.comingSoon ? '<span class="coming-soon-badge">🚀 Скоро</span>' : ''}</div><div class="game-card-content"><h3 class="game-title">${game.name}</h3><p class="game-description">${game.description}</p><div class="game-tags">${game.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div><div class="game-genres">${game.genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('')}</div>${game.comingSoon ? '<button class="btn-coming-soon" disabled>🚧 В разработке</button>' : (game.platform === 'web' && game.playLink ? `<button onclick="launchGame('${game.playLink}')" class="play-btn"><span>🎮 Играть</span><i class="ri-external-link-line"></i></button>` : `<a href="#" class="download-btn" target="_blank"><span>📥 Скачать</span><i class="ri-download-line"></i></a>`)}</div></div>`; }).join('');
+}
+function launchGame(gamePath = null) { const transition = document.getElementById('gameTransition'); const targetPath = gamePath || 'web-games/game-empire.html'; if (transition) { transition.classList.add('active'); setTimeout(() => { window.location.href = targetPath; }, 1500); } else { window.location.href = targetPath; } }
+const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', function(e) { e.preventDefault(); const target = document.querySelector(this.getAttribute('href')); if (target) target.scrollIntoView({ behavior: 'smooth' }); }); });
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn'); const navLinks = document.querySelector('.nav-links');
+if (mobileMenuBtn && navLinks) { mobileMenuBtn.addEventListener('click', () => { navLinks.classList.toggle('active'); mobileMenuBtn.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰'; }); document.querySelectorAll('.nav-links a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('active'); mobileMenuBtn.innerHTML = '☰'; }); }); window.addEventListener('resize', () => { if (window.innerWidth > 768) { navLinks.classList.remove('active'); mobileMenuBtn.innerHTML = '☰'; } }); }
+document.addEventListener('DOMContentLoaded', () => { updateGenreSelect(); renderGames(); const filterBtns = document.querySelectorAll('.filter-btn'); const searchInput = document.getElementById('gameSearch'); const genreSelect = document.getElementById('genreSelect'); filterBtns.forEach(btn => { btn.addEventListener('click', () => { filterBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderGames(); }); }); if (searchInput) searchInput.addEventListener('input', () => renderGames()); if (genreSelect) genreSelect.addEventListener('change', () => renderGames()); document.querySelectorAll('[data-filter]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); const filter = link.dataset.filter; const btn = document.querySelector(`.filter-btn[data-filter="${filter}"]`); if (btn) btn.click(); document.getElementById('games').scrollIntoView({ behavior: 'smooth' }); }); }); });
+const phoneInput = document.getElementById('user_phone'); if (phoneInput) { phoneInput.addEventListener('input', function(e) { let value = e.target.value.replace(/\D/g, ''); if (value.length > 0) { if (value[0] === '7') value = value.substring(1); if (value[0] === '8') value = value.substring(1); } value = value.substring(0, 10); let formattedValue = '+7'; if (value.length > 0) formattedValue += ' (' + value.substring(0, 3); if (value.length > 3) formattedValue += ') ' + value.substring(3, 6); if (value.length > 6) formattedValue += '-' + value.substring(6, 8); if (value.length > 8) formattedValue += '-' + value.substring(8, 10); e.target.value = formattedValue; }); }
+const contactForm = document.getElementById('contactForm'); if (contactForm) { contactForm.addEventListener('submit', function(event) { event.preventDefault(); const submitBtn = document.getElementById('submitBtn'); const formStatus = document.getElementById('formStatus'); const originalText = submitBtn.innerHTML; submitBtn.disabled = true; submitBtn.innerHTML = '⏳ Отправка...'; formStatus.className = 'form-status'; formStatus.style.display = 'none'; emailjs.sendForm('service_6u5en3m', 'template_aj1z0ff', this).then(() => { submitBtn.innerHTML = '✅ Отправлено!'; formStatus.textContent = 'Спасибо! Ваше сообщение успешно отправлено.'; formStatus.className = 'form-status success'; formStatus.style.display = 'block'; contactForm.reset(); setTimeout(() => { submitBtn.disabled = false; submitBtn.innerHTML = originalText; formStatus.style.display = 'none'; }, 5000); }).catch(() => { submitBtn.innerHTML = originalText; submitBtn.disabled = false; formStatus.textContent = 'Ошибка отправки. Попробуйте позже.'; formStatus.className = 'form-status error'; formStatus.style.display = 'block'; }); }); }
+</script>
+</body>
+</html>
+
