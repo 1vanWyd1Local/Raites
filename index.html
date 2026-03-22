@@ -1125,7 +1125,7 @@ padding: 0 20px;
 <script>
 // Данные игр - ТОЛЬКО EMPIRE TYCOON
 const gamesData = [
-{ id: 1, name: '🏢 Empire Tycoon', description: 'Построй свою бизнес-империю с нуля! Начинай с маленького ларька и стань магнатом. Покупай бизнесы, нанимай менеджеров, получай пассивный доход и стань самым богатым предпринимателем!', platform: 'web', genres: ['Бизнес', 'Стратегия', 'Idle', 'Экономика'], image: 'assets/images/empire-tycoon.jpg', playLink: 'web-games/game-empire.html', tags: ['💼 Бизнес', '📈 Стратегия', '⏱️ Idle'], comingSoon: false }
+{ id: 1, name: 'Empire Tycoon', description: 'Построй свою бизнес-империю с нуля! Начинай с маленького ларька и стань магнатом. Покупай бизнесы, нанимай менеджеров, получай пассивный доход и стань самым богатым предпринимателем!', platform: 'web', genres: ['Бизнес', 'Стратегия', 'Idle', 'Экономика'], image: 'assets/images/empire-tycoon.jpg', playLink: 'game-empire.html', tags: ['💼 Бизнес', '📈 Стратегия', '⏱️ Idle'], comingSoon: false }
 ];
 
 function getAllGenres() { const genres = new Set(); gamesData.forEach(game => { game.genres.forEach(genre => genres.add(genre)); }); return Array.from(genres).sort(); }
