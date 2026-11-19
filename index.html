@@ -10,17 +10,17 @@
   <title>Учёт рейсов — Газель</title>
   <style>
     :root {
-      --bg: #f4f5f7;
+      --bg: #f3f4f6;
       --surface: #ffffff;
       --surface-2: #eceef2;
-      --text: #1c2127;
+      --text: #1b2026;
       --text-muted: #5c6672;
       --border: #dcdfe6;
-      --primary: #f5b800;
-      --primary-hover: #dfa600;
+      --primary: #f6c300;
+      --primary-hover: #e2b200;
       --primary-text: #181c20;
-      --primary-soft: rgba(245, 184, 0, 0.18);
-      --accent-dark: #222831;
+      --primary-soft: rgba(246, 195, 0, 0.20);
+      --accent-dark: #20252c;
       --success: #15803d;
       --success-soft: rgba(21, 128, 61, 0.14);
       --warning: #b45309;
@@ -32,17 +32,17 @@
     }
 
     [data-theme="dark"] {
-      --bg: #14181d;
-      --surface: #1e242b;
-      --surface-2: #272e37;
+      --bg: #13171c;
+      --surface: #1d2228;
+      --surface-2: #262c34;
       --text: #f3f4f6;
       --text-muted: #9aa3af;
       --border: #343c47;
       --primary: #f7c600;
       --primary-hover: #e0b200;
       --primary-text: #14181d;
-      --primary-soft: rgba(247, 198, 0, 0.16);
-      --accent-dark: #14181d;
+      --primary-soft: rgba(247, 198, 0, 0.18);
+      --accent-dark: #13171c;
       --success: #22c55e;
       --success-soft: rgba(34, 197, 94, 0.16);
       --warning: #fbbf24;
@@ -73,6 +73,11 @@
       padding: 12px 14px 36px;
     }
 
+    .main-grid {
+      display: flex;
+      flex-direction: column;
+    }
+
     .topbar {
       display: flex;
       align-items: center;
@@ -84,13 +89,14 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       min-width: 0;
+      flex: 1;
     }
 
     .brand-badge {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       flex-shrink: 0;
       border-radius: 13px;
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
@@ -98,7 +104,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(245, 184, 0, 0.28);
+      box-shadow: 0 4px 12px rgba(246, 195, 0, 0.28);
       padding: 5px;
     }
 
@@ -109,7 +115,7 @@
     }
 
     .brand-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
       white-space: nowrap;
       overflow: hidden;
@@ -117,11 +123,11 @@
     }
 
     .brand-sub {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -147,35 +153,35 @@
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 12px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 17px;
+      font-size: 16px;
       cursor: pointer;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
     }
 
     .pill-btn {
-      border: 1px solid var(--border);
-      background: var(--surface);
+      border: 1px solid rgba(246, 195, 0, 0.55);
+      background: var(--primary-soft);
       color: var(--text);
       font-weight: 700;
       font-size: 12px;
-      padding: 0 11px;
-      height: 40px;
+      padding: 0 10px;
+      height: 38px;
       border-radius: 12px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 5px;
-    }
-
-    .pill-btn.primary-soft {
-      border: 1px solid rgba(245, 184, 0, 0.45);
-      background: var(--primary-soft);
-      color: var(--text);
+      max-width: 138px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
     }
 
     .card {
@@ -211,7 +217,7 @@
     }
 
     .date-main {
-      font-size: 24px;
+      font-size: 23px;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
@@ -309,6 +315,7 @@
       font-size: 14px;
       font-weight: 800;
       cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
     }
 
     .rate-chip.selected {
@@ -348,10 +355,6 @@
     .btn-primary {
       background: var(--primary);
       color: var(--primary-text);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
     }
 
     .btn-success {
@@ -406,7 +409,7 @@
     .amount-input {
       flex: 1;
       min-width: 0;
-      font-size: 20px;
+      font-size: 19px;
     }
 
     .amount-input:focus,
@@ -442,7 +445,7 @@
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 10px 12px;
+      padding: 11px 12px;
     }
 
     .trip-info {
@@ -471,6 +474,7 @@
       font-size: 16px;
       font-weight: 800;
       color: var(--success);
+      white-space: nowrap;
     }
 
     .del-trip-btn {
@@ -485,16 +489,18 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .day-summary-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 11px 13px;
+      gap: 10px;
+      padding: 12px 13px;
       border-radius: 12px;
       background: var(--primary-soft);
-      border: 1px solid rgba(245, 184, 0, 0.35);
+      border: 1px solid rgba(246, 195, 0, 0.45);
       margin-bottom: 12px;
       font-size: 14px;
       font-weight: 700;
@@ -503,6 +509,7 @@
     .day-summary-bar strong {
       font-size: 18px;
       color: var(--text);
+      white-space: nowrap;
     }
 
     .stats-grid {
@@ -521,7 +528,7 @@
     .stat-box.wide {
       grid-column: span 2;
       background: linear-gradient(135deg, var(--primary-soft), var(--surface-2));
-      border-color: rgba(245, 184, 0, 0.45);
+      border-color: rgba(246, 195, 0, 0.45);
     }
 
     .stat-title {
@@ -610,7 +617,7 @@
       border-radius: 7px;
       background: var(--primary-soft);
       color: var(--text);
-      border: 1px solid rgba(245, 184, 0, 0.35);
+      border: 1px solid rgba(246, 195, 0, 0.4);
     }
 
     .history-badge-off {
@@ -626,6 +633,7 @@
       font-weight: 800;
       font-size: 16px;
       color: var(--success);
+      white-space: nowrap;
     }
 
     .history-details {
@@ -760,7 +768,7 @@
       transform: translateX(-50%) translateY(20px);
       background: var(--accent-dark);
       color: var(--primary);
-      border: 1px solid rgba(247, 198, 0, 0.35);
+      border: 1px solid rgba(247, 198, 0, 0.4);
       padding: 10px 16px;
       border-radius: 999px;
       font-size: 13px;
@@ -784,6 +792,98 @@
       font-size: 13px;
       padding: 16px 8px;
     }
+
+    /* Адаптация под ПК и планшеты */
+    @media (min-width: 768px) {
+      .app {
+        max-width: 1040px;
+        padding: 24px 24px 48px;
+      }
+
+      .topbar {
+        margin-bottom: 20px;
+      }
+
+      .brand-badge {
+        width: 46px;
+        height: 46px;
+      }
+
+      .brand-title {
+        font-size: 18px;
+      }
+
+      .brand-sub {
+        font-size: 12.5px;
+      }
+
+      .icon-btn {
+        width: 42px;
+        height: 42px;
+      }
+
+      .pill-btn {
+        height: 42px;
+        padding: 0 14px;
+        font-size: 13px;
+        max-width: 200px;
+      }
+
+      .icon-btn:hover,
+      .pill-btn:hover,
+      .rate-chip:hover:not(.selected),
+      .month-nav button:hover,
+      .del-trip-btn:hover {
+        border-color: var(--primary);
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+
+      .main-grid {
+        display: grid;
+        grid-template-columns: minmax(360px, 430px) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+      }
+
+      .col-left .card,
+      .col-right .card {
+        margin-bottom: 18px;
+      }
+
+      .col-right .card:last-child,
+      .col-left .card:last-child {
+        margin-bottom: 0;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .date-main {
+        font-size: 26px;
+      }
+
+      .modal-backdrop {
+        align-items: center;
+        padding: 20px;
+      }
+
+      .modal {
+        max-width: 480px;
+        padding: 22px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .history-list {
+        max-height: 460px;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -793,16 +893,16 @@
         <div class="brand-badge" title="Учёт рейсов — Газель">
           <svg viewBox="0 0 64 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="4" y="6" width="33" height="21" rx="3" fill="#181c20"/>
-            <line x1="15" y1="6" x2="15" y2="27" stroke="#f5b800" stroke-width="1.6"/>
-            <line x1="26" y1="6" x2="26" y2="27" stroke="#f5b800" stroke-width="1.6"/>
+            <line x1="15" y1="6" x2="15" y2="27" stroke="#f6c300" stroke-width="1.6"/>
+            <line x1="26" y1="6" x2="26" y2="27" stroke="#f6c300" stroke-width="1.6"/>
             <path d="M39 11H48.5C50.2 11 51.7 12 52.4 13.5L56.5 21.5C57.2 22.7 57.5 24 57.5 25.3V27H39V11Z" fill="#181c20"/>
-            <path d="M41.5 13.5H48.2C49.1 13.5 49.9 14 50.3 14.8L53.2 20.5H41.5V13.5Z" fill="#f5b800"/>
+            <path d="M41.5 13.5H48.2C49.1 13.5 49.9 14 50.3 14.8L53.2 20.5H41.5V13.5Z" fill="#f6c300"/>
             <rect x="3" y="26.5" width="56" height="3.2" rx="1.5" fill="#181c20"/>
             <rect x="55" y="22.5" width="3" height="2.5" rx="1" fill="#ffffff"/>
-            <circle cx="15" cy="31.5" r="5.5" fill="#181c20" stroke="#f5b800" stroke-width="2"/>
-            <circle cx="15" cy="31.5" r="1.8" fill="#f5b800"/>
-            <circle cx="48" cy="31.5" r="5.5" fill="#181c20" stroke="#f5b800" stroke-width="2"/>
-            <circle cx="48" cy="31.5" r="1.8" fill="#f5b800"/>
+            <circle cx="15" cy="31.5" r="5.5" fill="#181c20" stroke="#f6c300" stroke-width="2"/>
+            <circle cx="15" cy="31.5" r="1.8" fill="#f6c300"/>
+            <circle cx="48" cy="31.5" r="5.5" fill="#181c20" stroke="#f6c300" stroke-width="2"/>
+            <circle cx="48" cy="31.5" r="1.8" fill="#f6c300"/>
           </svg>
         </div>
         <div style="min-width:0;">
@@ -814,129 +914,135 @@
         </div>
       </div>
       <div class="top-actions">
-        <button class="pill-btn primary-soft" id="account-btn" type="button" onclick="openAccountModal()">👤 Войти</button>
+        <button class="pill-btn" id="account-btn" type="button" onclick="openAccountModal()">👤 Войти</button>
         <button class="icon-btn" id="theme-btn" type="button" title="Сменить тему">🌓</button>
         <button class="icon-btn" id="settings-btn" type="button" title="Резервная копия и настройки">⚙️</button>
       </div>
     </header>
 
-    <section class="card">
-      <div class="card-header">
-        <span class="card-label">Рабочий календарь</span>
-        <span class="status-pill idle" id="shift-status">День не начат</span>
-      </div>
+    <div class="main-grid">
+      <div class="col-left">
+        <section class="card">
+          <div class="card-header">
+            <span class="card-label">Рабочий календарь</span>
+            <span class="status-pill idle" id="shift-status">День не начат</span>
+          </div>
 
-      <div class="date-row">
-        <div>
-          <div class="date-main" id="current-date-display">—</div>
-          <div class="date-weekday" id="current-weekday-display">—</div>
-        </div>
-        <button class="icon-btn" type="button" onclick="openDateModal()" title="Изменить дату вручную">✏️</button>
-      </div>
+          <div class="date-row">
+            <div>
+              <div class="date-main" id="current-date-display">—</div>
+              <div class="date-weekday" id="current-weekday-display">—</div>
+            </div>
+            <button class="icon-btn" type="button" onclick="openDateModal()" title="Изменить дату вручную">✏️</button>
+          </div>
 
-      <div id="idle-controls">
-        <div class="rate-picker">
-          <div class="rate-picker-top">
-            <span class="rate-picker-label">Процент с рейсов на смену:</span>
-            <div class="rate-input-wrap">
-              <input
-                type="number"
-                inputmode="decimal"
-                step="0.1"
-                min="0.1"
-                max="100"
-                id="shift-rate-input"
-                class="rate-custom-input"
-                value="19"
-                oninput="onRateInputChange()"
-              />
-              <span style="font-weight:800;color:var(--text-muted);">%</span>
+          <div id="idle-controls">
+            <div class="rate-picker">
+              <div class="rate-picker-top">
+                <span class="rate-picker-label">Процент с рейсов на смену:</span>
+                <div class="rate-input-wrap">
+                  <input
+                    type="number"
+                    inputmode="decimal"
+                    step="0.1"
+                    min="0.1"
+                    max="100"
+                    id="shift-rate-input"
+                    class="rate-custom-input"
+                    value="19"
+                    oninput="onRateInputChange()"
+                  />
+                  <span style="font-weight:800;color:var(--text-muted);">%</span>
+                </div>
+              </div>
+              <div class="rate-presets" id="rate-presets">
+                <button type="button" class="rate-chip selected" data-rate="19" onclick="selectPresetRate(19)">19%</button>
+                <button type="button" class="rate-chip" data-rate="37" onclick="selectPresetRate(37)">37%</button>
+                <button type="button" class="rate-chip" data-rate="54" onclick="selectPresetRate(54)">54%</button>
+              </div>
+            </div>
+
+            <div class="btn-grid">
+              <button class="btn btn-primary" type="button" onclick="startDay()">▶️ Начать день</button>
+              <button class="btn btn-warning" type="button" onclick="markDayOff()">🛌 Выходной</button>
             </div>
           </div>
-          <div class="rate-presets" id="rate-presets">
-            <button type="button" class="rate-chip selected" data-rate="19" onclick="selectPresetRate(19)">19%</button>
-            <button type="button" class="rate-chip" data-rate="37" onclick="selectPresetRate(37)">37%</button>
-            <button type="button" class="rate-chip" data-rate="54" onclick="selectPresetRate(54)">54%</button>
+
+          <div id="active-controls" style="display:none;">
+            <div class="trip-form" id="trip-form-box">
+              <div class="input-group">
+                <input
+                  type="number"
+                  inputmode="decimal"
+                  step="any"
+                  min="1"
+                  id="trip-amount"
+                  class="amount-input"
+                  placeholder="Стоимость рейса, ₽"
+                  oninput="updateCutPreview()"
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();addTrip();}"
+                />
+                <button class="btn btn-primary" type="button" onclick="addTrip()">+ Рейс</button>
+              </div>
+              <div class="preview-cut">
+                <span>Ваш доход (<span id="active-rate-label">19</span>%):</span>
+                <strong id="cut-preview">0 ₽</strong>
+              </div>
+            </div>
+
+            <div class="trips-list" id="active-trips-list"></div>
+
+            <div class="day-summary-bar">
+              <span>Итого за день (<span id="active-trips-count">0</span>/3 рейса · <span id="active-rate-bar">19</span>%):</span>
+              <strong id="active-day-earn">0 ₽</strong>
+            </div>
+
+            <button class="btn btn-success btn-full" type="button" onclick="finishDay()">
+              ✅ Завершить день и перейти к следующему
+            </button>
           </div>
-        </div>
-
-        <div class="btn-grid">
-          <button class="btn btn-primary" type="button" onclick="startDay()">▶️ Начать день</button>
-          <button class="btn btn-warning" type="button" onclick="markDayOff()">🛌 Выходной</button>
-        </div>
+        </section>
       </div>
 
-      <div id="active-controls" style="display:none;">
-        <div class="trip-form" id="trip-form-box">
-          <div class="input-group">
-            <input
-              type="number"
-              inputmode="decimal"
-              step="any"
-              min="1"
-              id="trip-amount"
-              class="amount-input"
-              placeholder="Стоимость рейса, ₽"
-              oninput="updateCutPreview()"
-              onkeydown="if(event.key==='Enter'){event.preventDefault();addTrip();}"
-            />
-            <button class="btn btn-primary" type="button" onclick="addTrip()">+ Рейс</button>
+      <div class="col-right">
+        <section class="card">
+          <div class="card-header">
+            <span class="card-label">Заработок</span>
+            <div class="month-nav">
+              <button type="button" onclick="changeMonth(-1)">‹</button>
+              <span class="month-name" id="selected-month-label">—</span>
+              <button type="button" onclick="changeMonth(1)">›</button>
+            </div>
           </div>
-          <div class="preview-cut">
-            <span>Ваш доход (<span id="active-rate-label">19</span>%):</span>
-            <strong id="cut-preview">0 ₽</strong>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-title">За текущий / посл. день</div>
+              <div class="stat-value" id="stat-day">0 ₽</div>
+              <div class="stat-sub" id="stat-day-sub">0 рейсов</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-title">За выбранный месяц</div>
+              <div class="stat-value" id="stat-month">0 ₽</div>
+              <div class="stat-sub" id="stat-month-sub">0 рейсов · 0 вых.</div>
+            </div>
+            <div class="stat-box wide">
+              <div class="stat-title">Всего заработано за всё время</div>
+              <div class="stat-value" id="stat-total">0 ₽</div>
+              <div class="stat-sub" id="stat-total-sub">Общий оборот рейсов: 0 ₽</div>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div class="trips-list" id="active-trips-list"></div>
-
-        <div class="day-summary-bar">
-          <span>Итого за день (<span id="active-trips-count">0</span>/3 рейса · <span id="active-rate-bar">19</span>%):</span>
-          <strong id="active-day-earn">0 ₽</strong>
-        </div>
-
-        <button class="btn btn-success btn-full" type="button" onclick="finishDay()">
-          ✅ Завершить день и перейти к следующему
-        </button>
+        <section class="card">
+          <div class="card-header">
+            <span class="card-label">История по дням</span>
+            <span style="font-size:12px;color:var(--text-muted);" id="history-count">0 записей</span>
+          </div>
+          <div class="history-list" id="history-list"></div>
+        </section>
       </div>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <span class="card-label">Заработок</span>
-        <div class="month-nav">
-          <button type="button" onclick="changeMonth(-1)">‹</button>
-          <span class="month-name" id="selected-month-label">—</span>
-          <button type="button" onclick="changeMonth(1)">›</button>
-        </div>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-title">За текущий / посл. день</div>
-          <div class="stat-value" id="stat-day">0 ₽</div>
-          <div class="stat-sub" id="stat-day-sub">0 рейсов</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-title">За выбранный месяц</div>
-          <div class="stat-value" id="stat-month">0 ₽</div>
-          <div class="stat-sub" id="stat-month-sub">0 рейсов · 0 вых.</div>
-        </div>
-        <div class="stat-box wide">
-          <div class="stat-title">Всего заработано за всё время</div>
-          <div class="stat-value" id="stat-total">0 ₽</div>
-          <div class="stat-sub" id="stat-total-sub">Общий оборот рейсов: 0 ₽</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <span class="card-label">История по дням</span>
-        <span style="font-size:12px;color:var(--text-muted);" id="history-count">0 записей</span>
-      </div>
-      <div class="history-list" id="history-list"></div>
-    </section>
+    </div>
   </div>
 
   <!-- Модалка аккаунта -->
@@ -1054,7 +1160,7 @@
       return new Intl.NumberFormat('ru-RU', {
         minimumFractionDigits: num % 1 === 0 ? 0 : 2,
         maximumFractionDigits: 2
-      }).format(num) + ' ₽';
+      }).format(num) + '\u00A0₽';
     }
 
     function normalizeRate(raw) {
@@ -1176,7 +1282,7 @@
       document.documentElement.setAttribute('data-theme', appStore.theme);
       document.getElementById('meta-theme-color').setAttribute(
         'content',
-        appStore.theme === 'dark' ? '#1e242b' : '#f4f5f7'
+        appStore.theme === 'dark' ? '#1d2228' : '#f3f4f6'
       );
     }
 
@@ -1387,7 +1493,7 @@
         earn
       });
       input.value = '';
-      document.getElementById('cut-preview').textContent = '0 ₽';
+      document.getElementById('cut-preview').textContent = '0\u00A0₽';
       persistAndSync();
       render();
       showToast(`Рейс добавлен (+${formatMoney(earn)})`);
@@ -1713,7 +1819,7 @@
     }
 
     function initIcon() {
-      const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f7c600"/><stop offset="100%" stop-color="#e0b200"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#bg)"/><g transform="translate(36, 128) scale(6.9)"><rect x="4" y="6" width="33" height="21" rx="3" fill="#181c20"/><line x1="15" y1="6" x2="15" y2="27" stroke="#f5b800" stroke-width="1.6"/><line x1="26" y1="6" x2="26" y2="27" stroke="#f5b800" stroke-width="1.6"/><path d="M39 11H48.5C50.2 11 51.7 12 52.4 13.5L56.5 21.5C57.2 22.7 57.5 24 57.5 25.3V27H39V11Z" fill="#181c20"/><path d="M41.5 13.5H48.2C49.1 13.5 49.9 14 50.3 14.8L53.2 20.5H41.5V13.5Z" fill="#f5b800"/><rect x="3" y="26.5" width="56" height="3.2" rx="1.5" fill="#181c20"/><rect x="55" y="22.5" width="3" height="2.5" rx="1" fill="#ffffff"/><circle cx="15" cy="31.5" r="5.5" fill="#181c20" stroke="#f5b800" stroke-width="2"/><circle cx="15" cy="31.5" r="1.8" fill="#f5b800"/><circle cx="48" cy="31.5" r="5.5" fill="#181c20" stroke="#f5b800" stroke-width="2"/><circle cx="48" cy="31.5" r="1.8" fill="#f5b800"/></g></svg>`;
+      const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f7c600"/><stop offset="100%" stop-color="#e0b200"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#bg)"/><g transform="translate(36, 128) scale(6.9)"><rect x="4" y="6" width="33" height="21" rx="3" fill="#181c20"/><line x1="15" y1="6" x2="15" y2="27" stroke="#f6c300" stroke-width="1.6"/><line x1="26" y1="6" x2="26" y2="27" stroke="#f6c300" stroke-width="1.6"/><path d="M39 11H48.5C50.2 11 51.7 12 52.4 13.5L56.5 21.5C57.2 22.7 57.5 24 57.5 25.3V27H39V11Z" fill="#181c20"/><path d="M41.5 13.5H48.2C49.1 13.5 49.9 14 50.3 14.8L53.2 20.5H41.5V13.5Z" fill="#f6c300"/><rect x="3" y="26.5" width="56" height="3.2" rx="1.5" fill="#181c20"/><rect x="55" y="22.5" width="3" height="2.5" rx="1" fill="#ffffff"/><circle cx="15" cy="31.5" r="5.5" fill="#181c20" stroke="#f6c300" stroke-width="2"/><circle cx="15" cy="31.5" r="1.8" fill="#f6c300"/><circle cx="48" cy="31.5" r="5.5" fill="#181c20" stroke="#f6c300" stroke-width="2"/><circle cx="48" cy="31.5" r="1.8" fill="#f6c300"/></g></svg>`;
       const iconUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg);
 
       const favicon = document.createElement('link');
