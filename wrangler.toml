@@ -1,0 +1,12 @@
+name = "raites-pwa"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+[assets]
+directory = "./"
+not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "raites-db"
+database_id = "e9f3f8f2-db70-43d3-ba89-99420347d23b"
