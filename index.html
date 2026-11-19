@@ -590,12 +590,6 @@
       border-color: rgba(246, 195, 0, 0.42);
     }
 
-    .stat-box.wide {
-      grid-column: span 2;
-      background: var(--surface-2);
-      border-color: var(--border);
-    }
-
     .stat-title {
       font-size: 11.5px;
       color: var(--text-muted);
@@ -757,14 +751,14 @@
     .history-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .history-item {
       border: 1px solid var(--border);
       background: var(--surface-2);
       border-radius: var(--radius-sm);
-      padding: 12px;
+      padding: 12px 13px;
     }
 
     .history-top {
@@ -782,24 +776,24 @@
     }
 
     .history-date {
-      font-weight: 700;
+      font-weight: 800;
       font-size: 14.5px;
     }
 
     .history-rate-tag {
       font-size: 11px;
       font-weight: 800;
-      padding: 2px 7px;
+      padding: 2px 8px;
       border-radius: 6px;
       background: var(--primary-soft);
       color: var(--text);
-      border: 1px solid rgba(246, 195, 0, 0.35);
+      border: 1px solid rgba(246, 195, 0, 0.4);
     }
 
     .history-badge-off {
       font-size: 11.5px;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 3px 9px;
       border-radius: 999px;
       background: var(--warning-soft);
       color: var(--warning);
@@ -807,31 +801,63 @@
 
     .history-earn {
       font-weight: 800;
-      font-size: 15.5px;
+      font-size: 16px;
       color: var(--success);
       white-space: nowrap;
     }
 
-    .history-details {
-      font-size: 12.5px;
-      color: var(--text-muted);
-      margin-top: 7px;
+    .history-trips {
+      margin-top: 9px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
       display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+      flex-direction: column;
+      gap: 5px;
     }
 
-    .chip {
+    .history-trip-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 5px 8px;
+      border-radius: 8px;
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 3px 8px;
-      border-radius: 7px;
-      font-size: 12px;
-      color: var(--text);
+      font-size: 12.5px;
+    }
+
+    .history-trip-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .history-trip-idx {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary-text);
+      background: var(--primary);
+      padding: 1px 6px;
+      border-radius: 5px;
+      flex-shrink: 0;
+    }
+
+    .history-trip-gross {
+      color: var(--text-muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .history-trip-cut {
+      font-weight: 800;
+      color: var(--success);
+      white-space: nowrap;
     }
 
     .history-actions {
-      margin-top: 6px;
+      margin-top: 8px;
       display: flex;
       justify-content: flex-end;
     }
@@ -841,8 +867,9 @@
       background: transparent;
       color: var(--text-muted);
       font-size: 12px;
+      font-weight: 600;
       cursor: pointer;
-      padding: 3px 6px;
+      padding: 3px 7px;
       border-radius: 6px;
     }
 
@@ -2121,9 +2148,15 @@
             `;
           }
           const recRate = normalizeRate(rec.rate ?? DEFAULT_RATE);
-          const chips = (rec.trips || []).map((t, i) =>
-            `<span class="chip">#${i + 1}: ${formatMoney(t.amount)} → <strong>${formatMoney(t.earn)}</strong></span>`
-          ).join('');
+          const tripRows = (rec.trips || []).map((t, i) => `
+            <div class="history-trip-row">
+              <div class="history-trip-left">
+                <span class="history-trip-idx">#${i + 1}</span>
+                <span class="history-trip-gross">Рейс ${formatMoney(t.amount)}</span>
+              </div>
+              <span class="history-trip-cut">+${formatMoney(t.earn)}</span>
+            </div>
+          `).join('');
           return `
             <div class="history-item">
               <div class="history-top">
@@ -2133,7 +2166,7 @@
                 </div>
                 <span class="history-earn">+${formatMoney(rec.totalEarn)}</span>
               </div>
-              <div class="history-details">${chips}</div>
+              <div class="history-trips">${tripRows}</div>
               <div class="history-actions">
                 <button class="tiny-btn" type="button" onclick="deleteHistoryRecord('${rec.date}')">Удалить</button>
               </div>
