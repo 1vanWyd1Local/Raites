@@ -3,53 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#1e242b" id="meta-theme-color" />
+  <meta name="theme-color" content="#1d2228" id="meta-theme-color" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Учёт рейсов" />
   <title>Учёт рейсов — Газель</title>
   <style>
     :root {
-      --bg: #f3f4f6;
+      --bg: #f1f3f6;
       --surface: #ffffff;
-      --surface-2: #eceef2;
-      --text: #1b2026;
-      --text-muted: #5c6672;
-      --border: #dcdfe6;
+      --surface-2: #f6f7f9;
+      --surface-3: #eaedf2;
+      --text: #181c22;
+      --text-muted: #5e6773;
+      --border: #dfe3ea;
       --primary: #f6c300;
       --primary-hover: #e2b200;
-      --primary-text: #181c20;
-      --primary-soft: rgba(246, 195, 0, 0.20);
-      --accent-dark: #20252c;
+      --primary-text: #161a1e;
+      --primary-soft: rgba(246, 195, 0, 0.16);
+      --accent-dark: #1d2228;
       --success: #15803d;
-      --success-soft: rgba(21, 128, 61, 0.14);
+      --success-soft: rgba(21, 128, 61, 0.12);
       --warning: #b45309;
-      --warning-soft: rgba(245, 158, 11, 0.18);
+      --warning-soft: rgba(217, 119, 6, 0.14);
       --danger: #b91c1c;
-      --danger-soft: rgba(185, 28, 28, 0.14);
-      --shadow: 0 4px 16px rgba(24, 28, 32, 0.06);
+      --danger-soft: rgba(185, 28, 28, 0.12);
+      --shadow: 0 2px 10px rgba(24, 28, 34, 0.05);
       --radius: 18px;
+      --radius-sm: 12px;
     }
 
     [data-theme="dark"] {
-      --bg: #13171c;
-      --surface: #1d2228;
-      --surface-2: #262c34;
-      --text: #f3f4f6;
-      --text-muted: #9aa3af;
-      --border: #343c47;
+      --bg: #11151a;
+      --surface: #1b2026;
+      --surface-2: #222830;
+      --surface-3: #2b323c;
+      --text: #f3f5f8;
+      --text-muted: #98a2b0;
+      --border: #2f3742;
       --primary: #f7c600;
       --primary-hover: #e0b200;
-      --primary-text: #14181d;
-      --primary-soft: rgba(247, 198, 0, 0.18);
-      --accent-dark: #13171c;
+      --primary-text: #13171c;
+      --primary-soft: rgba(247, 198, 0, 0.14);
+      --accent-dark: #11151a;
       --success: #22c55e;
-      --success-soft: rgba(34, 197, 94, 0.16);
+      --success-soft: rgba(34, 197, 94, 0.14);
       --warning: #fbbf24;
-      --warning-soft: rgba(251, 191, 36, 0.16);
+      --warning-soft: rgba(251, 191, 36, 0.14);
       --danger: #f87171;
-      --danger-soft: rgba(248, 113, 113, 0.16);
-      --shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      --danger-soft: rgba(248, 113, 113, 0.14);
+      --shadow: 0 6px 24px rgba(0, 0, 0, 0.32);
     }
 
     * {
@@ -62,9 +65,10 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding-top: env(safe-area-inset-top, 12px);
+      padding-top: env(safe-area-inset-top, 10px);
       padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 28px);
       line-height: 1.4;
+      font-variant-numeric: tabular-nums;
     }
 
     .app {
@@ -78,33 +82,38 @@
       flex-direction: column;
     }
 
+    /* Шапка */
     .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
       margin-bottom: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      box-shadow: var(--shadow);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
       min-width: 0;
       flex: 1;
     }
 
     .brand-badge {
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       flex-shrink: 0;
-      border-radius: 13px;
+      border-radius: 12px;
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       color: var(--primary-text);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(246, 195, 0, 0.28);
       padding: 5px;
     }
 
@@ -115,8 +124,9 @@
     }
 
     .brand-title {
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 800;
+      letter-spacing: -0.01em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -151,39 +161,40 @@
 
     .icon-btn {
       border: 1px solid var(--border);
-      background: var(--surface);
+      background: var(--surface-2);
       color: var(--text);
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
-      transition: border-color 0.15s ease, background-color 0.15s ease;
+      transition: all 0.15s ease;
     }
 
     .pill-btn {
-      border: 1px solid rgba(246, 195, 0, 0.55);
+      border: 1px solid rgba(246, 195, 0, 0.5);
       background: var(--primary-soft);
       color: var(--text);
       font-weight: 700;
       font-size: 12px;
       padding: 0 10px;
-      height: 38px;
-      border-radius: 12px;
+      height: 36px;
+      border-radius: 11px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      max-width: 138px;
+      max-width: 126px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      transition: border-color 0.15s ease, background-color 0.15s ease;
+      transition: all 0.15s ease;
     }
 
+    /* Карточки */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -197,15 +208,28 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
     .card-label {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-label::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      background: var(--primary);
+      display: inline-block;
     }
 
     .date-row {
@@ -213,17 +237,19 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      margin-bottom: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border);
     }
 
     .date-main {
-      font-size: 23px;
+      font-size: 22px;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
 
     .date-weekday {
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--text-muted);
       text-transform: capitalize;
       margin-top: 2px;
@@ -233,10 +259,11 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 11px;
+      padding: 5px 10px;
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .status-pill.idle {
@@ -248,12 +275,14 @@
     .status-pill.active {
       background: var(--success-soft);
       color: var(--success);
+      border: 1px solid rgba(34, 197, 94, 0.25);
     }
 
+    /* Выбор процента */
     .rate-picker {
       background: var(--surface-2);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: var(--radius-sm);
       padding: 12px;
       margin-bottom: 12px;
     }
@@ -277,10 +306,10 @@
       align-items: center;
       gap: 4px;
       background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 11px;
-      padding: 5px 10px;
-      width: 98px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 4px 9px;
+      width: 92px;
     }
 
     .rate-input-wrap:focus-within {
@@ -292,30 +321,28 @@
       border: none;
       background: transparent;
       color: var(--text);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       text-align: right;
       outline: none;
     }
 
     .rate-presets {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
     }
 
     .rate-chip {
-      flex: 1;
-      min-width: 68px;
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
-      border-radius: 11px;
-      padding: 8px 12px;
-      font-size: 14px;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 13.5px;
       font-weight: 800;
       cursor: pointer;
-      transition: background-color 0.15s ease, border-color 0.15s ease;
+      transition: all 0.14s ease;
     }
 
     .rate-chip.selected {
@@ -324,6 +351,7 @@
       color: var(--primary-text);
     }
 
+    /* Кнопки */
     .btn-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -332,20 +360,20 @@
 
     .btn {
       border: none;
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 15px;
+      border-radius: var(--radius-sm);
+      padding: 13px 14px;
+      font-size: 14.5px;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform 0.08s ease, background-color 0.15s ease;
+      transition: transform 0.08s ease, background-color 0.15s ease, border-color 0.15s ease;
     }
 
     .btn:active {
-      transform: scale(0.98);
+      transform: scale(0.985);
     }
 
     .btn-full {
@@ -365,7 +393,7 @@
     .btn-warning {
       background: var(--warning-soft);
       color: var(--warning);
-      border: 1px solid rgba(245, 158, 11, 0.35);
+      border: 1px solid rgba(217, 119, 6, 0.32);
     }
 
     .btn-ghost {
@@ -379,12 +407,13 @@
       color: var(--danger);
     }
 
+    /* Ввод рейса */
     .trip-form {
       background: var(--surface-2);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: var(--radius-sm);
       padding: 12px;
-      margin-top: 12px;
+      margin-bottom: 10px;
     }
 
     .input-group {
@@ -397,19 +426,20 @@
     .auth-input {
       width: 100%;
       background: var(--surface);
-      border: 2px solid var(--border);
+      border: 1.5px solid var(--border);
       color: var(--text);
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 16px;
+      border-radius: 11px;
+      padding: 11px 13px;
+      font-size: 15.5px;
       font-weight: 700;
       outline: none;
+      transition: border-color 0.15s ease;
     }
 
     .amount-input {
       flex: 1;
       min-width: 0;
-      font-size: 19px;
+      font-size: 18px;
     }
 
     .amount-input:focus,
@@ -423,19 +453,19 @@
       justify-content: space-between;
       font-size: 13px;
       color: var(--text-muted);
-      padding: 4px 2px 2px;
+      padding: 4px 2px 0;
     }
 
     .preview-cut strong {
       color: var(--success);
-      font-size: 16px;
+      font-size: 15.5px;
     }
 
     .trips-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin: 12px 0;
+      margin-bottom: 10px;
     }
 
     .trip-item {
@@ -444,8 +474,8 @@
       justify-content: space-between;
       background: var(--surface-2);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 11px 12px;
+      border-radius: 11px;
+      padding: 10px 12px;
     }
 
     .trip-info {
@@ -454,13 +484,13 @@
     }
 
     .trip-num {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-muted);
       font-weight: 600;
     }
 
     .trip-sum {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 700;
     }
 
@@ -471,20 +501,20 @@
     }
 
     .trip-earn {
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 800;
       color: var(--success);
       white-space: nowrap;
     }
 
     .del-trip-btn {
-      border: none;
+      border: 1px solid transparent;
       background: var(--danger-soft);
       color: var(--danger);
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 9px;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -497,62 +527,22 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 12px 13px;
-      border-radius: 12px;
+      padding: 11px 13px;
+      border-radius: 11px;
       background: var(--primary-soft);
-      border: 1px solid rgba(246, 195, 0, 0.45);
-      margin-bottom: 12px;
-      font-size: 14px;
+      border: 1px solid rgba(246, 195, 0, 0.4);
+      margin-bottom: 10px;
+      font-size: 13.5px;
       font-weight: 700;
     }
 
     .day-summary-bar strong {
-      font-size: 18px;
+      font-size: 17.5px;
       color: var(--text);
       white-space: nowrap;
     }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .stat-box {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-    }
-
-    .stat-box.wide {
-      grid-column: span 2;
-      background: linear-gradient(135deg, var(--primary-soft), var(--surface-2));
-      border-color: rgba(246, 195, 0, 0.45);
-    }
-
-    .stat-title {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .stat-value {
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .stat-box.wide .stat-value {
-      font-size: 24px;
-      color: var(--text);
-    }
-
-    .stat-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
+    /* Статистика и период */
     .month-nav {
       display: flex;
       align-items: center;
@@ -563,21 +553,207 @@
       border: 1px solid var(--border);
       background: var(--surface-2);
       color: var(--text);
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .month-name {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       text-transform: capitalize;
-      min-width: 110px;
+      min-width: 104px;
       text-align: center;
     }
 
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+    }
+
+    .stat-box.accent {
+      background: var(--primary-soft);
+      border-color: rgba(246, 195, 0, 0.42);
+    }
+
+    .stat-box.wide {
+      grid-column: span 2;
+      background: var(--surface-2);
+      border-color: var(--border);
+    }
+
+    .stat-title {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 18.5px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .stat-box.accent .stat-value {
+      color: var(--text);
+    }
+
+    .stat-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Блок выбора периода От — До */
+    .range-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+    }
+
+    .range-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .range-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .range-clear-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .range-clear-btn:hover {
+      color: var(--text);
+      background: var(--surface-3);
+    }
+
+    .range-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .range-preset-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 5px 9px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+
+    .range-preset-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--primary-text);
+    }
+
+    .range-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .range-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .range-field input[type="date"] {
+      width: 100%;
+      margin: 0;
+      padding: 8px 9px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    .range-field input[type="date"]:focus {
+      border-color: var(--primary);
+    }
+
+    .range-result {
+      background: var(--surface);
+      border: 1px solid rgba(246, 195, 0, 0.45);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .range-result-main {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .range-result-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .range-result-avg {
+      text-align: right;
+    }
+
+    .range-result-avg span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .range-result-avg strong {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--success);
+    }
+
+    /* История */
     .history-list {
       display: flex;
       flex-direction: column;
@@ -587,7 +763,7 @@
     .history-item {
       border: 1px solid var(--border);
       background: var(--surface-2);
-      border-radius: 14px;
+      border-radius: var(--radius-sm);
       padding: 12px;
     }
 
@@ -607,23 +783,23 @@
 
     .history-date {
       font-weight: 700;
-      font-size: 15px;
+      font-size: 14.5px;
     }
 
     .history-rate-tag {
       font-size: 11px;
       font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 7px;
+      padding: 2px 7px;
+      border-radius: 6px;
       background: var(--primary-soft);
       color: var(--text);
-      border: 1px solid rgba(246, 195, 0, 0.4);
+      border: 1px solid rgba(246, 195, 0, 0.35);
     }
 
     .history-badge-off {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
-      padding: 3px 9px;
+      padding: 2px 8px;
       border-radius: 999px;
       background: var(--warning-soft);
       color: var(--warning);
@@ -631,15 +807,15 @@
 
     .history-earn {
       font-weight: 800;
-      font-size: 16px;
+      font-size: 15.5px;
       color: var(--success);
       white-space: nowrap;
     }
 
     .history-details {
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--text-muted);
-      margin-top: 6px;
+      margin-top: 7px;
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
@@ -649,13 +825,13 @@
       background: var(--surface);
       border: 1px solid var(--border);
       padding: 3px 8px;
-      border-radius: 8px;
+      border-radius: 7px;
       font-size: 12px;
       color: var(--text);
     }
 
     .history-actions {
-      margin-top: 8px;
+      margin-top: 6px;
       display: flex;
       justify-content: flex-end;
     }
@@ -666,17 +842,21 @@
       color: var(--text-muted);
       font-size: 12px;
       cursor: pointer;
-      padding: 4px 6px;
+      padding: 3px 6px;
+      border-radius: 6px;
     }
 
     .tiny-btn:hover {
       color: var(--danger);
+      background: var(--danger-soft);
     }
 
+    /* Модалки */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.65);
+      background: rgba(10, 14, 20, 0.68);
+      backdrop-filter: blur(2px);
       display: none;
       align-items: flex-end;
       justify-content: center;
@@ -691,13 +871,13 @@
     .modal {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 22px;
+      border-radius: 20px;
       width: 100%;
-      max-width: 500px;
+      max-width: 480px;
       max-height: 88vh;
       overflow-y: auto;
       padding: 18px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.42);
     }
 
     .modal-head {
@@ -708,14 +888,14 @@
     }
 
     .modal-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
     }
 
     .section-box {
       border: 1px solid var(--border);
       background: var(--surface-2);
-      border-radius: 14px;
+      border-radius: var(--radius-sm);
       padding: 12px;
       margin-bottom: 12px;
     }
@@ -727,7 +907,7 @@
 
     .section-box p {
       margin: 0 0 10px;
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--text-muted);
     }
 
@@ -739,8 +919,8 @@
 
     textarea.backup-text {
       width: 100%;
-      min-height: 86px;
-      border-radius: 12px;
+      min-height: 84px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
@@ -750,15 +930,16 @@
       resize: vertical;
     }
 
-    input[type="date"] {
+    input[type="date"].modal-date-input {
       width: 100%;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
+      padding: 11px 12px;
+      border-radius: 11px;
+      border: 1.5px solid var(--border);
       background: var(--surface);
       color: var(--text);
-      font-size: 16px;
-      margin-bottom: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
     }
 
     .toast {
@@ -768,7 +949,7 @@
       transform: translateX(-50%) translateY(20px);
       background: var(--accent-dark);
       color: var(--primary);
-      border: 1px solid rgba(247, 198, 0, 0.4);
+      border: 1px solid rgba(247, 198, 0, 0.45);
       padding: 10px 16px;
       border-radius: 999px;
       font-size: 13px;
@@ -779,6 +960,7 @@
       z-index: 200;
       max-width: 90vw;
       text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
 
     .toast.show {
@@ -796,42 +978,28 @@
     /* Адаптация под ПК и планшеты */
     @media (min-width: 768px) {
       .app {
-        max-width: 1040px;
-        padding: 24px 24px 48px;
+        max-width: 1060px;
+        padding: 22px 24px 48px;
       }
 
       .topbar {
-        margin-bottom: 20px;
-      }
-
-      .brand-badge {
-        width: 46px;
-        height: 46px;
+        padding: 12px 16px;
+        margin-bottom: 18px;
       }
 
       .brand-title {
-        font-size: 18px;
-      }
-
-      .brand-sub {
-        font-size: 12.5px;
-      }
-
-      .icon-btn {
-        width: 42px;
-        height: 42px;
+        font-size: 17px;
       }
 
       .pill-btn {
-        height: 42px;
-        padding: 0 14px;
-        font-size: 13px;
-        max-width: 200px;
+        max-width: 210px;
+        padding: 0 13px;
       }
 
       .icon-btn:hover,
       .pill-btn:hover,
       .rate-chip:hover:not(.selected),
+      .range-preset-btn:hover:not(.active),
       .month-nav button:hover,
       .del-trip-btn:hover {
         border-color: var(--primary);
@@ -843,7 +1011,7 @@
 
       .main-grid {
         display: grid;
-        grid-template-columns: minmax(360px, 430px) minmax(0, 1fr);
+        grid-template-columns: minmax(360px, 420px) minmax(0, 1fr);
         gap: 18px;
         align-items: start;
       }
@@ -859,11 +1027,11 @@
       }
 
       .card {
-        padding: 20px;
+        padding: 18px 20px;
       }
 
       .date-main {
-        font-size: 26px;
+        font-size: 25px;
       }
 
       .modal-backdrop {
@@ -872,14 +1040,13 @@
       }
 
       .modal {
-        max-width: 480px;
         padding: 22px;
       }
     }
 
     @media (min-width: 1024px) {
       .history-list {
-        max-height: 460px;
+        max-height: 440px;
         overflow-y: auto;
         padding-right: 4px;
       }
@@ -1007,7 +1174,7 @@
       <div class="col-right">
         <section class="card">
           <div class="card-header">
-            <span class="card-label">Заработок</span>
+            <span class="card-label">Заработок и среднее</span>
             <div class="month-nav">
               <button type="button" onclick="changeMonth(-1)">‹</button>
               <span class="month-name" id="selected-month-label">—</span>
@@ -1021,15 +1188,52 @@
               <div class="stat-value" id="stat-day">0 ₽</div>
               <div class="stat-sub" id="stat-day-sub">0 рейсов</div>
             </div>
+            <div class="stat-box accent">
+              <div class="stat-title">Средний за смену (мес.)</div>
+              <div class="stat-value" id="stat-avg-day">0 ₽</div>
+              <div class="stat-sub" id="stat-avg-day-sub">0 рабочих смен</div>
+            </div>
             <div class="stat-box">
               <div class="stat-title">За выбранный месяц</div>
               <div class="stat-value" id="stat-month">0 ₽</div>
               <div class="stat-sub" id="stat-month-sub">0 рейсов · 0 вых.</div>
             </div>
-            <div class="stat-box wide">
-              <div class="stat-title">Всего заработано за всё время</div>
+            <div class="stat-box">
+              <div class="stat-title">Всего за всё время</div>
               <div class="stat-value" id="stat-total">0 ₽</div>
-              <div class="stat-sub" id="stat-total-sub">Общий оборот рейсов: 0 ₽</div>
+              <div class="stat-sub" id="stat-total-sub">Оборот: 0 ₽</div>
+            </div>
+          </div>
+
+          <div class="range-box">
+            <div class="range-head">
+              <span class="range-title">📅 Заработок за период (от и до)</span>
+              <button type="button" class="range-clear-btn" onclick="resetDateRange()">Сбросить</button>
+            </div>
+            <div class="range-presets">
+              <button type="button" class="range-preset-btn" data-preset="7" onclick="applyRangePreset(7)">7 дней</button>
+              <button type="button" class="range-preset-btn" data-preset="14" onclick="applyRangePreset(14)">14 дней</button>
+              <button type="button" class="range-preset-btn active" data-preset="month" onclick="applyRangePreset('month')">Текущий месяц</button>
+            </div>
+            <div class="range-inputs">
+              <div class="range-field">
+                <label for="range-from">От</label>
+                <input type="date" id="range-from" onchange="onCustomRangeChange()" />
+              </div>
+              <div class="range-field">
+                <label for="range-to">До</label>
+                <input type="date" id="range-to" onchange="onCustomRangeChange()" />
+              </div>
+            </div>
+            <div class="range-result">
+              <div>
+                <div class="range-result-main" id="range-earn">0 ₽</div>
+                <div class="range-result-sub" id="range-meta">0 смен · 0 рейсов · оборот 0 ₽</div>
+              </div>
+              <div class="range-result-avg">
+                <span>Средний / смена</span>
+                <strong id="range-avg">0 ₽</strong>
+              </div>
             </div>
           </div>
         </section>
@@ -1116,7 +1320,7 @@
         <div class="modal-title">Установить рабочую дату</div>
         <button class="icon-btn" type="button" onclick="closeModal('date-modal')">✕</button>
       </div>
-      <input type="date" id="manual-date-input" />
+      <input type="date" id="manual-date-input" class="modal-date-input" />
       <button class="btn btn-primary btn-full" type="button" onclick="saveManualDate()">Сохранить дату</button>
     </div>
   </div>
@@ -1142,6 +1346,14 @@
       return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
     }
 
+    function getMonthBoundsISO(ymStr) {
+      const [y, m] = ymStr.split('-').map(Number);
+      const first = `${y}-${String(m).padStart(2, '0')}-01`;
+      const lastDay = new Date(y, m, 0).getDate();
+      const last = `${y}-${String(m).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+      return { first, last };
+    }
+
     function formatDateRu(isoStr) {
       const [y, m, d] = isoStr.split('-').map(Number);
       return new Date(y, m - 1, d).toLocaleDateString('ru-RU', {
@@ -1157,10 +1369,11 @@
     }
 
     function formatMoney(num) {
+      const safe = Number.isFinite(num) ? num : 0;
       return new Intl.NumberFormat('ru-RU', {
-        minimumFractionDigits: num % 1 === 0 ? 0 : 2,
+        minimumFractionDigits: safe % 1 === 0 ? 0 : 2,
         maximumFractionDigits: 2
-      }).format(num) + '\u00A0₽';
+      }).format(safe) + '\u00A0₽';
     }
 
     function normalizeRate(raw) {
@@ -1185,6 +1398,59 @@
 
     let appStore = loadStore();
     let selectedMonth = appStore.data.currentDate.slice(0, 7);
+    let rangeState = initRangeState(selectedMonth);
+
+    function initRangeState(ymStr) {
+      const { first, last } = getMonthBoundsISO(ymStr);
+      return { from: first, to: last, preset: 'month' };
+    }
+
+    function syncRangeInputs() {
+      document.getElementById('range-from').value = rangeState.from;
+      document.getElementById('range-to').value = rangeState.to;
+      document.querySelectorAll('.range-preset-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.preset === rangeState.preset);
+      });
+    }
+
+    function applyRangePreset(preset) {
+      const anchorDate = appStore.data.activeDay ? appStore.data.activeDay.date : appStore.data.currentDate;
+      if (preset === 'month') {
+        const bounds = getMonthBoundsISO(selectedMonth);
+        rangeState = { from: bounds.first, to: bounds.last, preset: 'month' };
+      } else {
+        const days = Number(preset);
+        rangeState = {
+          from: addDaysISO(anchorDate, -(days - 1)),
+          to: anchorDate,
+          preset: String(preset)
+        };
+      }
+      syncRangeInputs();
+      render();
+    }
+
+    function onCustomRangeChange() {
+      let from = document.getElementById('range-from').value;
+      let to = document.getElementById('range-to').value;
+      if (from && to && from > to) {
+        const tmp = from;
+        from = to;
+        to = tmp;
+        document.getElementById('range-from').value = from;
+        document.getElementById('range-to').value = to;
+      }
+      rangeState = { from, to, preset: 'custom' };
+      syncRangeInputs();
+      render();
+    }
+
+    function resetDateRange() {
+      rangeState = initRangeState(selectedMonth);
+      syncRangeInputs();
+      render();
+      showToast('Период сброшен на выбранный месяц');
+    }
 
     function loadStore() {
       try {
@@ -1282,7 +1548,7 @@
       document.documentElement.setAttribute('data-theme', appStore.theme);
       document.getElementById('meta-theme-color').setAttribute(
         'content',
-        appStore.theme === 'dark' ? '#1d2228' : '#f3f4f6'
+        appStore.theme === 'dark' ? '#1b2026' : '#ffffff'
       );
     }
 
@@ -1369,6 +1635,8 @@
         }
 
         selectedMonth = appStore.data.currentDate.slice(0, 7);
+        rangeState = initRangeState(selectedMonth);
+        syncRangeInputs();
         saveLocalOnly();
         document.getElementById('auth-password').value = '';
         closeModal('account-modal');
@@ -1385,6 +1653,8 @@
       appStore.username = null;
       appStore.data = defaultData();
       selectedMonth = appStore.data.currentDate.slice(0, 7);
+      rangeState = initRangeState(selectedMonth);
+      syncRangeInputs();
       saveLocalOnly();
       updateAccountButton();
       updateSyncIndicator();
@@ -1408,6 +1678,8 @@
               ...out.state
             };
             selectedMonth = appStore.data.currentDate.slice(0, 7);
+            rangeState = initRangeState(selectedMonth);
+            syncRangeInputs();
             saveLocalOnly();
             render();
             if (showToastFlag) showToast('Данные обновлены из облака');
@@ -1548,6 +1820,12 @@
       const [y, m] = selectedMonth.split('-').map(Number);
       const dt = new Date(y, m - 1 + delta, 1);
       selectedMonth = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}`;
+      if (rangeState.preset === 'month') {
+        const bounds = getMonthBoundsISO(selectedMonth);
+        rangeState.from = bounds.first;
+        rangeState.to = bounds.last;
+        syncRangeInputs();
+      }
       render();
     }
 
@@ -1577,6 +1855,12 @@
         appStore.data.activeDay.date = val;
       }
       selectedMonth = val.slice(0, 7);
+      if (rangeState.preset === 'month') {
+        const bounds = getMonthBoundsISO(selectedMonth);
+        rangeState.from = bounds.first;
+        rangeState.to = bounds.last;
+        syncRangeInputs();
+      }
       persistAndSync();
       closeModal('date-modal');
       render();
@@ -1634,6 +1918,8 @@
           updatedAt: Date.now()
         };
         selectedMonth = appStore.data.currentDate.slice(0, 7);
+        rangeState = initRangeState(selectedMonth);
+        syncRangeInputs();
         persistAndSync();
         render();
         closeModal('settings-modal');
@@ -1665,10 +1951,57 @@
       if (!confirm('Точно удалить все записи?')) return;
       appStore.data = defaultData();
       selectedMonth = appStore.data.currentDate.slice(0, 7);
+      rangeState = initRangeState(selectedMonth);
+      syncRangeInputs();
       persistAndSync();
       closeModal('settings-modal');
       render();
       showToast('Данные очищены');
+    }
+
+    function calcRangeStats(records, activeDay, fromISO, toISO) {
+      let earn = 0;
+      let gross = 0;
+      let shifts = 0;
+      let trips = 0;
+      let offs = 0;
+
+      const inRange = (d) => {
+        if (!d) return false;
+        if (fromISO && d < fromISO) return false;
+        if (toISO && d > toISO) return false;
+        return true;
+      };
+
+      records.forEach(r => {
+        if (!inRange(r.date)) return;
+        if (r.type === 'off') {
+          offs++;
+        } else {
+          const rEarn = r.totalEarn || 0;
+          const rGross = r.totalGross || 0;
+          const rTrips = r.trips ? r.trips.length : 0;
+          if (rEarn > 0 || rTrips > 0) {
+            shifts++;
+          }
+          earn += rEarn;
+          gross += rGross;
+          trips += rTrips;
+        }
+      });
+
+      if (activeDay && inRange(activeDay.date) && activeDay.trips.length > 0) {
+        earn += activeDay.trips.reduce((s, t) => s + t.earn, 0);
+        gross += activeDay.trips.reduce((s, t) => s + t.amount, 0);
+        trips += activeDay.trips.length;
+        shifts++;
+      }
+
+      earn = Math.round(earn * 100) / 100;
+      gross = Math.round(gross * 100) / 100;
+      const avgPerShift = shifts > 0 ? Math.round((earn / shifts) * 100) / 100 : 0;
+
+      return { earn, gross, shifts, trips, offs, avgPerShift };
     }
 
     function render() {
@@ -1742,27 +2075,13 @@
         year: 'numeric'
       });
 
-      let monthEarn = 0;
-      let monthTrips = 0;
-      let monthOffs = 0;
+      const monthBounds = getMonthBoundsISO(selectedMonth);
+      const mStats = calcRangeStats(d.records, d.activeDay, monthBounds.first, monthBounds.last);
 
-      d.records.forEach(r => {
-        if (r.date.startsWith(selectedMonth)) {
-          if (r.type === 'off') monthOffs++;
-          else {
-            monthEarn += r.totalEarn || 0;
-            monthTrips += r.trips ? r.trips.length : 0;
-          }
-        }
-      });
-
-      if (d.activeDay && d.activeDay.date.startsWith(selectedMonth)) {
-        monthEarn += d.activeDay.trips.reduce((s, t) => s + t.earn, 0);
-        monthTrips += d.activeDay.trips.length;
-      }
-
-      document.getElementById('stat-month').textContent = formatMoney(monthEarn);
-      document.getElementById('stat-month-sub').textContent = `${monthTrips} рейс(ов) · ${monthOffs} вых.`;
+      document.getElementById('stat-month').textContent = formatMoney(mStats.earn);
+      document.getElementById('stat-month-sub').textContent = `${mStats.trips} рейс(ов) · ${mStats.offs} вых.`;
+      document.getElementById('stat-avg-day').textContent = formatMoney(mStats.avgPerShift);
+      document.getElementById('stat-avg-day-sub').textContent = `${mStats.shifts} рабочих смен`;
 
       let totalEarn = d.records.reduce((s, r) => s + (r.totalEarn || 0), 0);
       let totalGross = d.records.reduce((s, r) => s + (r.totalGross || 0), 0);
@@ -1772,7 +2091,13 @@
       }
 
       document.getElementById('stat-total').textContent = formatMoney(totalEarn);
-      document.getElementById('stat-total-sub').textContent = `Общий оборот рейсов: ${formatMoney(totalGross)}`;
+      document.getElementById('stat-total-sub').textContent = `Оборот: ${formatMoney(totalGross)}`;
+
+      const rStats = calcRangeStats(d.records, d.activeDay, rangeState.from, rangeState.to);
+      document.getElementById('range-earn').textContent = formatMoney(rStats.earn);
+      document.getElementById('range-meta').textContent =
+        `${rStats.shifts} смен · ${rStats.trips} рейсов · оборот ${formatMoney(rStats.gross)}`;
+      document.getElementById('range-avg').textContent = formatMoney(rStats.avgPerShift);
 
       const sortedRecords = [...d.records].sort((a, b) => b.date.localeCompare(a.date));
       document.getElementById('history-count').textContent = `${sortedRecords.length} записей`;
@@ -1843,6 +2168,7 @@
     applyTheme();
     updateAccountButton();
     updateSyncIndicator();
+    syncRangeInputs();
     initIcon();
     render();
     if (appStore.username && navigator.onLine) {
