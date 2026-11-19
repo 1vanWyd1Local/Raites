@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#0f172a" id="meta-theme-color" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Рейсы 19%" />
-  <title>Учёт рейсов — 19%</title>
+  <meta name="apple-mobile-web-app-title" content="Учёт рейсов" />
+  <title>Учёт рейсов — Газель</title>
   <style>
     :root {
       --bg: #f1f5f9;
@@ -85,18 +85,23 @@
     }
 
     .brand-badge {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       flex-shrink: 0;
       border-radius: 12px;
       background: linear-gradient(135deg, var(--primary), #1d4ed8);
       color: #fff;
-      font-weight: 800;
-      font-size: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      padding: 5px;
+    }
+
+    .brand-badge svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     .brand-title {
@@ -243,6 +248,78 @@
       color: var(--success);
     }
 
+    /* Блок выбора процента перед началом дня */
+    .rate-picker {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .rate-picker-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .rate-picker-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .rate-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 4px 10px;
+      width: 96px;
+    }
+
+    .rate-input-wrap:focus-within {
+      border-color: var(--primary);
+    }
+
+    .rate-custom-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 800;
+      text-align: right;
+      outline: none;
+    }
+
+    .rate-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .rate-chip {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 6px 11px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .rate-chip.selected {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
     .btn-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -342,7 +419,7 @@
       justify-content: space-between;
       font-size: 13px;
       color: var(--text-muted);
-      padding: 4px 2px 10px;
+      padding: 4px 2px 2px;
     }
 
     .preview-cut strong {
@@ -512,9 +589,25 @@
       gap: 8px;
     }
 
+    .history-date-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
     .history-date {
       font-weight: 700;
       font-size: 15px;
+    }
+
+    .history-rate-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 7px;
+      background: var(--primary-soft);
+      color: var(--primary);
     }
 
     .history-badge-off {
@@ -693,7 +786,28 @@
   <div class="app">
     <header class="topbar">
       <div class="brand">
-        <div class="brand-badge">19%</div>
+        <div class="brand-badge" title="Газель — Учёт рейсов">
+          <!-- Иконка грузовой Газели -->
+          <svg viewBox="0 0 64 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Тент / фургон -->
+            <rect x="4" y="6" width="33" height="21" rx="3" fill="#ffffff"/>
+            <line x1="15" y1="6" x2="15" y2="27" stroke="#2563eb" stroke-width="1.6"/>
+            <line x1="26" y1="6" x2="26" y2="27" stroke="#2563eb" stroke-width="1.6"/>
+            <!-- Кабина Газели -->
+            <path d="M39 11H48.5C50.2 11 51.7 12 52.4 13.5L56.5 21.5C57.2 22.7 57.5 24 57.5 25.3V27H39V11Z" fill="#ffffff"/>
+            <!-- Лобовое и боковое стекло -->
+            <path d="M41.5 13.5H48.2C49.1 13.5 49.9 14 50.3 14.8L53.2 20.5H41.5V13.5Z" fill="#2563eb"/>
+            <!-- Рама / бампер -->
+            <rect x="3" y="26.5" width="56" height="3.2" rx="1.5" fill="#dbeafe"/>
+            <!-- Фара -->
+            <rect x="55" y="22.5" width="3" height="2.5" rx="1" fill="#fde047"/>
+            <!-- Колёса -->
+            <circle cx="15" cy="31.5" r="5.5" fill="#0f172a" stroke="#ffffff" stroke-width="2"/>
+            <circle cx="15" cy="31.5" r="1.8" fill="#ffffff"/>
+            <circle cx="48" cy="31.5" r="5.5" fill="#0f172a" stroke="#ffffff" stroke-width="2"/>
+            <circle cx="48" cy="31.5" r="1.8" fill="#ffffff"/>
+          </svg>
+        </div>
         <div style="min-width:0;">
           <div class="brand-title">Учёт рейсов</div>
           <div class="brand-sub">
@@ -724,11 +838,42 @@
         <button class="icon-btn" type="button" onclick="openDateModal()" title="Изменить дату вручную">✏️</button>
       </div>
 
-      <div class="btn-grid" id="idle-controls">
-        <button class="btn btn-primary" type="button" onclick="startDay()">▶️ Начать день</button>
-        <button class="btn btn-warning" type="button" onclick="markDayOff()">🛌 Выходной</button>
+      <!-- Панель перед началом дня: выбор процента + кнопки -->
+      <div id="idle-controls">
+        <div class="rate-picker">
+          <div class="rate-picker-top">
+            <span class="rate-picker-label">Процент с рейсов на смену:</span>
+            <div class="rate-input-wrap">
+              <input
+                type="number"
+                inputmode="decimal"
+                step="0.1"
+                min="0.1"
+                max="100"
+                id="shift-rate-input"
+                class="rate-custom-input"
+                value="19"
+                oninput="onRateInputChange()"
+              />
+              <span style="font-weight:800;color:var(--text-muted);">%</span>
+            </div>
+          </div>
+          <div class="rate-presets" id="rate-presets">
+            <button type="button" class="rate-chip" data-rate="15" onclick="selectPresetRate(15)">15%</button>
+            <button type="button" class="rate-chip selected" data-rate="19" onclick="selectPresetRate(19)">19%</button>
+            <button type="button" class="rate-chip" data-rate="20" onclick="selectPresetRate(20)">20%</button>
+            <button type="button" class="rate-chip" data-rate="25" onclick="selectPresetRate(25)">25%</button>
+            <button type="button" class="rate-chip" data-rate="30" onclick="selectPresetRate(30)">30%</button>
+          </div>
+        </div>
+
+        <div class="btn-grid">
+          <button class="btn btn-primary" type="button" onclick="startDay()">▶️ Начать день</button>
+          <button class="btn btn-warning" type="button" onclick="markDayOff()">🛌 Выходной</button>
+        </div>
       </div>
 
+      <!-- Активная смена -->
       <div id="active-controls" style="display:none;">
         <div class="trip-form" id="trip-form-box">
           <div class="input-group">
@@ -745,7 +890,7 @@
             <button class="btn btn-primary" type="button" onclick="addTrip()">+ Рейс</button>
           </div>
           <div class="preview-cut">
-            <span>Ваш доход (19%):</span>
+            <span>Ваш доход (<span id="active-rate-label">19</span>%):</span>
             <strong id="cut-preview">0 ₽</strong>
           </div>
         </div>
@@ -753,7 +898,7 @@
         <div class="trips-list" id="active-trips-list"></div>
 
         <div class="day-summary-bar">
-          <span>Итого за день (<span id="active-trips-count">0</span>/3 рейса):</span>
+          <span>Итого за день (<span id="active-trips-count">0</span>/3 рейса · <span id="active-rate-bar">19</span>%):</span>
           <strong id="active-day-earn">0 ₽</strong>
         </div>
 
@@ -765,7 +910,7 @@
 
     <section class="card">
       <div class="card-header">
-        <span class="card-label">Заработок (19%)</span>
+        <span class="card-label">Заработок</span>
         <div class="month-nav">
           <button type="button" onclick="changeMonth(-1)">‹</button>
           <span class="month-name" id="selected-month-label">—</span>
@@ -881,7 +1026,7 @@
 
   <script>
     const STORAGE_KEY = 'trip_tracker_d1_v1';
-    const RATE = 0.19;
+    const DEFAULT_RATE = 19;
 
     function getTodayISO() {
       const now = new Date();
@@ -919,13 +1064,20 @@
       }).format(num) + ' ₽';
     }
 
-    function calcCut(amount) {
-      return Math.round(amount * RATE * 100) / 100;
+    function normalizeRate(raw) {
+      const n = parseFloat(raw);
+      if (!Number.isFinite(n) || n <= 0 || n > 100) return DEFAULT_RATE;
+      return Math.round(n * 100) / 100;
+    }
+
+    function calcCut(amount, ratePercent) {
+      return Math.round(amount * (ratePercent / 100) * 100) / 100;
     }
 
     function defaultData() {
       return {
         currentDate: getTodayISO(),
+        defaultRate: DEFAULT_RATE,
         activeDay: null,
         records: [],
         updatedAt: Date.now()
@@ -946,7 +1098,13 @@
             theme: parsed.theme || 'light',
             data: {
               currentDate: parsed.data?.currentDate || getTodayISO(),
-              activeDay: parsed.data?.activeDay || null,
+              defaultRate: normalizeRate(parsed.data?.defaultRate ?? DEFAULT_RATE),
+              activeDay: parsed.data?.activeDay
+                ? {
+                    ...parsed.data.activeDay,
+                    rate: normalizeRate(parsed.data.activeDay.rate ?? DEFAULT_RATE)
+                  }
+                : null,
               records: Array.isArray(parsed.data?.records) ? parsed.data.records : [],
               updatedAt: parsed.data?.updatedAt || Date.now()
             }
@@ -1036,6 +1194,33 @@
       applyTheme();
     });
 
+    // Выбор процента до старта дня
+    function syncRateChips(rate) {
+      document.querySelectorAll('#rate-presets .rate-chip').forEach(btn => {
+        const chipRate = parseFloat(btn.dataset.rate);
+        btn.classList.toggle('selected', chipRate === rate);
+      });
+    }
+
+    function selectPresetRate(rate) {
+      const valid = normalizeRate(rate);
+      appStore.data.defaultRate = valid;
+      document.getElementById('shift-rate-input').value = valid;
+      syncRateChips(valid);
+      saveLocalOnly();
+    }
+
+    function onRateInputChange() {
+      const raw = parseFloat(document.getElementById('shift-rate-input').value);
+      if (Number.isFinite(raw) && raw > 0 && raw <= 100) {
+        appStore.data.defaultRate = Math.round(raw * 100) / 100;
+        syncRateChips(appStore.data.defaultRate);
+        saveLocalOnly();
+      } else {
+        syncRateChips(-1);
+      }
+    }
+
     // Аккаунты
     function openAccountModal() {
       const loggedIn = Boolean(appStore.username);
@@ -1082,11 +1267,17 @@
             (out.state.activeDay && out.state.activeDay.trips.length > 0);
 
           if (cloudHasRecords) {
-            appStore.data = out.state;
+            appStore.data = {
+              ...defaultData(),
+              ...out.state
+            };
           } else if (localHasRecords) {
             await persistAndSync(false);
           } else {
-            appStore.data = out.state;
+            appStore.data = {
+              ...defaultData(),
+              ...out.state
+            };
           }
         } else if (localHasRecords) {
           await persistAndSync(false);
@@ -1124,7 +1315,10 @@
           const cloudTs = out.state.updatedAt || 0;
           const localTs = appStore.data.updatedAt || 0;
           if (cloudTs > localTs) {
-            appStore.data = out.state;
+            appStore.data = {
+              ...defaultData(),
+              ...out.state
+            };
             selectedMonth = appStore.data.currentDate.slice(0, 7);
             saveLocalOnly();
             render();
@@ -1148,13 +1342,22 @@
 
     // Логика смен и рейсов
     function startDay() {
+      const raw = parseFloat(document.getElementById('shift-rate-input').value);
+      if (!Number.isFinite(raw) || raw <= 0 || raw > 100) {
+        showToast('Укажите процент от 0.1 до 100');
+        document.getElementById('shift-rate-input').focus();
+        return;
+      }
+      const chosenRate = Math.round(raw * 100) / 100;
+      appStore.data.defaultRate = chosenRate;
       appStore.data.activeDay = {
         date: appStore.data.currentDate,
+        rate: chosenRate,
         trips: []
       };
       persistAndSync();
       render();
-      showToast('Смена начата');
+      showToast(`Смена начата (${chosenRate}%)`);
     }
 
     function markDayOff() {
@@ -1175,8 +1378,10 @@
     }
 
     function updateCutPreview() {
+      const active = appStore.data.activeDay;
+      const rate = active ? normalizeRate(active.rate) : DEFAULT_RATE;
       const val = parseFloat(document.getElementById('trip-amount').value);
-      document.getElementById('cut-preview').textContent = formatMoney(val > 0 ? calcCut(val) : 0);
+      document.getElementById('cut-preview').textContent = formatMoney(val > 0 ? calcCut(val, rate) : 0);
     }
 
     function addTrip() {
@@ -1193,7 +1398,8 @@
         input.focus();
         return;
       }
-      const earn = calcCut(amount);
+      const rate = normalizeRate(active.rate);
+      const earn = calcCut(amount, rate);
       active.trips.push({
         id: Date.now(),
         amount,
@@ -1221,6 +1427,7 @@
         return;
       }
       const date = active.date;
+      const rate = normalizeRate(active.rate);
       const totalGross = active.trips.reduce((s, t) => s + t.amount, 0);
       const totalEarn = Math.round(active.trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
 
@@ -1228,6 +1435,7 @@
       appStore.data.records.unshift({
         date,
         type: 'work',
+        rate,
         trips: [...active.trips],
         totalGross,
         totalEarn
@@ -1291,8 +1499,8 @@
     // Бэкап JSON
     function buildBackupPayload() {
       return JSON.stringify({
-        app: 'trip_tracker_19_d1',
-        version: 2,
+        app: 'trip_tracker_gazelle_d1',
+        version: 3,
         account: appStore.username || null,
         exportedAt: new Date().toISOString(),
         data: appStore.data
@@ -1332,7 +1540,10 @@
         }
         appStore.data = {
           currentDate: src.currentDate,
-          activeDay: src.activeDay || null,
+          defaultRate: normalizeRate(src.defaultRate ?? DEFAULT_RATE),
+          activeDay: src.activeDay
+            ? { ...src.activeDay, rate: normalizeRate(src.activeDay.rate ?? DEFAULT_RATE) }
+            : null,
           records: src.records,
           updatedAt: Date.now()
         };
@@ -1385,10 +1596,14 @@
       const activeBox = document.getElementById('active-controls');
 
       if (d.activeDay) {
-        statusEl.textContent = 'Смена идёт';
+        const activeRate = normalizeRate(d.activeDay.rate);
+        statusEl.textContent = `Смена идёт · ${activeRate}%`;
         statusEl.className = 'status-pill active';
         idleBox.style.display = 'none';
         activeBox.style.display = 'block';
+
+        document.getElementById('active-rate-label').textContent = activeRate;
+        document.getElementById('active-rate-bar').textContent = activeRate;
 
         const trips = d.activeDay.trips;
         document.getElementById('trip-form-box').style.display = trips.length >= 3 ? 'none' : 'block';
@@ -1414,10 +1629,13 @@
           `).join('');
         }
       } else {
+        const defRate = normalizeRate(d.defaultRate);
         statusEl.textContent = 'День не начат';
         statusEl.className = 'status-pill idle';
-        idleBox.style.display = 'grid';
+        idleBox.style.display = 'block';
         activeBox.style.display = 'none';
+        document.getElementById('shift-rate-input').value = defRate;
+        syncRateChips(defRate);
       }
 
       let dayEarn = 0;
@@ -1475,7 +1693,7 @@
       const historyEl = document.getElementById('history-list');
 
       if (sortedRecords.length === 0) {
-        historyEl.innerHTML = '<div class="empty-note">История пока пуста. Нажмите «Начать день» или «Выходной».</div>';
+        historyEl.innerHTML = '<div class="empty-note">История пока пуста. Выберите процент и нажмите «Начать день» или «Выходной».</div>';
       } else {
         historyEl.innerHTML = sortedRecords.map(rec => {
           if (rec.type === 'off') {
@@ -1491,13 +1709,17 @@
               </div>
             `;
           }
+          const recRate = normalizeRate(rec.rate ?? DEFAULT_RATE);
           const chips = (rec.trips || []).map((t, i) =>
             `<span class="chip">#${i + 1}: ${formatMoney(t.amount)} → <strong>${formatMoney(t.earn)}</strong></span>`
           ).join('');
           return `
             <div class="history-item">
               <div class="history-top">
-                <span class="history-date">${formatDateRu(rec.date)}</span>
+                <div class="history-date-wrap">
+                  <span class="history-date">${formatDateRu(rec.date)}</span>
+                  <span class="history-rate-tag">${recRate}%</span>
+                </div>
                 <span class="history-earn">+${formatMoney(rec.totalEarn)}</span>
               </div>
               <div class="history-details">${chips}</div>
@@ -1511,16 +1733,40 @@
     }
 
     function initPWA() {
+      // Иконка приложения с грузовой Газелью
       const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-        <rect width="512" height="512" rx="112" fill="#2563eb"/>
-        <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
-              fill="#ffffff" font-family="Arial, sans-serif" font-weight="800" font-size="180">19%</text>
+        <defs>
+          <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#1d4ed8"/>
+          </linearGradient>
+        </defs>
+        <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+        <g transform="translate(36, 128) scale(6.9)">
+          <rect x="4" y="6" width="33" height="21" rx="3" fill="#ffffff"/>
+          <line x1="15" y1="6" x2="15" y2="27" stroke="#2563eb" stroke-width="1.6"/>
+          <line x1="26" y1="6" x2="26" y2="27" stroke="#2563eb" stroke-width="1.6"/>
+          <path d="M39 11H48.5C50.2 11 51.7 12 52.4 13.5L56.5 21.5C57.2 22.7 57.5 24 57.5 25.3V27H39V11Z" fill="#ffffff"/>
+          <path d="M41.5 13.5H48.2C49.1 13.5 49.9 14 50.3 14.8L53.2 20.5H41.5V13.5Z" fill="#2563eb"/>
+          <rect x="3" y="26.5" width="56" height="3.2" rx="1.5" fill="#dbeafe"/>
+          <rect x="55" y="22.5" width="3" height="2.5" rx="1" fill="#fde047"/>
+          <circle cx="15" cy="31.5" r="5.5" fill="#0f172a" stroke="#ffffff" stroke-width="2"/>
+          <circle cx="15" cy="31.5" r="1.8" fill="#ffffff"/>
+          <circle cx="48" cy="31.5" r="5.5" fill="#0f172a" stroke="#ffffff" stroke-width="2"/>
+          <circle cx="48" cy="31.5" r="1.8" fill="#ffffff"/>
+        </g>
       </svg>`;
       const iconUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg);
 
+      const favicon = document.createElement('link');
+      favicon.rel = 'icon';
+      favicon.type = 'image/svg+xml';
+      favicon.href = iconUrl;
+      document.head.appendChild(favicon);
+
       const manifest = {
-        name: 'Учёт рейсов — 19%',
-        short_name: 'Рейсы 19%',
+        name: 'Учёт рейсов — Газель',
+        short_name: 'Учёт рейсов',
         start_url: location.href,
         display: 'standalone',
         background_color: '#0b1120',
