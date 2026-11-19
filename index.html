@@ -1,1172 +1,1575 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>Игровая Компания Raites | Создаём миры</title>
-<!-- Favicon -->
-<link rel="icon" type="image/jpeg" href="assets/images/raites.jpg">
-<!-- Tailwind CSS CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- Remix Icon CDN -->
-<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-<!-- EmailJS CDN -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script type="text/javascript">
-(function() {
-emailjs.init("ugovLRn3G9yRvbUfG");
-})();
-</script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-scroll-behavior: smooth;
-}
-body {
-font-family: 'Inter', sans-serif;
-background: #0f172a;
-color: #ffffff;
-line-height: 1.5;
-}
-/* Game Transition Overlay */
-.game-transition {
-position: fixed;
-inset: 0;
-background: #0f172a;
-z-index: 9999;
-display: flex;
-align-items: center;
-justify-content: center;
-opacity: 0;
-pointer-events: none;
-transition: opacity 0.5s ease;
-}
-.game-transition.active {
-opacity: 1;
-pointer-events: all;
-}
-.game-loader {
-width: 80px;
-height: 80px;
-border: 4px solid #1e293b;
-border-top-color: #3b82f6;
-border-radius: 50%;
-animation: spin 1s linear infinite;
-}
-@keyframes spin {
-to { transform: rotate(360deg); }
-}
-.game-transition-title {
-margin-top: 20px;
-color: #e2e8f0;
-font-size: 1.5rem;
-font-weight: 600;
-opacity: 0;
-transform: translateY(20px);
-transition: all 0.3s ease 0.3s;
-}
-.game-transition.active .game-transition-title {
-opacity: 1;
-transform: translateY(0);
-}
-/* Hover Effects */
-.game-card {
-transition: all 0.3s ease;
-}
-.game-card:hover {
-transform: translateY(-8px);
-box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
-}
-.play-btn {
-position: relative;
-overflow: hidden;
-}
-.play-btn::before {
-content: '';
-position: absolute;
-inset: 0;
-background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-transform: translateX(-100%);
-transition: transform 0.5s ease;
-}
-.play-btn:hover::before {
-transform: translateX(100%);
-}
-/* Scroll Animations */
-.fade-in {
-opacity: 0;
-transform: translateY(30px);
-transition: all 0.6s ease;
-}
-.fade-in.visible {
-opacity: 1;
-transform: translateY(0);
-}
-/* ========== НАВИГАЦИЯ ========== */
-.navbar {
-position: fixed;
-top: 0;
-left: 0;
-right: 0;
-z-index: 50;
-background: rgba(15, 23, 42, 0.95);
-backdrop-filter: blur(8px);
-border-bottom: 1px solid #1e293b;
-}
-.nav-container {
-max-width: 1200px;
-margin: 0 auto;
-padding: 1rem 1.5rem;
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
-.logo {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-}
-.logo-icon {
-width: 2.5rem;
-height: 2.5rem;
-border-radius: 0.5rem;
-overflow: hidden;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-.logo-icon img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-}
-.logo-text {
-font-size: 1.25rem;
-font-weight: 700;
-}
-.nav-links {
-display: flex;
-gap: 2rem;
-}
-.nav-links a {
-color: #cbd5e1;
-transition: color 0.2s;
-text-decoration: none;
-font-size: 1rem;
-}
-.nav-links a:hover {
-color: #ffffff;
-}
-.mobile-menu-btn {
-display: none;
-background: none;
-border: none;
-color: white;
-cursor: pointer;
-font-size: 1.5rem;
-width: 40px;
-height: 40px;
-align-items: center;
-justify-content: center;
-border-radius: 8px;
-transition: background 0.2s;
-z-index: 100;
-}
-.mobile-menu-btn:hover {
-background: rgba(255, 255, 255, 0.1);
-}
-@media (max-width: 768px) {
-.nav-links {
-position: fixed;
-top: 70px;
-right: -100%;
-width: 220px;
-background: rgba(15, 23, 42, 0.98);
-backdrop-filter: blur(12px);
-flex-direction: column;
-gap: 0;
-transition: right 0.3s ease;
-z-index: 99;
-display: flex;
-margin: 0;
-padding: 0;
-border-radius: 12px;
-border: 1px solid rgba(255, 255, 255, 0.1);
-overflow: hidden;
-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-}
-.mobile-menu-btn {
-display: flex;
-}
-.nav-links.active {
-right: 20px;
-}
-.nav-links a {
-color: #e2e8f0;
-font-size: 0.95rem;
-padding: 12px 20px;
-width: 100%;
-text-align: left;
-border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-transition: all 0.2s;
-}
-.nav-links a:last-child {
-border-bottom: none;
-}
-.nav-links a:hover {
-color: #60a5fa;
-background: rgba(96, 165, 250, 0.1);
-padding-left: 24px;
-}
-}
-/* ========== ФИЛЬТРЫ - СТИЛЬНОЕ РАСПОЛОЖЕНИЕ ========== */
-.filters-section {
-margin-bottom: 48px;
-}
-.filter-buttons-wrapper {
-display: flex;
-justify-content: center;
-margin-bottom: 32px;
-}
-.filter-buttons {
-display: flex;
-flex-wrap: wrap;
-gap: 16px;
-justify-content: center;
-background: rgba(30, 41, 59, 0.4);
-backdrop-filter: blur(4px);
-padding: 12px 24px;
-border-radius: 80px;
-border: 1px solid rgba(59, 130, 246, 0.2);
-}
-.filter-btn {
-padding: 12px 28px;
-background: rgba(255, 255, 255, 0.05);
-border: 1px solid rgba(255, 255, 255, 0.15);
-border-radius: 60px;
-color: #e2e8f0;
-font-weight: 600;
-font-size: 0.95rem;
-cursor: pointer;
-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-letter-spacing: 0.3px;
-backdrop-filter: blur(4px);
-}
-.filter-btn:hover {
-background: rgba(59, 130, 246, 0.25);
-border-color: #3b82f6;
-transform: translateY(-2px);
-box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-}
-.filter-btn.active {
-background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-border-color: transparent;
-color: white;
-box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-}
-.search-panel {
-display: flex;
-flex-wrap: wrap;
-gap: 20px;
-justify-content: center;
-max-width: 800px;
-margin: 0 auto;
-}
-.search-box {
-flex: 2;
-min-width: 240px;
-}
-.search-box input {
-width: 100%;
-padding: 14px 20px;
-background: rgba(15, 23, 42, 0.8);
-border: 1px solid rgba(255, 255, 255, 0.2);
-border-radius: 60px;
-color: white;
-font-size: 0.95rem;
-transition: all 0.3s;
-backdrop-filter: blur(4px);
-}
-.search-box input:focus {
-outline: none;
-border-color: #3b82f6;
-background: rgba(15, 23, 42, 1);
-box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-.genre-select {
-flex: 1;
-min-width: 200px;
-}
-.genre-select select {
-width: 100%;
-padding: 14px 20px;
-background: rgba(15, 23, 42, 0.8);
-border: 1px solid rgba(255, 255, 255, 0.2);
-border-radius: 60px;
-color: white;
-font-size: 0.95rem;
-cursor: pointer;
-transition: all 0.3s;
-backdrop-filter: blur(4px);
-}
-.genre-select select:focus {
-outline: none;
-border-color: #3b82f6;
-background: rgba(15, 23, 42, 1);
-box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-@media (max-width: 768px) {
-.filter-buttons {
-padding: 16px 20px;
-gap: 12px;
-border-radius: 20px;
-width: 100%;
-max-width: 400px;
-margin: 0 auto 32px;
-}
-.filter-btn {
-padding: 10px 20px;
-font-size: 0.85rem;
-flex: 0 1 calc(50% - 10px);
-text-align: center;
-}
-.search-panel {
-padding: 0 12px;
-flex-direction: column;
-}
-.search-box, .genre-select {
-width: 100%;
-min-width: 100%;
-}
-}
-/* ========== СЕТКА ИГР ========== */
-.games-grid {
-display: grid;
-grid-template-columns: 1fr;
-gap: 32px;
-margin-top: 32px;
-}
-@media (min-width: 768px) {
-.games-grid {
-grid-template-columns: repeat(2, 1fr);
-}
-}
-@media (min-width: 1024px) {
-.games-grid {
-grid-template-columns: repeat(3, 1fr);
-}
-}
-/* ========== КАРТОЧКА ИГРЫ ========== */
-.game-card-new {
-background: linear-gradient(135deg, #1e293b, #0f172a);
-border-radius: 1.5rem;
-overflow: hidden;
-border: 1px solid rgba(255, 255, 255, 0.1);
-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-display: flex;
-flex-direction: column;
-height: 100%;
-position: relative;
-}
-.game-card-new:hover {
-transform: translateY(-8px);
-box-shadow: 0 25px 40px rgba(0, 0, 0, 0.4);
-border-color: rgba(59, 130, 246, 0.6);
-}
-.game-card-image {
-position: relative;
-height: 200px;
-overflow: hidden;
-background: linear-gradient(135deg, #2d3748, #1e293b);
-flex-shrink: 0;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-.game-image-placeholder {
-font-size: 4rem;
-color: #94a3b8;
-display: flex;
-align-items: center;
-justify-content: center;
-width: 100%;
-height: 100%;
-background: linear-gradient(135deg, #1f2937, #111827);
-}
-.game-card-image img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-}
-.game-badge {
-position: absolute;
-top: 12px;
-left: 12px;
-padding: 4px 12px;
-border-radius: 20px;
-font-size: 0.7rem;
-font-weight: 600;
-z-index: 10;
-color: white;
-}
-.game-badge.web { background: linear-gradient(135deg, #10b981, #059669); }
-.game-badge.pc { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-.game-badge.mobile { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.coming-soon-badge {
-position: absolute;
-top: 12px;
-right: 12px;
-left: auto;
-background: linear-gradient(135deg, #ef4444, #dc2626);
-padding: 4px 12px;
-border-radius: 20px;
-font-size: 0.7rem;
-font-weight: 600;
-z-index: 10;
-color: white;
-}
-.game-card-content {
-padding: 24px;
-flex: 1;
-display: flex;
-flex-direction: column;
-background: linear-gradient(135deg, #1e293b, #0f172a);
-}
-/* ========== НАЗВАНИЯ ИГР - БЕЛЫЕ С ПОДСВЕТКОЙ И ПО ЦЕНТРУ ========== */
-.game-card-content .game-title {
-font-size: 1.35rem;
-font-weight: 800;
-margin-bottom: 0.75rem;
-color: #ffffff;
-display: block;
-line-height: 1.3;
-text-align: center;
-text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.3);
-letter-spacing: -0.2px;
-transition: text-shadow 0.3s ease;
-}
-.game-card-new:hover .game-title {
-text-shadow: 0 0 12px rgba(255, 255, 255, 0.5), 0 0 8px rgba(96, 165, 250, 0.4);
-}
-.game-description {
-color: #94a3b8;
-font-size: 0.875rem;
-margin-bottom: 1rem;
-line-height: 1.5;
-}
-.game-tags {
-display: flex;
-flex-wrap: wrap;
-gap: 0.5rem;
-margin-bottom: 0.75rem;
-justify-content: center;
-}
-.tag {
-padding: 0.25rem 0.75rem;
-background: #334155;
-border-radius: 9999px;
-font-size: 0.7rem;
-color: #e2e8f0;
-}
-.game-genres {
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
-margin-bottom: 1rem;
-justify-content: center;
-}
-.genre-tag {
-padding: 4px 10px;
-background: rgba(59, 130, 246, 0.2);
-border-radius: 20px;
-font-size: 0.7rem;
-color: #60a5fa;
-}
-.play-btn {
-width: 100%;
-padding: 12px;
-background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-border: none;
-border-radius: 12px;
-color: white;
-font-weight: 600;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
-transition: all 0.3s;
-margin-top: auto;
-}
-.play-btn:hover {
-transform: scale(1.02);
-box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
-}
-.download-btn {
-display: inline-flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
-width: 100%;
-padding: 12px;
-background: linear-gradient(135deg, #10b981, #059669);
-border: none;
-border-radius: 12px;
-color: white;
-font-weight: 600;
-text-decoration: none;
-transition: all 0.3s;
-margin-top: auto;
-}
-.download-btn:hover {
-transform: scale(1.02);
-box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
-}
-.btn-coming-soon {
-width: 100%;
-padding: 12px;
-background: rgba(100, 100, 100, 0.5);
-border: none;
-border-radius: 12px;
-color: #94a3b8;
-font-weight: 600;
-cursor: not-allowed;
-margin-top: auto;
-}
-.no-results {
-text-align: center;
-padding: 60px 20px;
-background: rgba(30, 41, 59, 0.3);
-border-radius: 1rem;
-}
-.no-results-icon {
-font-size: 4rem;
-margin-bottom: 1rem;
-}
-.no-results h3 {
-font-size: 1.5rem;
-margin-bottom: 0.5rem;
-color: #e2e8f0;
-}
-.no-results p {
-color: #94a3b8;
-}
-/* ========== КОНТАКТЫ ========== */
-.contact-content {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 3rem;
-}
-.contact-info {
-background: #0f0f1a;
-padding: 2rem;
-border-radius: 15px;
-border: 1px solid #6c5ce7;
-}
-.contact-info h3 {
-color: #6c5ce7;
-margin-bottom: 1.5rem;
-font-size: 1.5rem;
-}
-.contact-info-item {
-display: flex;
-align-items: flex-start;
-gap: 1rem;
-margin-bottom: 1.5rem;
-padding: 1rem;
-background: rgba(108, 92, 231, 0.1);
-border-radius: 10px;
-transition: background 0.3s;
-}
-.contact-info-item:hover {
-background: rgba(108, 92, 231, 0.2);
-}
-.contact-info-item span {
-font-size: 1.8rem;
-min-width: 40px;
-}
-.contact-info-item .label {
-font-size: 0.85rem;
-color: #a29bfe;
-text-transform: uppercase;
-letter-spacing: 1px;
-margin-bottom: 0.25rem;
-}
-.contact-social {
-margin-top: 2rem;
-padding-top: 1.5rem;
-border-top: 1px solid rgba(108, 92, 231, 0.3);
-}
-.contact-social h4 {
-color: #6c5ce7;
-margin-bottom: 1rem;
-font-size: 1.1rem;
-}
-.contact-social-links {
-display: flex;
-gap: 1rem;
-flex-wrap: wrap;
-}
-.contact-social-links a {
-display: flex;
-align-items: center;
-justify-content: center;
-width: 44px;
-height: 44px;
-background: rgba(108, 92, 231, 0.2);
-border-radius: 50%;
-font-size: 1.3rem;
-text-decoration: none;
-transition: all 0.3s;
-border: 1px solid rgba(108, 92, 231, 0.3);
-color: white;
-}
-.contact-social-links a:hover {
-background: #6c5ce7;
-transform: translateY(-3px);
-box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
-}
-.contact-form {
-background: #0f0f1a;
-padding: 2rem;
-border-radius: 15px;
-border: 1px solid #6c5ce7;
-}
-.contact-form h3 {
-color: #6c5ce7;
-margin-bottom: 1.5rem;
-font-size: 1.5rem;
-}
-.form-group {
-margin-bottom: 1.25rem;
-}
-.form-group label {
-display: block;
-margin-bottom: 0.5rem;
-color: #b2bec3;
-font-weight: 500;
-font-size: 0.9rem;
-}
-.form-group input,
-.form-group textarea,
-.form-group select {
-width: 100%;
-padding: 0.875rem 1rem;
-background: #1a1a2e;
-border: 1px solid #6c5ce7;
-border-radius: 10px;
-color: #ffffff;
-font-size: 0.95rem;
-transition: all 0.3s;
-}
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-outline: none;
-border-color: #a29bfe;
-box-shadow: 0 0 10px rgba(108, 92, 231, 0.3);
-}
-.form-group textarea {
-height: 120px;
-resize: none;
-}
-.form-row {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 1rem;
-}
-.submit-btn {
-width: 100%;
-padding: 1rem;
-background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-color: #ffffff;
-border: none;
-border-radius: 10px;
-font-size: 1rem;
-font-weight: 600;
-cursor: pointer;
-transition: all 0.3s;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 0.5rem;
-}
-.submit-btn:hover {
-transform: translateY(-2px);
-box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
-}
-.form-status {
-margin-top: 1rem;
-padding: 1rem;
-border-radius: 10px;
-display: none;
-font-weight: 500;
-}
-.form-status.success {
-display: block;
-background: rgba(46, 204, 113, 0.2);
-color: #2ecc71;
-border: 1px solid #2ecc71;
-}
-.form-status.error {
-display: block;
-background: rgba(231, 76, 60, 0.2);
-color: #e74c3c;
-border: 1px solid #e74c3c;
-}
-.contact-features {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 1rem;
-margin-top: 2rem;
-padding-top: 1.5rem;
-border-top: 1px solid rgba(108, 92, 231, 0.3);
-}
-.contact-feature {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-padding: 0.75rem;
-background: rgba(108, 92, 231, 0.1);
-border-radius: 8px;
-}
-.footer {
-background: #0f172a;
-border-top: 1px solid #1e293b;
-padding: 3rem 1rem;
-margin-top: 3rem;
-}
-.footer-grid {
-display: grid;
-grid-template-columns: 1fr;
-gap: 2rem;
-}
-@media (min-width: 768px) {
-.footer-grid {
-grid-template-columns: repeat(4, 1fr);
-}
-}
-.footer-links a {
-color: #94a3b8;
-transition: color 0.2s;
-text-decoration: none;
-font-size: 0.875rem;
-}
-.footer-links a:hover {
-color: white;
-}
-.footer-bottom {
-border-top: 1px solid #1e293b;
-padding-top: 2rem;
-margin-top: 2rem;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 1rem;
-text-align: center;
-}
-@media (min-width: 768px) {
-.footer-bottom {
-flex-direction: row;
-justify-content: space-between;
-}
-}
-.section {
-padding: 80px 0;
-}
-.section-alt {
-background: rgba(30, 41, 59, 0.3);
-}
-.container {
-max-width: 1200px;
-margin: 0 auto;
-padding: 0 24px;
-}
-.grid-2 {
-display: grid;
-grid-template-columns: 1fr;
-gap: 2rem;
-}
-@media (min-width: 768px) {
-.grid-2 {
-grid-template-columns: 1fr 1fr;
-gap: 3rem;
-}
-}
-.grid-4 {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 1.5rem;
-}
-@media (min-width: 768px) {
-.grid-4 {
-grid-template-columns: repeat(4, 1fr);
-gap: 2rem;
-}
-}
-.stat-card {
-background: #1e293b;
-padding: 1.5rem;
-border-radius: 1rem;
-text-align: center;
-}
-.stat-number {
-font-size: 2rem;
-font-weight: 700;
-margin-bottom: 0.5rem;
-}
-.stat-number.blue { color: #60a5fa; }
-.stat-number.purple { color: #c084fc; }
-.stat-number.green { color: #4ade80; }
-.stat-number.yellow { color: #facc15; }
-.news-card {
-background: #1e293b;
-border-radius: 1rem;
-padding: 1.5rem;
-margin-bottom: 1.5rem;
-}
-.news-card.featured {
-border: 2px solid rgba(59, 130, 246, 0.3);
-}
-.faq-item {
-background: #1e293b;
-border-radius: 1rem;
-padding: 1.5rem;
-margin-bottom: 1.5rem;
-}
-@media (max-width: 768px) {
-.section {
-padding: 60px 0;
-}
-.contact-content {
-grid-template-columns: 1fr;
-}
-.form-row {
-grid-template-columns: 1fr;
-}
-.contact-features {
-grid-template-columns: 1fr;
-}
-.container {
-padding: 0 20px;
-}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" id="meta-theme-color" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Рейсы 19%" />
+  <title>Учёт рейсов — 19%</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-soft: rgba(37, 99, 235, 0.12);
+      --success: #16a34a;
+      --success-soft: rgba(22, 163, 74, 0.12);
+      --warning: #d97706;
+      --warning-soft: rgba(217, 119, 6, 0.14);
+      --danger: #dc2626;
+      --danger-soft: rgba(220, 38, 38, 0.12);
+      --shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+      --radius: 18px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --surface: #1e293b;
+      --surface-2: #162032;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-soft: rgba(59, 130, 246, 0.18);
+      --success: #22c55e;
+      --success-soft: rgba(34, 197, 94, 0.16);
+      --warning: #f59e0b;
+      --warning-soft: rgba(245, 158, 11, 0.18);
+      --danger: #ef4444;
+      --danger-soft: rgba(239, 68, 68, 0.18);
+      --shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding-top: env(safe-area-inset-top, 12px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 24px);
+      line-height: 1.4;
+    }
+
+    .app {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 12px 14px 32px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .brand-title {
+      font-size: 17px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dot-status {
+      width: 7px;
+      height: 7px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--success);
+      display: inline-block;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .icon-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    .pill-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 0 11px;
+      height: 40px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pill-btn.primary-soft {
+      border: none;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .install-btn {
+      display: none;
+    }
+
+    .install-btn.visible {
+      display: inline-flex;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .date-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .date-main {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .date-weekday {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-transform: capitalize;
+      margin-top: 2px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-pill.idle {
+      background: var(--surface-2);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .status-pill.active {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.08s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn-warning {
+      background: var(--warning-soft);
+      color: var(--warning);
+      border: 1px solid rgba(217, 119, 6, 0.25);
+    }
+
+    .btn-ghost {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-danger-soft {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .trip-form {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .amount-input,
+    .auth-input {
+      width: 100%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .amount-input {
+      flex: 1;
+      min-width: 0;
+      font-size: 20px;
+    }
+
+    .amount-input:focus,
+    .auth-input:focus {
+      border-color: var(--primary);
+    }
+
+    .preview-cut {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 4px 2px 10px;
+    }
+
+    .preview-cut strong {
+      color: var(--success);
+      font-size: 16px;
+    }
+
+    .trips-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .trip-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .trip-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .trip-num {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .trip-sum {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .trip-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .trip-earn {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--success);
+    }
+
+    .del-trip-btn {
+      border: none;
+      background: var(--danger-soft);
+      color: var(--danger);
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day-summary-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: var(--primary-soft);
+      margin-bottom: 12px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .day-summary-bar strong {
+      font-size: 18px;
+      color: var(--primary);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .stat-box.wide {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--primary-soft), var(--surface-2));
+      border-color: rgba(37, 99, 235, 0.25);
+    }
+
+    .stat-title {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .stat-box.wide .stat-value {
+      font-size: 24px;
+      color: var(--primary);
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .month-nav button {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .month-name {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: capitalize;
+      min-width: 110px;
+      text-align: center;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-item {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .history-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .history-date {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .history-badge-off {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--warning-soft);
+      color: var(--warning);
+    }
+
+    .history-earn {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--success);
+    }
+
+    .history-details {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .history-actions {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .tiny-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      padding: 4px 6px;
+    }
+
+    .tiny-btn:hover {
+      color: var(--danger);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 100;
+      padding: 12px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .section-box {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-box h4 {
+      margin: 0 0 6px;
+      font-size: 14px;
+    }
+
+    .section-box p {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    textarea.backup-text {
+      width: 100%;
+      min-height: 86px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 10px;
+      font-size: 12px;
+      font-family: monospace;
+      resize: vertical;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(env(safe-area-inset-bottom, 16px) + 18px);
+      transform: translateX(-50%) translateY(20px);
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 200;
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .empty-note {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 16px 8px;
+    }
+  </style>
 </head>
 <body>
-<!-- Navigation -->
-<nav class="navbar">
-<div class="nav-container">
-<div class="logo">
-<div class="logo-icon">
-<img src="assets/images/raites.jpg" alt="Raites Logo">
-</div>
-<span class="logo-text">RAITES</span>
-</div>
-<div class="nav-links">
-<a href="#games">Игры</a>
-<a href="#about">О компании</a>
-<a href="#news">Новости</a>
-<a href="#support">Поддержка</a>
-<a href="#contact">Контакты</a>
-</div>
-<button class="mobile-menu-btn">☰</button>
-</div>
-</nav>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-badge">19%</div>
+        <div style="min-width:0;">
+          <div class="brand-title">Учёт рейсов</div>
+          <div class="brand-sub">
+            <span class="dot-status" id="sync-dot"></span>
+            <span id="account-sub">Гость · локально</span>
+          </div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="pill-btn primary-soft install-btn" id="install-pwa-btn" type="button">📲</button>
+        <button class="pill-btn primary-soft" id="account-btn" type="button" onclick="openAccountModal()">👤 Войти</button>
+        <button class="icon-btn" id="theme-btn" type="button" title="Сменить тему">🌓</button>
+        <button class="icon-btn" id="settings-btn" type="button" title="Резервная копия и настройки">⚙️</button>
+      </div>
+    </header>
 
-<!-- Hero Section -->
-<section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
-<div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-slate-900 to-purple-900/20"></div>
-<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
-<div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-<div class="inline-block px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400 text-sm mb-6 fade-in">
-🎮 Теперь и веб-игры доступны!
-</div>
-<h1 class="text-5xl md:text-7xl font-bold mb-6 fade-in" style="transition-delay: 0.1s">
-Создаём <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">миры</span>
-</h1>
-<p class="text-xl text-slate-400 mb-8 fade-in" style="transition-delay: 0.2s">
-Погрузитесь в миры, созданные с любовью
-</p>
-<div class="flex flex-wrap gap-4 justify-center fade-in" style="transition-delay: 0.3s">
-<a href="#games" class="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold hover:shadow-lg hover:shadow-blue-500/30 transition-all hover:scale-105">
-Играть сейчас
-</a>
-<a href="#contact" class="px-8 py-4 bg-slate-800 border border-slate-700 rounded-full font-semibold hover:bg-slate-700 transition-all hover:scale-105">
-Контакты
-</a>
-</div>
-</div>
-</section>
+    <section class="card">
+      <div class="card-header">
+        <span class="card-label">Рабочий календарь</span>
+        <span class="status-pill idle" id="shift-status">День не начат</span>
+      </div>
 
-<!-- Games Section -->
-<section id="games" class="section">
-<div class="container">
-<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Наши Игры</h2>
-<p class="text-slate-400 text-center mb-8 fade-in">Полноценные проекты для всех платформ</p>
-<!-- Фильтры и поиск - стильное расположение -->
-<div class="filters-section fade-in">
-<div class="filter-buttons-wrapper">
-<div class="filter-buttons">
-<button class="filter-btn active" data-filter="all">Все игры</button>
-<button class="filter-btn" data-filter="web">🌐 Веб-игры</button>
-<button class="filter-btn" data-filter="pc">💻 ПК игры</button>
-<button class="filter-btn" data-filter="mobile">📱 Мобильные игры</button>
-</div>
-</div>
-<div class="search-panel">
-<div class="search-box">
-<input type="text" id="gameSearch" placeholder="🔍 Поиск по названию...">
-</div>
-<div class="genre-select">
-<select id="genreSelect">
-<option value="all">🎮 Все жанры</option>
-</select>
-</div>
-</div>
-</div>
-<!-- Список игр -->
-<div class="games-grid" id="gamesGrid"></div>
-</div>
-</section>
+      <div class="date-row">
+        <div>
+          <div class="date-main" id="current-date-display">—</div>
+          <div class="date-weekday" id="current-weekday-display">—</div>
+        </div>
+        <button class="icon-btn" type="button" onclick="openDateModal()" title="Изменить дату вручную">✏️</button>
+      </div>
 
-<!-- About Section -->
-<section id="about" class="section">
-<div class="container">
-<div class="grid-2">
-<div class="fade-in">
-<h2 class="text-3xl md:text-4xl font-bold mb-6">О Компании</h2>
-<p class="text-slate-400 mb-6">Raites — новая инновационная игровая компания, основанная в 2026 году. Наша миссия — дарить игрокам незабываемые эмоции через качественные игры.</p>
-<p class="text-slate-400 mb-6">Мы объединяем талантливых разработчиков, художников и дизайнеров со всего мира, чтобы создавать игры, которые вдохновляют и развлекают миллионы игроков.</p>
-<p class="text-slate-400">Наша команда постоянно экспериментирует с новыми технологиями и игровыми механиками, чтобы каждый наш проект был уникальным.</p>
-</div>
-<div class="fade-in" style="display: flex; align-items: center; justify-content: center;">
-<div style="width: 100%; max-width: 400px; aspect-ratio: 1; border-radius: 1.5rem; overflow: hidden; border: 2px solid rgba(108, 92, 231, 0.3); box-shadow: 0 20px 40px rgba(108, 92, 231, 0.2);">
-<img src="assets/images/raites.jpg" alt="Raites Company" style="width: 100%; height: 100%; object-fit: cover;">
-</div>
-</div>
-</div>
-</div>
-</section>
+      <div class="btn-grid" id="idle-controls">
+        <button class="btn btn-primary" type="button" onclick="startDay()">▶️ Начать день</button>
+        <button class="btn btn-warning" type="button" onclick="markDayOff()">🛌 Выходной</button>
+      </div>
 
-<!-- News Section -->
-<section id="news" class="section section-alt">
-<div class="container">
-<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Новости</h2>
-<p class="text-slate-400 text-center mb-8 fade-in">Последние события из жизни студии</p>
-<div class="max-w-3xl mx-auto">
-<div class="news-card featured fade-in">
-<div class="flex items-center gap-3 mb-3">
-<span class="text-blue-400 text-sm">17 Марта 2026</span>
-<span class="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-xs font-semibold">🎮 Бета-тест</span>
-</div>
-<h3 class="text-xl font-bold mb-3">Empire Tycoon — запущен бета-тест!</h3>
-<p class="text-slate-400 text-sm mb-4">Мы рады сообщить о запуске бета-теста нашей новой веб-игры Empire Tycoon! Постройте свою бизнес-империю с нуля прямо в браузере. Игра полностью бесплатна и не требует регистрации. Присоединяйтесь к тестированию и помогите нам сделать игру лучше!</p>
-<a href="#games" class="text-blue-400 hover:text-blue-300 font-semibold inline-flex items-center gap-2" data-game="empire">Играть сейчас →</a>
-</div>
-<div class="news-card coming fade-in">
-<div class="text-slate-500 text-sm mb-3">Скоро</div>
-<h3 class="text-xl font-bold mb-3 text-slate-400">Анонс новой игры</h3>
-<p class="text-slate-500 text-sm">Мы готовим что-то особенное! Скоро раскроем детали нашего нового проекта.</p>
-</div>
-</div>
-</div>
-</section>
+      <div id="active-controls" style="display:none;">
+        <div class="trip-form" id="trip-form-box">
+          <div class="input-group">
+            <input
+              type="number"
+              inputmode="decimal"
+              step="any"
+              min="1"
+              id="trip-amount"
+              class="amount-input"
+              placeholder="Стоимость рейса, ₽"
+              oninput="updateCutPreview()"
+            />
+            <button class="btn btn-primary" type="button" onclick="addTrip()">+ Рейс</button>
+          </div>
+          <div class="preview-cut">
+            <span>Ваш доход (19%):</span>
+            <strong id="cut-preview">0 ₽</strong>
+          </div>
+        </div>
 
-<!-- Support Section -->
-<section id="support" class="section">
-<div class="container container-small">
-<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Поддержка</h2>
-<p class="text-slate-400 text-center mb-8 fade-in">Ответы на частые вопросы</p>
-<div class="space-y-6">
-<div class="faq-item">
-<h3 class="text-lg font-bold mb-3">Как связаться с поддержкой?</h3>
-<p class="text-slate-400">Вы можете написать нам на email <a href="mailto:raites158@gmail.com" class="text-blue-400 hover:underline">raites158@gmail.com</a> или использовать форму обратной связи на сайте.</p>
-</div>
-<div class="faq-item">
-<h3 class="text-lg font-bold mb-3">Где скачать ваши игры?</h3>
-<p class="text-slate-400">Все наши игры доступны в разделе "Наши игры". Веб-игры запускаются прямо в браузере.</p>
-</div>
-<div class="faq-item">
-<h3 class="text-lg font-bold mb-3">Нужно ли регистрироваться?</h3>
-<p class="text-slate-400">Нет, все наши веб-игры полностью бесплатны и не требуют регистрации.</p>
-</div>
-</div>
-</div>
-</section>
+        <div class="trips-list" id="active-trips-list"></div>
 
-<!-- Contact Section -->
-<section id="contact" class="section section-alt">
-<div class="container">
-<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Контакты</h2>
-<p class="text-slate-400 text-center mb-8 fade-in">Свяжитесь с нами любым удобным способом</p>
-<div class="contact-content">
-<div class="contact-info">
-<h3>Свяжитесь с нами</h3>
-<div class="contact-info-item">
-<span>📧</span>
-<div>
-<p class="label">Email</p>
-<p><a href="mailto:raites158@gmail.com">raites158@gmail.com</a></p>
-<p class="text-xs text-purple-300">Отвечаем в течение 24 часов</p>
-</div>
-</div>
-<div class="contact-info-item">
-<span>📞</span>
-<div>
-<p class="label">Телефон</p>
-<p><a href="tel:+79022707213">+7 (902) 270-72-13</a></p>
-<p class="text-xs text-purple-300">Пн-Пт: 10:00 - 19:00 (МСК)</p>
-</div>
-</div>
-<div class="contact-social">
-<h4>Мы в социальных сетях</h4>
-<div class="contact-social-links">
-<a href="#" title="VKontakte">📘</a>
-<a href="#" title="Telegram">✈️</a>
-<a href="#" title="YouTube">📺</a>
-<a href="#" title="Discord">🎮</a>
-</div>
-</div>
-<div class="contact-features">
-<div class="contact-feature"><span>⚡</span><p>Быстрый ответ</p></div>
-<div class="contact-feature"><span>🔒</span><p>Конфиденциально</p></div>
-<div class="contact-feature"><span>🌍</span><p>Работаем worldwide</p></div>
-<div class="contact-feature"><span>💬</span><p>Поддержка 24/7</p></div>
-</div>
-</div>
-<div class="contact-form">
-<h3>Отправить письмо</h3>
-<form id="contactForm">
-<div class="form-row">
-<div class="form-group">
-<label for="user_name">Ваше имя *</label>
-<input type="text" id="user_name" name="user_name" required placeholder="Иван Иванов">
-</div>
-<div class="form-group">
-<label for="user_email">Email *</label>
-<input type="email" id="user_email" name="user_email" required placeholder="example@mail.ru">
-</div>
-</div>
-<div class="form-group">
-<label for="user_phone">Телефон</label>
-<input type="tel" id="user_phone" name="user_phone" placeholder="+7 (___) ___-__-__" value="+7 (">
-</div>
-<div class="form-group">
-<label for="subject">Тема *</label>
-<select id="subject" name="subject" required>
-<option value="">Выберите тему</option>
-<option value="Техническая поддержка">Техническая поддержка</option>
-<option value="Сотрудничество">Сотрудничество</option>
-<option value="Обратная связь">Обратная связь</option>
-</select>
-</div>
-<div class="form-group">
-<label for="message">Сообщение *</label>
-<textarea id="message" name="message" required placeholder="Опишите ваш вопрос..."></textarea>
-</div>
-<button type="submit" class="submit-btn" id="submitBtn">📤 Отправить</button>
-<div class="form-status" id="formStatus"></div>
-</form>
-</div>
-</div>
-</div>
-</section>
+        <div class="day-summary-bar">
+          <span>Итого за день (<span id="active-trips-count">0</span>/3 рейса):</span>
+          <strong id="active-day-earn">0 ₽</strong>
+        </div>
 
-<!-- Footer -->
-<footer class="footer">
-<div class="container">
-<div class="footer-grid">
-<div>
-<div class="flex items-center gap-3 mb-4">
-<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
-<img src="assets/images/raites.jpg" alt="Raites Logo" style="width: 100%; height: 100%; object-fit: cover;">
-</div>
-<div>
-<div class="font-bold">RAITES</div>
-<div class="text-slate-400 text-sm">Создаём миры, в которые хочется возвращаться.</div>
-</div>
-</div>
-</div>
-<div>
-<h4 class="font-bold mb-4">Игры</h4>
-<ul class="footer-links space-y-2">
-<li><a href="#games">Все игры</a></li>
-<li><a href="#games" data-filter="web">Веб-игры</a></li>
-<li><a href="#games" data-filter="pc">ПК игры</a></li>
-<li><a href="#games" data-filter="mobile">Мобильные игры</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-bold mb-4">Компания</h4>
-<ul class="footer-links space-y-2">
-<li><a href="#about">О нас</a></li>
-<li><a href="#">Карьера</a></li>
-<li><a href="#">Пресс-кит</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-bold mb-4">Помощь</h4>
-<ul class="footer-links space-y-2">
-<li><a href="#support">Поддержка</a></li>
-<li><a href="#contact">Контакты</a></li>
-<li><a href="#">FAQ</a></li>
-</ul>
-</div>
-</div>
-<div class="footer-bottom">
-<p>© 2026 Raites</p>
-<div class="flex gap-6">
-<a href="#" class="text-slate-400 text-sm hover:text-white">Политика конфиденциальности</a>
-<a href="#" class="text-slate-400 text-sm hover:text-white">Условия обслуживания</a>
-</div>
-</div>
-</div>
-</footer>
+        <button class="btn btn-success btn-full" type="button" onclick="finishDay()">
+          ✅ Завершить день и перейти к следующему
+        </button>
+      </div>
+    </section>
 
-<!-- Game Transition Overlay -->
-<div class="game-transition" id="gameTransition">
-<div class="text-center">
-<div class="game-loader mx-auto"></div>
-<div class="game-transition-title">Запуск Empire Tycoon...</div>
-</div>
-</div>
+    <section class="card">
+      <div class="card-header">
+        <span class="card-label">Заработок (19%)</span>
+        <div class="month-nav">
+          <button type="button" onclick="changeMonth(-1)">‹</button>
+          <span class="month-name" id="selected-month-label">—</span>
+          <button type="button" onclick="changeMonth(1)">›</button>
+        </div>
+      </div>
 
-<script>
-// Данные игр - ТОЛЬКО EMPIRE TYCOON
-const gamesData = [
-{ id: 1, name: '🏢 Empire Tycoon', description: 'Построй свою бизнес-империю с нуля! Начинай с маленького ларька и стань магнатом. Покупай бизнесы, нанимай менеджеров, получай пассивный доход и стань самым богатым предпринимателем!', platform: 'web', genres: ['Бизнес', 'Стратегия', 'Idle', 'Экономика'], image: 'assets/images/empire-tycoon.jpg', playLink: 'game-empire.html', tags: ['💼 Бизнес', '📈 Стратегия', '⏱️ Idle'], comingSoon: false }
-];
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-title">За текущий / посл. день</div>
+          <div class="stat-value" id="stat-day">0 ₽</div>
+          <div class="stat-sub" id="stat-day-sub">0 рейсов</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-title">За выбранный месяц</div>
+          <div class="stat-value" id="stat-month">0 ₽</div>
+          <div class="stat-sub" id="stat-month-sub">0 рейсов · 0 вых.</div>
+        </div>
+        <div class="stat-box wide">
+          <div class="stat-title">Всего заработано за всё время</div>
+          <div class="stat-value" id="stat-total">0 ₽</div>
+          <div class="stat-sub" id="stat-total-sub">Общий оборот рейсов: 0 ₽</div>
+        </div>
+      </div>
+    </section>
 
-function getAllGenres() { const genres = new Set(); gamesData.forEach(game => { game.genres.forEach(genre => genres.add(genre)); }); return Array.from(genres).sort(); }
-function updateGenreSelect() { const genreSelect = document.getElementById('genreSelect'); if (!genreSelect) return; const genres = getAllGenres(); genreSelect.innerHTML = '<option value="all">🎮 Все жанры</option>'; genres.forEach(genre => { genreSelect.innerHTML += `<option value="${genre}">🎯 ${genre}</option>`; }); }
-function renderGames() {
-const gamesGrid = document.getElementById('gamesGrid'); if (!gamesGrid) return;
-const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
-const searchQuery = document.getElementById('gameSearch')?.value.toLowerCase().trim() || '';
-const selectedGenre = document.getElementById('genreSelect')?.value || 'all';
-let filteredGames = [...gamesData];
-if (activeFilter !== 'all') filteredGames = filteredGames.filter(game => game.platform === activeFilter);
-if (searchQuery) filteredGames = filteredGames.filter(game => game.name.toLowerCase().includes(searchQuery) || game.genres.some(genre => genre.toLowerCase().includes(searchQuery)) || game.tags.some(tag => tag.toLowerCase().includes(searchQuery)));
-if (selectedGenre !== 'all') filteredGames = filteredGames.filter(game => game.genres.includes(selectedGenre));
-if (filteredGames.length === 0) { gamesGrid.innerHTML = `<div class="no-results"><div class="no-results-icon">🔍</div><h3>Игры не найдены</h3><p>Попробуйте изменить фильтр или поисковый запрос</p></div>`; return; }
-gamesGrid.innerHTML = filteredGames.map(game => { const isImageUrl = game.image && game.image.startsWith('assets/'); return `<div class="game-card-new" data-platform="${game.platform}"><div class="game-card-image">${isImageUrl ? `<img src="${game.image}" alt="${game.name}">` : `<div class="game-image-placeholder">${game.image}</div>`}<span class="game-badge ${game.platform === 'web' ? 'web' : game.platform === 'pc' ? 'pc' : 'mobile'}">${game.platform === 'web' ? '🌐 Браузер' : game.platform === 'pc' ? '💻 ПК' : '📱 Мобильная'}</span>${game.comingSoon ? '<span class="coming-soon-badge">🚀 Скоро</span>' : ''}</div><div class="game-card-content"><h3 class="game-title">${game.name}</h3><p class="game-description">${game.description}</p><div class="game-tags">${game.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div><div class="game-genres">${game.genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('')}</div>${game.comingSoon ? '<button class="btn-coming-soon" disabled>🚧 В разработке</button>' : (game.platform === 'web' && game.playLink ? `<button onclick="launchGame('${game.playLink}')" class="play-btn"><span>🎮 Играть</span><i class="ri-external-link-line"></i></button>` : `<a href="#" class="download-btn" target="_blank"><span>📥 Скачать</span><i class="ri-download-line"></i></a>`)}</div></div>`; }).join('');
-}
-function launchGame(gamePath = null) { const transition = document.getElementById('gameTransition'); const targetPath = gamePath || 'web-games/game-empire.html'; if (transition) { transition.classList.add('active'); setTimeout(() => { window.location.href = targetPath; }, 1500); } else { window.location.href = targetPath; } }
-const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', function(e) { e.preventDefault(); const target = document.querySelector(this.getAttribute('href')); if (target) target.scrollIntoView({ behavior: 'smooth' }); }); });
-const mobileMenuBtn = document.querySelector('.mobile-menu-btn'); const navLinks = document.querySelector('.nav-links');
-if (mobileMenuBtn && navLinks) { mobileMenuBtn.addEventListener('click', () => { navLinks.classList.toggle('active'); mobileMenuBtn.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰'; }); document.querySelectorAll('.nav-links a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('active'); mobileMenuBtn.innerHTML = '☰'; }); }); window.addEventListener('resize', () => { if (window.innerWidth > 768) { navLinks.classList.remove('active'); mobileMenuBtn.innerHTML = '☰'; } }); }
-document.addEventListener('DOMContentLoaded', () => { updateGenreSelect(); renderGames(); const filterBtns = document.querySelectorAll('.filter-btn'); const searchInput = document.getElementById('gameSearch'); const genreSelect = document.getElementById('genreSelect'); filterBtns.forEach(btn => { btn.addEventListener('click', () => { filterBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderGames(); }); }); if (searchInput) searchInput.addEventListener('input', () => renderGames()); if (genreSelect) genreSelect.addEventListener('change', () => renderGames()); document.querySelectorAll('[data-filter]').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); const filter = link.dataset.filter; const btn = document.querySelector(`.filter-btn[data-filter="${filter}"]`); if (btn) btn.click(); document.getElementById('games').scrollIntoView({ behavior: 'smooth' }); }); }); });
-const phoneInput = document.getElementById('user_phone'); if (phoneInput) { phoneInput.addEventListener('input', function(e) { let value = e.target.value.replace(/\D/g, ''); if (value.length > 0) { if (value[0] === '7') value = value.substring(1); if (value[0] === '8') value = value.substring(1); } value = value.substring(0, 10); let formattedValue = '+7 ('; if (value.length > 0) formattedValue += value.substring(0, 3); if (value.length >= 3) formattedValue += ') ' + value.substring(3, 6); if (value.length >= 6) formattedValue += '-' + value.substring(6, 8); if (value.length >= 8) formattedValue += '-' + value.substring(8, 10); e.target.value = formattedValue; }); phoneInput.addEventListener('focus', function(e) { if (!e.target.value || e.target.value === '+7 (') { e.target.value = '+7 ('; } }); phoneInput.addEventListener('blur', function(e) { if (e.target.value === '+7 (') { e.target.value = ''; } }); }
-const contactForm = document.getElementById('contactForm'); if (contactForm) { contactForm.addEventListener('submit', function(event) { event.preventDefault(); const submitBtn = document.getElementById('submitBtn'); const formStatus = document.getElementById('formStatus'); const originalText = submitBtn.innerHTML; submitBtn.disabled = true; submitBtn.innerHTML = '⏳ Отправка...'; formStatus.className = 'form-status'; formStatus.style.display = 'none'; emailjs.sendForm('service_6u5en3m', 'template_aj1z0ff', this).then(() => { submitBtn.innerHTML = '✅ Отправлено!'; formStatus.textContent = 'Спасибо! Ваше сообщение успешно отправлено.'; formStatus.className = 'form-status success'; formStatus.style.display = 'block'; contactForm.reset(); setTimeout(() => { submitBtn.disabled = false; submitBtn.innerHTML = originalText; formStatus.style.display = 'none'; }, 5000); }).catch(() => { submitBtn.innerHTML = originalText; submitBtn.disabled = false; formStatus.textContent = 'Ошибка отправки. Попробуйте позже.'; formStatus.className = 'form-status error'; formStatus.style.display = 'block'; }); }); }
-</script>
+    <section class="card">
+      <div class="card-header">
+        <span class="card-label">История по дням</span>
+        <span style="font-size:12px;color:var(--text-muted);" id="history-count">0 записей</span>
+      </div>
+      <div class="history-list" id="history-list"></div>
+    </section>
+  </div>
+
+  <!-- Модалка аккаунта -->
+  <div class="modal-backdrop" id="account-modal" onclick="closeOnBackdrop(event, 'account-modal')">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title" id="account-modal-title">Аккаунт и облако D1</div>
+        <button class="icon-btn" type="button" onclick="closeModal('account-modal')">✕</button>
+      </div>
+
+      <div id="logged-out-box" class="section-box">
+        <h4>Вход или регистрация</h4>
+        <p>Данные привяжутся к аккаунту в Cloudflare D1 и будут доступны на другом устройстве после входа.</p>
+        <div class="stack">
+          <input type="text" id="auth-username" class="auth-input" placeholder="Логин (например, ivan_work)" autocomplete="username" />
+          <input type="password" id="auth-password" class="auth-input" placeholder="Пароль (от 4 символов)" autocomplete="current-password" />
+          <button class="btn btn-primary btn-full" type="button" onclick="authAction('login')">Войти в аккаунт</button>
+          <button class="btn btn-ghost btn-full" type="button" onclick="authAction('register')">Создать новый аккаунт</button>
+        </div>
+      </div>
+
+      <div id="logged-in-box" class="section-box" style="display:none;">
+        <h4 id="logged-in-user">Аккаунт: —</h4>
+        <p id="sync-status-text">Синхронизация активна</p>
+        <div class="stack">
+          <button class="btn btn-primary btn-full" type="button" onclick="syncNow(true)">☁️ Синхронизировать сейчас</button>
+          <button class="btn btn-ghost btn-full" type="button" onclick="logoutAccount()">Выйти из аккаунта</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка резервной копии и настроек -->
+  <div class="modal-backdrop" id="settings-modal" onclick="closeOnBackdrop(event, 'settings-modal')">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Резервная копия и PWA</div>
+        <button class="icon-btn" type="button" onclick="closeModal('settings-modal')">✕</button>
+      </div>
+
+      <div class="section-box">
+        <h4>💾 Резервная копия (JSON)</h4>
+        <p>Дополнительная копия на случай, если захотите перенести данные в файл.</p>
+        <div class="stack">
+          <button class="btn btn-primary btn-full" type="button" onclick="exportBackupFile()">📥 Скачать файл копии (.json)</button>
+          <button class="btn btn-ghost btn-full" type="button" onclick="copyBackupText()">📋 Скопировать копию в буфер</button>
+        </div>
+      </div>
+
+      <div class="section-box">
+        <h4>♻️ Восстановить из копии</h4>
+        <div class="stack">
+          <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;" onchange="importBackupFile(event)" />
+          <button class="btn btn-ghost btn-full" type="button" onclick="document.getElementById('import-file-input').click()">📂 Выбрать файл .json</button>
+          <textarea class="backup-text" id="import-text-area" placeholder="Или вставьте JSON-код резервной копии..."></textarea>
+          <button class="btn btn-success btn-full" type="button" onclick="importBackupFromText()">Восстановить из текста</button>
+        </div>
+      </div>
+
+      <div class="section-box" style="border-color: rgba(220,38,38,0.3);">
+        <h4>🗑 Сброс данных</h4>
+        <button class="btn btn-danger-soft btn-full" type="button" onclick="resetAllData()">Очистить все записи</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка даты -->
+  <div class="modal-backdrop" id="date-modal" onclick="closeOnBackdrop(event, 'date-modal')">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Установить рабочую дату</div>
+        <button class="icon-btn" type="button" onclick="closeModal('date-modal')">✕</button>
+      </div>
+      <input type="date" id="manual-date-input" />
+      <button class="btn btn-primary btn-full" type="button" onclick="saveManualDate()">Сохранить дату</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = 'trip_tracker_d1_v1';
+    const RATE = 0.19;
+
+    function getTodayISO() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function addDaysISO(isoStr, days) {
+      const [y, m, d] = isoStr.split('-').map(Number);
+      const dt = new Date(y, m - 1, d);
+      dt.setDate(dt.getDate() + days);
+      return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+    }
+
+    function formatDateRu(isoStr) {
+      const [y, m, d] = isoStr.split('-').map(Number);
+      return new Date(y, m - 1, d).toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+
+    function formatWeekdayRu(isoStr) {
+      const [y, m, d] = isoStr.split('-').map(Number);
+      return new Date(y, m - 1, d).toLocaleDateString('ru-RU', { weekday: 'long' });
+    }
+
+    function formatMoney(num) {
+      return new Intl.NumberFormat('ru-RU', {
+        minimumFractionDigits: num % 1 === 0 ? 0 : 2,
+        maximumFractionDigits: 2
+      }).format(num) + ' ₽';
+    }
+
+    function calcCut(amount) {
+      return Math.round(amount * RATE * 100) / 100;
+    }
+
+    function defaultData() {
+      return {
+        currentDate: getTodayISO(),
+        activeDay: null,
+        records: [],
+        updatedAt: Date.now()
+      };
+    }
+
+    let appStore = loadStore();
+    let selectedMonth = appStore.data.currentDate.slice(0, 7);
+    let deferredInstallPrompt = null;
+
+    function loadStore() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return {
+            username: parsed.username || null,
+            theme: parsed.theme || 'light',
+            data: {
+              currentDate: parsed.data?.currentDate || getTodayISO(),
+              activeDay: parsed.data?.activeDay || null,
+              records: Array.isArray(parsed.data?.records) ? parsed.data.records : [],
+              updatedAt: parsed.data?.updatedAt || Date.now()
+            }
+          };
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      return {
+        username: null,
+        theme: 'light',
+        data: defaultData()
+      };
+    }
+
+    function saveLocalOnly() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appStore));
+    }
+
+    async function persistAndSync(showMsgOnFail = false) {
+      appStore.data.updatedAt = Date.now();
+      saveLocalOnly();
+
+      if (!appStore.username || !navigator.onLine) {
+        updateSyncIndicator();
+        return;
+      }
+
+      try {
+        setSyncBadge('syncing', 'Сохранение в облако...');
+        const res = await fetch('/api/state', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: appStore.username,
+            state: appStore.data
+          })
+        });
+        const out = await res.json();
+        if (!res.ok) throw new Error(out.error || 'Ошибка синхронизации');
+        setSyncBadge('ok', `@${appStore.username} · D1`);
+      } catch (e) {
+        setSyncBadge('warn', `@${appStore.username} · локально`);
+        if (showMsgOnFail) showToast('Нет связи с облаком, сохранено локально');
+      }
+    }
+
+    function setSyncBadge(mode, text) {
+      const dot = document.getElementById('sync-dot');
+      const sub = document.getElementById('account-sub');
+      const modalStatus = document.getElementById('sync-status-text');
+      sub.textContent = text;
+      if (modalStatus) modalStatus.textContent = `Статус: ${text}`;
+
+      if (mode === 'ok') dot.style.background = 'var(--success)';
+      else if (mode === 'syncing') dot.style.background = 'var(--primary)';
+      else dot.style.background = 'var(--warning)';
+    }
+
+    function updateSyncIndicator() {
+      if (appStore.username) {
+        setSyncBadge(navigator.onLine ? 'ok' : 'warn', `@${appStore.username} · ${navigator.onLine ? 'D1' : 'офлайн'}`);
+      } else {
+        setSyncBadge('warn', 'Гость · локально');
+      }
+    }
+
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(el._timer);
+      el._timer = setTimeout(() => el.classList.remove('show'), 2600);
+    }
+
+    function applyTheme() {
+      document.documentElement.setAttribute('data-theme', appStore.theme);
+      document.getElementById('meta-theme-color').setAttribute(
+        'content',
+        appStore.theme === 'dark' ? '#0b1120' : '#f1f5f9'
+      );
+    }
+
+    document.getElementById('theme-btn').addEventListener('click', () => {
+      appStore.theme = appStore.theme === 'dark' ? 'light' : 'dark';
+      saveLocalOnly();
+      applyTheme();
+    });
+
+    // Аккаунты
+    function openAccountModal() {
+      const loggedIn = Boolean(appStore.username);
+      document.getElementById('logged-out-box').style.display = loggedIn ? 'none' : 'block';
+      document.getElementById('logged-in-box').style.display = loggedIn ? 'block' : 'none';
+      if (loggedIn) {
+        document.getElementById('logged-in-user').textContent = `Аккаунт: @${appStore.username}`;
+      }
+      updateSyncIndicator();
+      document.getElementById('account-modal').classList.add('open');
+    }
+
+    async function authAction(mode) {
+      const username = document.getElementById('auth-username').value.trim().toLowerCase();
+      const password = document.getElementById('auth-password').value;
+
+      if (!username || !password) {
+        showToast('Введите логин и пароль');
+        return;
+      }
+
+      try {
+        const endpoint = mode === 'register' ? '/api/register' : '/api/login';
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const out = await res.json();
+        if (!res.ok) {
+          showToast(out.error || 'Ошибка входа');
+          return;
+        }
+
+        const localHasRecords =
+          appStore.data.records.length > 0 ||
+          (appStore.data.activeDay && appStore.data.activeDay.trips.length > 0);
+
+        appStore.username = out.user.username;
+
+        if (out.state && Array.isArray(out.state.records)) {
+          const cloudHasRecords =
+            out.state.records.length > 0 ||
+            (out.state.activeDay && out.state.activeDay.trips.length > 0);
+
+          if (cloudHasRecords) {
+            appStore.data = out.state;
+          } else if (localHasRecords) {
+            await persistAndSync(false);
+          } else {
+            appStore.data = out.state;
+          }
+        } else if (localHasRecords) {
+          await persistAndSync(false);
+        }
+
+        selectedMonth = appStore.data.currentDate.slice(0, 7);
+        saveLocalOnly();
+        document.getElementById('auth-password').value = '';
+        closeModal('account-modal');
+        updateAccountButton();
+        updateSyncIndicator();
+        render();
+        showToast(mode === 'register' ? `Аккаунт @${appStore.username} создан` : `Вход выполнен: @${appStore.username}`);
+      } catch (e) {
+        showToast('Не удалось связаться с сервером');
+      }
+    }
+
+    function logoutAccount() {
+      appStore.username = null;
+      saveLocalOnly();
+      updateAccountButton();
+      updateSyncIndicator();
+      closeModal('account-modal');
+      showToast('Вы вышли из аккаунта');
+    }
+
+    async function syncNow(showToastFlag = true) {
+      if (!appStore.username) return;
+      try {
+        setSyncBadge('syncing', 'Синхронизация...');
+        const res = await fetch(`/api/state?username=${encodeURIComponent(appStore.username)}`);
+        const out = await res.json();
+        if (res.ok && out.state) {
+          const cloudTs = out.state.updatedAt || 0;
+          const localTs = appStore.data.updatedAt || 0;
+          if (cloudTs > localTs) {
+            appStore.data = out.state;
+            selectedMonth = appStore.data.currentDate.slice(0, 7);
+            saveLocalOnly();
+            render();
+            if (showToastFlag) showToast('Данные обновлены из облака');
+            updateSyncIndicator();
+            return;
+          }
+        }
+        await persistAndSync(showToastFlag);
+        if (showToastFlag) showToast('Данные синхронизированы с D1');
+      } catch (e) {
+        updateSyncIndicator();
+        if (showToastFlag) showToast('Ошибка синхронизации');
+      }
+    }
+
+    function updateAccountButton() {
+      const btn = document.getElementById('account-btn');
+      btn.textContent = appStore.username ? `👤 @${appStore.username}` : '👤 Войти';
+    }
+
+    // Логика смен и рейсов
+    function startDay() {
+      appStore.data.activeDay = {
+        date: appStore.data.currentDate,
+        trips: []
+      };
+      persistAndSync();
+      render();
+      showToast('Смена начата');
+    }
+
+    function markDayOff() {
+      const date = appStore.data.currentDate;
+      appStore.data.records = appStore.data.records.filter(r => r.date !== date);
+      appStore.data.records.unshift({
+        date,
+        type: 'off',
+        trips: [],
+        totalGross: 0,
+        totalEarn: 0
+      });
+      appStore.data.currentDate = addDaysISO(date, 1);
+      selectedMonth = appStore.data.currentDate.slice(0, 7);
+      persistAndSync();
+      render();
+      showToast('Выходной записан, дата сдвинута');
+    }
+
+    function updateCutPreview() {
+      const val = parseFloat(document.getElementById('trip-amount').value);
+      document.getElementById('cut-preview').textContent = formatMoney(val > 0 ? calcCut(val) : 0);
+    }
+
+    function addTrip() {
+      const active = appStore.data.activeDay;
+      if (!active) return;
+      if (active.trips.length >= 3) {
+        showToast('Максимум 3 рейса в день');
+        return;
+      }
+      const input = document.getElementById('trip-amount');
+      const amount = parseFloat(input.value);
+      if (!amount || amount <= 0) {
+        showToast('Введите стоимость рейса');
+        input.focus();
+        return;
+      }
+      const earn = calcCut(amount);
+      active.trips.push({
+        id: Date.now(),
+        amount,
+        earn
+      });
+      input.value = '';
+      document.getElementById('cut-preview').textContent = '0 ₽';
+      persistAndSync();
+      render();
+      showToast(`Рейс добавлен (+${formatMoney(earn)})`);
+    }
+
+    function removeActiveTrip(id) {
+      if (!appStore.data.activeDay) return;
+      appStore.data.activeDay.trips = appStore.data.activeDay.trips.filter(t => t.id !== id);
+      persistAndSync();
+      render();
+    }
+
+    function finishDay() {
+      const active = appStore.data.activeDay;
+      if (!active) return;
+      if (active.trips.length === 0) {
+        showToast('Добавьте хотя бы 1 рейс или отметьте выходной');
+        return;
+      }
+      const date = active.date;
+      const totalGross = active.trips.reduce((s, t) => s + t.amount, 0);
+      const totalEarn = Math.round(active.trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
+
+      appStore.data.records = appStore.data.records.filter(r => r.date !== date);
+      appStore.data.records.unshift({
+        date,
+        type: 'work',
+        trips: [...active.trips],
+        totalGross,
+        totalEarn
+      });
+
+      appStore.data.activeDay = null;
+      appStore.data.currentDate = addDaysISO(date, 1);
+      selectedMonth = appStore.data.currentDate.slice(0, 7);
+      persistAndSync();
+      render();
+      showToast('День завершён! Открыта следующая дата');
+    }
+
+    function deleteHistoryRecord(date) {
+      if (!confirm(`Удалить запись за ${formatDateRu(date)}?`)) return;
+      appStore.data.records = appStore.data.records.filter(r => r.date !== date);
+      persistAndSync();
+      render();
+      showToast('Запись удалена');
+    }
+
+    function changeMonth(delta) {
+      const [y, m] = selectedMonth.split('-').map(Number);
+      const dt = new Date(y, m - 1 + delta, 1);
+      selectedMonth = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}`;
+      render();
+    }
+
+    function openDateModal() {
+      document.getElementById('manual-date-input').value =
+        appStore.data.activeDay ? appStore.data.activeDay.date : appStore.data.currentDate;
+      document.getElementById('date-modal').classList.add('open');
+    }
+
+    document.getElementById('settings-btn').addEventListener('click', () => {
+      document.getElementById('settings-modal').classList.add('open');
+    });
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function closeOnBackdrop(e, id) {
+      if (e.target.id === id) closeModal(id);
+    }
+
+    function saveManualDate() {
+      const val = document.getElementById('manual-date-input').value;
+      if (!val) return;
+      appStore.data.currentDate = val;
+      if (appStore.data.activeDay) {
+        appStore.data.activeDay.date = val;
+      }
+      selectedMonth = val.slice(0, 7);
+      persistAndSync();
+      closeModal('date-modal');
+      render();
+      showToast('Рабочая дата обновлена');
+    }
+
+    // Бэкап JSON
+    function buildBackupPayload() {
+      return JSON.stringify({
+        app: 'trip_tracker_19_d1',
+        version: 2,
+        account: appStore.username || null,
+        exportedAt: new Date().toISOString(),
+        data: appStore.data
+      }, null, 2);
+    }
+
+    function exportBackupFile() {
+      const blob = new Blob([buildBackupPayload()], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `trips-backup-${getTodayISO()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast('Файл резервной копии скачан');
+    }
+
+    async function copyBackupText() {
+      const json = buildBackupPayload();
+      try {
+        await navigator.clipboard.writeText(json);
+        showToast('Копия скопирована в буфер обмена');
+      } catch (e) {
+        document.getElementById('import-text-area').value = json;
+        showToast('Текст вставлен в поле ниже');
+      }
+    }
+
+    function applyImportedJson(rawText) {
+      try {
+        const parsed = JSON.parse(rawText);
+        const src = parsed.data && parsed.records === undefined ? parsed.data : parsed;
+        if (!src || !Array.isArray(src.records) || !src.currentDate) {
+          throw new Error('Неверный формат');
+        }
+        appStore.data = {
+          currentDate: src.currentDate,
+          activeDay: src.activeDay || null,
+          records: src.records,
+          updatedAt: Date.now()
+        };
+        selectedMonth = appStore.data.currentDate.slice(0, 7);
+        persistAndSync();
+        render();
+        closeModal('settings-modal');
+        showToast(`Восстановлено записей: ${appStore.data.records.length}`);
+      } catch (err) {
+        alert('Ошибка восстановления: проверьте формат JSON.');
+      }
+    }
+
+    function importBackupFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => applyImportedJson(reader.result);
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function importBackupFromText() {
+      const txt = document.getElementById('import-text-area').value.trim();
+      if (!txt) {
+        showToast('Вставьте текст копии');
+        return;
+      }
+      applyImportedJson(txt);
+    }
+
+    function resetAllData() {
+      if (!confirm('Точно удалить все записи?')) return;
+      appStore.data = defaultData();
+      selectedMonth = appStore.data.currentDate.slice(0, 7);
+      persistAndSync();
+      closeModal('settings-modal');
+      render();
+      showToast('Данные очищены');
+    }
+
+    function render() {
+      const d = appStore.data;
+      const activeDate = d.activeDay ? d.activeDay.date : d.currentDate;
+      document.getElementById('current-date-display').textContent = formatDateRu(activeDate);
+      document.getElementById('current-weekday-display').textContent = formatWeekdayRu(activeDate);
+
+      const statusEl = document.getElementById('shift-status');
+      const idleBox = document.getElementById('idle-controls');
+      const activeBox = document.getElementById('active-controls');
+
+      if (d.activeDay) {
+        statusEl.textContent = 'Смена идёт';
+        statusEl.className = 'status-pill active';
+        idleBox.style.display = 'none';
+        activeBox.style.display = 'block';
+
+        const trips = d.activeDay.trips;
+        document.getElementById('trip-form-box').style.display = trips.length >= 3 ? 'none' : 'block';
+        document.getElementById('active-trips-count').textContent = trips.length;
+        const dayEarn = trips.reduce((sum, t) => sum + t.earn, 0);
+        document.getElementById('active-day-earn').textContent = formatMoney(dayEarn);
+
+        const listEl = document.getElementById('active-trips-list');
+        if (trips.length === 0) {
+          listEl.innerHTML = '<div class="empty-note">Добавьте первый рейс за эту смену (от 1 до 3 в день)</div>';
+        } else {
+          listEl.innerHTML = trips.map((t, idx) => `
+            <div class="trip-item">
+              <div class="trip-info">
+                <span class="trip-num">Рейс #${idx + 1}</span>
+                <span class="trip-sum">Сумма: ${formatMoney(t.amount)}</span>
+              </div>
+              <div class="trip-right">
+                <span class="trip-earn">+${formatMoney(t.earn)}</span>
+                <button class="del-trip-btn" type="button" onclick="removeActiveTrip(${t.id})" title="Удалить рейс">✕</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      } else {
+        statusEl.textContent = 'День не начат';
+        statusEl.className = 'status-pill idle';
+        idleBox.style.display = 'grid';
+        activeBox.style.display = 'none';
+      }
+
+      let dayEarn = 0;
+      let dayTripsCount = 0;
+      if (d.activeDay) {
+        dayEarn = d.activeDay.trips.reduce((s, t) => s + t.earn, 0);
+        dayTripsCount = d.activeDay.trips.length;
+      } else if (d.records.length > 0) {
+        dayEarn = d.records[0].totalEarn || 0;
+        dayTripsCount = d.records[0].trips ? d.records[0].trips.length : 0;
+      }
+      document.getElementById('stat-day').textContent = formatMoney(dayEarn);
+      document.getElementById('stat-day-sub').textContent = `${dayTripsCount} рейс(ов)`;
+
+      const [my, mm] = selectedMonth.split('-').map(Number);
+      document.getElementById('selected-month-label').textContent = new Date(my, mm - 1, 1).toLocaleDateString('ru-RU', {
+        month: 'long',
+        year: 'numeric'
+      });
+
+      let monthEarn = 0;
+      let monthTrips = 0;
+      let monthOffs = 0;
+
+      d.records.forEach(r => {
+        if (r.date.startsWith(selectedMonth)) {
+          if (r.type === 'off') monthOffs++;
+          else {
+            monthEarn += r.totalEarn || 0;
+            monthTrips += r.trips ? r.trips.length : 0;
+          }
+        }
+      });
+
+      if (d.activeDay && d.activeDay.date.startsWith(selectedMonth)) {
+        monthEarn += d.activeDay.trips.reduce((s, t) => s + t.earn, 0);
+        monthTrips += d.activeDay.trips.length;
+      }
+
+      document.getElementById('stat-month').textContent = formatMoney(monthEarn);
+      document.getElementById('stat-month-sub').textContent = `${monthTrips} рейс(ов) · ${monthOffs} вых.`;
+
+      let totalEarn = d.records.reduce((s, r) => s + (r.totalEarn || 0), 0);
+      let totalGross = d.records.reduce((s, r) => s + (r.totalGross || 0), 0);
+      if (d.activeDay) {
+        totalEarn += d.activeDay.trips.reduce((s, t) => s + t.earn, 0);
+        totalGross += d.activeDay.trips.reduce((s, t) => s + t.amount, 0);
+      }
+
+      document.getElementById('stat-total').textContent = formatMoney(totalEarn);
+      document.getElementById('stat-total-sub').textContent = `Общий оборот рейсов: ${formatMoney(totalGross)}`;
+
+      const sortedRecords = [...d.records].sort((a, b) => b.date.localeCompare(a.date));
+      document.getElementById('history-count').textContent = `${sortedRecords.length} записей`;
+      const historyEl = document.getElementById('history-list');
+
+      if (sortedRecords.length === 0) {
+        historyEl.innerHTML = '<div class="empty-note">История пока пуста. Нажмите «Начать день» или «Выходной».</div>';
+      } else {
+        historyEl.innerHTML = sortedRecords.map(rec => {
+          if (rec.type === 'off') {
+            return `
+              <div class="history-item">
+                <div class="history-top">
+                  <span class="history-date">${formatDateRu(rec.date)}</span>
+                  <span class="history-badge-off">Выходной</span>
+                </div>
+                <div class="history-actions">
+                  <button class="tiny-btn" type="button" onclick="deleteHistoryRecord('${rec.date}')">Удалить</button>
+                </div>
+              </div>
+            `;
+          }
+          const chips = (rec.trips || []).map((t, i) =>
+            `<span class="chip">#${i + 1}: ${formatMoney(t.amount)} → <strong>${formatMoney(t.earn)}</strong></span>`
+          ).join('');
+          return `
+            <div class="history-item">
+              <div class="history-top">
+                <span class="history-date">${formatDateRu(rec.date)}</span>
+                <span class="history-earn">+${formatMoney(rec.totalEarn)}</span>
+              </div>
+              <div class="history-details">${chips}</div>
+              <div class="history-actions">
+                <button class="tiny-btn" type="button" onclick="deleteHistoryRecord('${rec.date}')">Удалить</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function initPWA() {
+      const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <rect width="512" height="512" rx="112" fill="#2563eb"/>
+        <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
+              fill="#ffffff" font-family="Arial, sans-serif" font-weight="800" font-size="180">19%</text>
+      </svg>`;
+      const iconUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg);
+
+      const manifest = {
+        name: 'Учёт рейсов — 19%',
+        short_name: 'Рейсы 19%',
+        start_url: location.href,
+        display: 'standalone',
+        background_color: '#0b1120',
+        theme_color: '#2563eb',
+        icons: [
+          { src: iconUrl, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+          { src: iconUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+        ]
+      };
+
+      const manifestLink = document.createElement('link');
+      manifestLink.rel = 'manifest';
+      manifestLink.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }));
+      document.head.appendChild(manifestLink);
+
+      const appleIcon = document.createElement('link');
+      appleIcon.rel = 'apple-touch-icon';
+      appleIcon.href = iconUrl;
+      document.head.appendChild(appleIcon);
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      document.getElementById('install-pwa-btn').classList.add('visible');
+    });
+
+    document.getElementById('install-pwa-btn').addEventListener('click', async () => {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      document.getElementById('install-pwa-btn').classList.remove('visible');
+    });
+
+    window.addEventListener('online', () => {
+      updateSyncIndicator();
+      if (appStore.username) syncNow(false);
+    });
+    window.addEventListener('offline', updateSyncIndicator);
+
+    applyTheme();
+    updateAccountButton();
+    updateSyncIndicator();
+    initPWA();
+    render();
+    if (appStore.username && navigator.onLine) {
+      syncNow(false);
+    }
+  </script>
 </body>
 </html>
-
-
