@@ -484,13 +484,24 @@
       font-size: 13.5px;
     }
 
-    /* Ввод рейса */
-    .trip-form {
+    /* Ввод рейса и ГСМ */
+    .trip-form,
+    .fuel-form-box {
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       padding: 12px;
       margin-bottom: 10px;
+    }
+
+    .fuel-form-box {
+      border-color: rgba(217, 119, 6, 0.35);
+    }
+
+    .box-mini-hint {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--warning);
     }
 
     .input-group {
@@ -499,15 +510,32 @@
       margin-bottom: 6px;
     }
 
+    .fuel-fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .field-col label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
     .amount-input,
-    .auth-input {
+    .auth-input,
+    .text-input,
+    .date-field-input {
       width: 100%;
       background: var(--surface);
       border: 1.5px solid var(--border);
       color: var(--text);
       border-radius: 11px;
-      padding: 11px 13px;
-      font-size: 15.5px;
+      padding: 10px 12px;
+      font-size: 15px;
       font-weight: 700;
       outline: none;
       transition: border-color 0.15s ease;
@@ -516,11 +544,22 @@
     .amount-input {
       flex: 1;
       min-width: 0;
-      font-size: 18px;
+      font-size: 17.5px;
+    }
+
+    .text-input {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .date-field-input {
+      font-size: 13.5px;
     }
 
     .amount-input:focus,
-    .auth-input:focus {
+    .auth-input:focus,
+    .text-input:focus,
+    .date-field-input:focus {
       border-color: var(--primary);
     }
 
@@ -536,6 +575,10 @@
     .preview-cut strong {
       color: var(--success);
       font-size: 15.5px;
+    }
+
+    .preview-cut strong.fuel-deduct {
+      color: var(--danger);
     }
 
     .trips-list {
@@ -558,6 +601,7 @@
     .trip-info {
       display: flex;
       flex-direction: column;
+      min-width: 0;
     }
 
     .trip-num {
@@ -575,6 +619,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-shrink: 0;
     }
 
     .trip-earn {
@@ -617,6 +662,13 @@
       font-size: 17.5px;
       color: var(--text);
       white-space: nowrap;
+    }
+
+    .day-summary-note {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 2px;
     }
 
     /* Статистика и период */
@@ -886,11 +938,24 @@
       border: 1px solid var(--border);
     }
 
+    .history-fuel-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
     .history-earn {
       font-weight: 800;
       font-size: 16px;
       color: var(--success);
       white-space: nowrap;
+    }
+
+    .history-earn.negative {
+      color: var(--danger);
     }
 
     .history-trips {
@@ -914,6 +979,10 @@
       font-size: 12.5px;
     }
 
+    .history-trip-row.fuel-row {
+      border-color: rgba(185, 28, 28, 0.22);
+    }
+
     .history-trip-left {
       display: flex;
       align-items: center;
@@ -931,15 +1000,28 @@
       flex-shrink: 0;
     }
 
+    .history-trip-idx.fuel-idx {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
     .history-trip-gross {
       color: var(--text-muted);
       font-weight: 600;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .history-trip-cut {
       font-weight: 800;
       color: var(--success);
+      white-space: nowrap;
+    }
+
+    .history-trip-fuel {
+      font-weight: 800;
+      color: var(--danger);
       white-space: nowrap;
     }
 
@@ -1064,6 +1146,29 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 8px 10px;
+    }
+
+    .modal-fuel-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .modal-fuel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .modal-fuel-inputs {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 8px;
     }
 
     .modal-trip-meta {
@@ -1348,7 +1453,10 @@
             <div class="trips-list" id="active-trips-list"></div>
 
             <div class="day-summary-bar">
-              <span>Итого за день (<span id="active-trips-count">0</span> рейс(а) · <span id="active-rate-bar">19</span>%):</span>
+              <div>
+                <div>Итого к выплате (<span id="active-trips-count">0</span> рейс(а) · <span id="active-rate-bar">19</span>%):</div>
+                <div class="day-summary-note" id="active-day-breakdown">Доход 0 ₽</div>
+              </div>
               <strong id="active-day-earn">0 ₽</strong>
             </div>
 
@@ -1360,12 +1468,55 @@
             </div>
           </div>
         </section>
+
+        <!-- Отдельный блок для записи расходов ГСМ (только для водителей) -->
+        <section class="card" id="standalone-fuel-card" style="display:none;">
+          <div class="card-header">
+            <span class="card-label">⛽ Расходы ГСМ</span>
+            <span class="box-mini-hint">Удержание с зарплаты</span>
+          </div>
+
+          <div class="fuel-form-box" style="margin-bottom:0;">
+            <div class="fuel-fields-grid">
+              <div class="field-col">
+                <label for="quick-fuel-date">Дата расхода</label>
+                <input type="date" id="quick-fuel-date" class="date-field-input" />
+              </div>
+              <div class="field-col">
+                <label for="quick-fuel-label">Что за расход</label>
+                <input
+                  type="text"
+                  id="quick-fuel-label"
+                  class="text-input"
+                  placeholder="АИ-95, дизель, газ..."
+                />
+              </div>
+            </div>
+
+            <div class="input-group" style="margin-bottom:4px;">
+              <input
+                type="number"
+                inputmode="decimal"
+                step="any"
+                min="1"
+                id="quick-fuel-amount"
+                class="amount-input"
+                placeholder="Сумма, ₽"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();addStandaloneFuelExpense();}"
+              />
+              <button class="btn btn-primary" type="button" onclick="addStandaloneFuelExpense()">Записать</button>
+            </div>
+            <div class="day-summary-note">
+              Расход сразу запишется за выбранную дату и вычтется из заработка.
+            </div>
+          </div>
+        </section>
       </div>
 
       <div class="col-right">
         <section class="card">
           <div class="card-header">
-            <span class="card-label">Заработок</span>
+            <span class="card-label">Заработок (чистыми)</span>
             <div class="month-nav">
               <button type="button" onclick="changeMonth(-1)">‹</button>
               <span class="month-name" id="selected-month-label">—</span>
@@ -1459,11 +1610,31 @@
       <div class="section-box">
         <h4>Рейсы за день (₽)</h4>
         <div class="modal-trips-stack" id="past-trips-list"></div>
-        <button type="button" class="btn btn-ghost btn-sm btn-full" style="margin-bottom:10px;" onclick="addPastTripRow()">
+        <button type="button" class="btn btn-ghost btn-sm btn-full" onclick="addPastTripRow()">
           + Добавить рейс
         </button>
-        <div class="preview-cut">
-          <span>Итого ваш доход за день (<span id="past-rate-label">19</span>%):</span>
+      </div>
+
+      <div class="section-box" id="past-fuel-box" style="display:none;">
+        <h4>⛽ Расходы ГСМ за день</h4>
+        <p>Укажите название расхода и сумму — она вычтется из заработка водителя.</p>
+        <div class="modal-trips-stack" id="past-fuel-list"></div>
+        <button type="button" class="btn btn-ghost btn-sm btn-full" onclick="addPastFuelRow()">
+          + Добавить расход ГСМ
+        </button>
+      </div>
+
+      <div class="section-box">
+        <div class="preview-cut" style="padding:0 0 6px;">
+          <span>Начислено по рейсам (<span id="past-rate-label">19</span>%):</span>
+          <strong id="past-gross-cut-preview">0 ₽</strong>
+        </div>
+        <div class="preview-cut" id="past-fuel-deduct-row" style="display:none;padding:0 0 6px;">
+          <span>Удержано за ГСМ:</span>
+          <strong class="fuel-deduct" id="past-fuel-preview">−0 ₽</strong>
+        </div>
+        <div class="preview-cut" style="padding-top:6px;border-top:1px solid var(--border);">
+          <span>Итого чистыми за день:</span>
           <strong id="past-cut-preview">0 ₽</strong>
         </div>
       </div>
@@ -1496,11 +1667,31 @@
       <div class="section-box">
         <h4>Рейсы за день (₽)</h4>
         <div class="modal-trips-stack" id="edit-trips-list"></div>
-        <button type="button" class="btn btn-ghost btn-sm btn-full" style="margin-bottom:10px;" onclick="addEditTripRow()">
+        <button type="button" class="btn btn-ghost btn-sm btn-full" onclick="addEditTripRow()">
           + Добавить рейс
         </button>
-        <div class="preview-cut">
-          <span>Итого доход за день (<span id="edit-rate-label">19</span>%):</span>
+      </div>
+
+      <div class="section-box" id="edit-fuel-box" style="display:none;">
+        <h4>⛽ Расходы ГСМ за день</h4>
+        <p>Укажите название расхода и сумму — она вычтется из заработка водителя.</p>
+        <div class="modal-trips-stack" id="edit-fuel-list"></div>
+        <button type="button" class="btn btn-ghost btn-sm btn-full" onclick="addEditFuelRow()">
+          + Добавить расход ГСМ
+        </button>
+      </div>
+
+      <div class="section-box">
+        <div class="preview-cut" style="padding:0 0 6px;">
+          <span>Начислено по рейсам (<span id="edit-rate-label">19</span>%):</span>
+          <strong id="edit-gross-cut-preview">0 ₽</strong>
+        </div>
+        <div class="preview-cut" id="edit-fuel-deduct-row" style="display:none;padding:0 0 6px;">
+          <span>Удержано за ГСМ:</span>
+          <strong class="fuel-deduct" id="edit-fuel-preview">−0 ₽</strong>
+        </div>
+        <div class="preview-cut" style="padding-top:6px;border-top:1px solid var(--border);">
+          <span>Итого чистыми за день:</span>
           <strong id="edit-cut-preview">0 ₽</strong>
         </div>
       </div>
@@ -1589,6 +1780,11 @@
       return { role: safeRole, vehicle: safeVehicle };
     }
 
+    function normalizeFuelTitle(title) {
+      const clean = String(title || '').trim();
+      return clean || 'Расход топлива';
+    }
+
     function getTodayISO() {
       const now = new Date();
       const y = now.getFullYear();
@@ -1638,6 +1834,30 @@
       return Math.round(amount * (ratePercent / 100) * 100) / 100;
     }
 
+    function roundMoney(num) {
+      return Math.round((Number.isFinite(num) ? num : 0) * 100) / 100;
+    }
+
+    function getRecordFuelTotal(rec, roleOverride) {
+      const inferred = inferProfileFromRate(rec.rate);
+      const role = roleOverride || (rec.role === 'driver' ? 'driver' : (rec.role === 'loader' ? 'loader' : inferred.role));
+      if (role !== 'driver') return 0;
+      if (Array.isArray(rec.fuelExpenses)) {
+        return roundMoney(rec.fuelExpenses.reduce((s, f) => s + (Number(f.amount) || 0), 0));
+      }
+      return roundMoney(rec.fuelTotal || 0);
+    }
+
+    function getRecordNetEarn(rec, roleOverride) {
+      const inferred = inferProfileFromRate(rec.rate);
+      const role = roleOverride || (rec.role === 'driver' ? 'driver' : (rec.role === 'loader' ? 'loader' : inferred.role));
+      const grossCut = Array.isArray(rec.trips) && rec.trips.length > 0
+        ? roundMoney(rec.trips.reduce((s, t) => s + (Number(t.earn) || 0), 0))
+        : roundMoney(rec.grossCut != null ? rec.grossCut : (rec.totalEarn || 0));
+      const fuel = getRecordFuelTotal(rec, role);
+      return roundMoney(grossCut - fuel);
+    }
+
     function defaultData() {
       return {
         currentDate: getTodayISO(),
@@ -1656,11 +1876,20 @@
     let pastRole = appStore.data.role;
     let pastVehicle = appStore.data.vehicle;
     let pastTripAmounts = [''];
+    let pastFuelItems = [{ title: '', amount: '' }];
 
     let editingOriginalDate = null;
     let editRole = 'loader';
     let editVehicle = 'company';
     let editTripAmounts = [''];
+    let editFuelItems = [];
+
+    function initQuickFuelDate() {
+      const el = document.getElementById('quick-fuel-date');
+      if (el) {
+        el.value = appStore.data.activeDay ? appStore.data.activeDay.date : getTodayISO();
+      }
+    }
 
     function toggleDropdown(event, id) {
       event.stopPropagation();
@@ -1710,6 +1939,11 @@
           ...t,
           earn: calcCut(t.amount, newRate)
         }));
+        if (norm.role !== 'driver') {
+          appStore.data.activeDay.fuelExpenses = [];
+        } else if (!Array.isArray(appStore.data.activeDay.fuelExpenses)) {
+          appStore.data.activeDay.fuelExpenses = [];
+        }
       }
 
       closeAllDropdowns();
@@ -1780,6 +2014,14 @@
             parsed.data?.role || inferred.role,
             parsed.data?.vehicle || inferred.vehicle
           );
+          const activeDay = parsed.data?.activeDay
+            ? {
+                ...parsed.data.activeDay,
+                fuelExpenses: Array.isArray(parsed.data.activeDay.fuelExpenses)
+                  ? parsed.data.activeDay.fuelExpenses
+                  : []
+              }
+            : null;
           return {
             username: parsed.username || null,
             theme: parsed.theme || 'dark',
@@ -1787,7 +2029,7 @@
               currentDate: parsed.data?.currentDate || getTodayISO(),
               role: norm.role,
               vehicle: norm.vehicle,
-              activeDay: parsed.data?.activeDay || null,
+              activeDay,
               records: Array.isArray(parsed.data?.records) ? parsed.data.records : [],
               updatedAt: parsed.data?.updatedAt || Date.now()
             }
@@ -2021,9 +2263,12 @@
         role: norm.role,
         vehicle: norm.vehicle,
         rate: chosenRate,
-        trips: []
+        trips: [],
+        fuelExpenses: []
       };
       selectedMonth = todayISO.slice(0, 7);
+      const quickDateEl = document.getElementById('quick-fuel-date');
+      if (quickDateEl) quickDateEl.value = todayISO;
       persistAndSync();
       render();
       showToast(`Смена начата за ${formatDateRu(todayISO)} (${chosenRate}%)`);
@@ -2069,6 +2314,94 @@
       render();
     }
 
+    /* Отдельный блок записи расходов ГСМ (только для водителей) */
+    function addStandaloneFuelExpense() {
+      const norm = normalizeProfile(appStore.data.role, appStore.data.vehicle);
+      if (norm.role !== 'driver') {
+        showToast('Расходы ГСМ доступны только для водителей');
+        return;
+      }
+
+      const dateInput = document.getElementById('quick-fuel-date');
+      const labelInput = document.getElementById('quick-fuel-label');
+      const amountInput = document.getElementById('quick-fuel-amount');
+
+      const dateVal = dateInput.value || getTodayISO();
+      const title = normalizeFuelTitle(labelInput.value);
+      const amount = parseFloat(amountInput.value);
+
+      if (!amount || amount <= 0) {
+        showToast('Введите сумму расхода ГСМ');
+        amountInput.focus();
+        return;
+      }
+
+      const newFuelEntry = {
+        id: Date.now() + Math.random(),
+        title,
+        amount: roundMoney(amount)
+      };
+
+      if (appStore.data.activeDay && appStore.data.activeDay.date === dateVal) {
+        if (!Array.isArray(appStore.data.activeDay.fuelExpenses)) {
+          appStore.data.activeDay.fuelExpenses = [];
+        }
+        appStore.data.activeDay.fuelExpenses.push(newFuelEntry);
+      } else {
+        const existingIdx = appStore.data.records.findIndex(r => r.date === dateVal && r.type !== 'off');
+        if (existingIdx !== -1) {
+          const rec = appStore.data.records[existingIdx];
+          const existingFuels = Array.isArray(rec.fuelExpenses)
+            ? [...rec.fuelExpenses]
+            : (Number(rec.fuelTotal) > 0
+                ? [{ id: Date.now() + 1, title: 'Расход топлива', amount: roundMoney(rec.fuelTotal) }]
+                : []);
+          existingFuels.push(newFuelEntry);
+          const fuelTotal = roundMoney(existingFuels.reduce((s, f) => s + Number(f.amount || 0), 0));
+          const grossCut = Array.isArray(rec.trips) && rec.trips.length > 0
+            ? roundMoney(rec.trips.reduce((s, t) => s + Number(t.earn || 0), 0))
+            : roundMoney(rec.grossCut != null ? rec.grossCut : rec.totalEarn || 0);
+
+          appStore.data.records[existingIdx] = {
+            ...rec,
+            fuelExpenses: existingFuels,
+            fuelTotal,
+            grossCut,
+            totalEarn: roundMoney(grossCut - fuelTotal)
+          };
+        } else {
+          const rate = getRateForProfile(norm.role, norm.vehicle);
+          appStore.data.records.unshift({
+            date: dateVal,
+            type: 'work',
+            role: norm.role,
+            vehicle: norm.vehicle,
+            rate,
+            trips: [],
+            fuelExpenses: [newFuelEntry],
+            fuelTotal: roundMoney(amount),
+            grossCut: 0,
+            totalGross: 0,
+            totalEarn: roundMoney(-amount)
+          });
+        }
+      }
+
+      labelInput.value = '';
+      amountInput.value = '';
+      selectedMonth = dateVal.slice(0, 7);
+      if (rangeState.preset === 'month') {
+        const bounds = getMonthBoundsISO(selectedMonth);
+        rangeState.from = bounds.first;
+        rangeState.to = bounds.last;
+        syncRangeInputs();
+      }
+
+      persistAndSync();
+      render();
+      showToast(`Записано (${formatDateRu(dateVal)}): ${title} −${formatMoney(amount)}`);
+    }
+
     function finishDay() {
       closeAllDropdowns();
       const active = appStore.data.activeDay;
@@ -2084,8 +2417,25 @@
         ...t,
         earn: calcCut(t.amount, rate)
       }));
-      const totalGross = trips.reduce((s, t) => s + t.amount, 0);
-      const totalEarn = Math.round(trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
+
+      const prevRecord = appStore.data.records.find(r => r.date === date && r.type !== 'off');
+      const prevFuels = norm.role === 'driver' && prevRecord && Array.isArray(prevRecord.fuelExpenses)
+        ? prevRecord.fuelExpenses
+        : (norm.role === 'driver' && prevRecord && Number(prevRecord.fuelTotal) > 0
+            ? [{ id: Date.now() + 9, title: 'Расход топлива', amount: roundMoney(prevRecord.fuelTotal) }]
+            : []);
+      const activeFuels = norm.role === 'driver' && Array.isArray(active.fuelExpenses)
+        ? active.fuelExpenses.filter(f => Number(f.amount) > 0).map(f => ({
+            id: f.id || Date.now() + Math.random(),
+            title: normalizeFuelTitle(f.title),
+            amount: roundMoney(Number(f.amount))
+          }))
+        : [];
+      const fuelExpenses = norm.role === 'driver' ? [...prevFuels, ...activeFuels] : [];
+      const fuelTotal = roundMoney(fuelExpenses.reduce((s, f) => s + f.amount, 0));
+      const totalGross = roundMoney(trips.reduce((s, t) => s + t.amount, 0));
+      const grossCut = roundMoney(trips.reduce((s, t) => s + t.earn, 0));
+      const totalEarn = roundMoney(grossCut - fuelTotal);
 
       appStore.data.records = appStore.data.records.filter(r => r.date !== date);
       appStore.data.records.unshift({
@@ -2095,6 +2445,9 @@
         vehicle: norm.vehicle,
         rate,
         trips,
+        fuelExpenses,
+        fuelTotal,
+        grossCut,
         totalGross,
         totalEarn
       });
@@ -2102,23 +2455,25 @@
       appStore.data.activeDay = null;
       appStore.data.currentDate = getTodayISO();
       selectedMonth = date.slice(0, 7);
+      const quickDateEl = document.getElementById('quick-fuel-date');
+      if (quickDateEl) quickDateEl.value = getTodayISO();
       persistAndSync();
       render();
       showToast('День завершён и сохранён в историю');
     }
 
-    /* Рендер списка рейсов в модалках прошлого дня и редактирования */
+    /* Рендер списков строк в модалках прошлого дня и редактирования */
     function renderModalTripRows(containerId, amounts, rate, onChangeFnName, onRemoveFnName) {
       const container = document.getElementById(containerId);
       container.innerHTML = amounts.map((valStr, idx) => {
         const num = parseFloat(valStr);
-        const cut = num > 0 ? calcCut(num, rate) : 0;
+        const valid = num > 0;
         const canRemove = amounts.length > 1;
         return `
           <div class="modal-trip-row">
             <div class="modal-trip-meta">
               <span class="modal-trip-idx">Рейс #${idx + 1}</span>
-              <span class="modal-trip-cut">+${formatMoney(cut)}</span>
+              <span class="modal-trip-cut">+${formatMoney(valid ? calcCut(num, rate) : 0)}</span>
             </div>
             <input
               type="number"
@@ -2138,6 +2493,74 @@
       }).join('');
     }
 
+    function renderModalFuelRows(containerId, items, onTitleFnName, onAmountFnName, onRemoveFnName) {
+      const container = document.getElementById(containerId);
+      if (!items || items.length === 0) {
+        container.innerHTML = '<div class="empty-note" style="padding:6px;">Расходов ГСМ нет</div>';
+        return;
+      }
+      container.innerHTML = items.map((item, idx) => {
+        const num = parseFloat(item.amount);
+        const cutText = num > 0 ? `−${formatMoney(roundMoney(num))}` : 'ГСМ';
+        return `
+          <div class="modal-fuel-row">
+            <div class="modal-fuel-top">
+              <span class="modal-trip-idx">ГСМ #${idx + 1} · <span style="color:var(--danger);">${cutText}</span></span>
+              <button class="del-trip-btn" type="button" onclick="${onRemoveFnName}(${idx})" title="Удалить расход ГСМ">✕</button>
+            </div>
+            <div class="modal-fuel-inputs">
+              <input
+                type="text"
+                class="modal-trip-input"
+                style="font-size:13.5px;font-weight:600;"
+                placeholder="Что за расход (АИ-95, газ...)"
+                value="${escapeAttr(item.title)}"
+                oninput="${onTitleFnName}(${idx}, this.value)"
+              />
+              <input
+                type="number"
+                inputmode="decimal"
+                step="any"
+                min="1"
+                class="modal-trip-input"
+                placeholder="Сумма, ₽"
+                value="${item.amount}"
+                oninput="${onAmountFnName}(${idx}, this.value)"
+              />
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function escapeAttr(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function calcModalSummary(role, vehicle, tripStrList, fuelList) {
+      const rate = getRateForProfile(role, vehicle);
+      const grossCut = roundMoney(
+        tripStrList.reduce((sum, v) => {
+          const num = parseFloat(v);
+          return num > 0 ? sum + calcCut(num, rate) : sum;
+        }, 0)
+      );
+      const fuelTotal = role === 'driver'
+        ? roundMoney(
+            (fuelList || []).reduce((sum, item) => {
+              const num = parseFloat(item.amount);
+              return num > 0 ? sum + num : sum;
+            }, 0)
+          )
+        : 0;
+      const netEarn = roundMoney(grossCut - fuelTotal);
+      return { rate, grossCut, fuelTotal, netEarn };
+    }
+
     /* Добавление прошлого отработанного дня */
     function openPastDayModal() {
       closeAllDropdowns();
@@ -2146,11 +2569,12 @@
       pastRole = norm.role;
       pastVehicle = norm.vehicle;
       pastTripAmounts = [''];
+      pastFuelItems = [{ title: '', amount: '' }];
 
       document.getElementById('past-date-input').value = addDaysISO(todayISO, -1);
       document.getElementById('past-date-input').max = todayISO;
       document.getElementById('past-role-select').value = `${pastRole}|${pastVehicle}`;
-      renderPastTrips();
+      renderPastLists();
       document.getElementById('past-day-modal').classList.add('open');
     }
 
@@ -2159,12 +2583,15 @@
       const norm = normalizeProfile(r, v);
       pastRole = norm.role;
       pastVehicle = norm.vehicle;
-      renderPastTrips();
+      if (pastRole === 'driver' && pastFuelItems.length === 0) {
+        pastFuelItems = [{ title: '', amount: '' }];
+      }
+      renderPastLists();
     }
 
     function addPastTripRow() {
       pastTripAmounts.push('');
-      renderPastTrips();
+      renderPastLists();
       const inputs = document.querySelectorAll('#past-trips-list .modal-trip-input');
       if (inputs.length) inputs[inputs.length - 1].focus();
     }
@@ -2177,26 +2604,62 @@
     function removePastTripRow(idx) {
       if (pastTripAmounts.length <= 1) return;
       pastTripAmounts.splice(idx, 1);
-      renderPastTrips();
+      renderPastLists();
+    }
+
+    function addPastFuelRow() {
+      pastFuelItems.push({ title: '', amount: '' });
+      renderPastLists();
+      const rows = document.querySelectorAll('#past-fuel-list .modal-fuel-row');
+      if (rows.length) {
+        const firstInp = rows[rows.length - 1].querySelector('input[type="text"]');
+        if (firstInp) firstInp.focus();
+      }
+    }
+
+    function onPastFuelTitleInput(idx, val) {
+      if (pastFuelItems[idx]) pastFuelItems[idx].title = val;
+    }
+
+    function onPastFuelAmountInput(idx, val) {
+      if (pastFuelItems[idx]) pastFuelItems[idx].amount = val;
+      updatePastTotalsOnly();
+    }
+
+    function removePastFuelRow(idx) {
+      pastFuelItems.splice(idx, 1);
+      renderPastLists();
     }
 
     function updatePastTotalsOnly() {
-      const rate = getRateForProfile(pastRole, pastVehicle);
-      document.getElementById('past-rate-label').textContent = rate;
-      const rows = document.querySelectorAll('#past-trips-list .modal-trip-row');
-      let totalCut = 0;
-      rows.forEach((row, idx) => {
+      const isDriver = pastRole === 'driver';
+      document.getElementById('past-fuel-box').style.display = isDriver ? 'block' : 'none';
+      document.getElementById('past-fuel-deduct-row').style.display = isDriver ? 'flex' : 'none';
+
+      const sum = calcModalSummary(pastRole, pastVehicle, pastTripAmounts, pastFuelItems);
+      document.getElementById('past-rate-label').textContent = sum.rate;
+      document.getElementById('past-gross-cut-preview').textContent = formatMoney(sum.grossCut);
+      document.getElementById('past-fuel-preview').textContent = `−${formatMoney(sum.fuelTotal)}`;
+      document.getElementById('past-cut-preview').textContent = formatMoney(sum.netEarn);
+
+      const tripRows = document.querySelectorAll('#past-trips-list .modal-trip-row');
+      tripRows.forEach((row, idx) => {
         const num = parseFloat(pastTripAmounts[idx]);
-        const cut = num > 0 ? calcCut(num, rate) : 0;
-        totalCut += cut;
         const cutEl = row.querySelector('.modal-trip-cut');
-        if (cutEl) cutEl.textContent = `+${formatMoney(cut)}`;
+        if (cutEl) cutEl.textContent = `+${formatMoney(num > 0 ? calcCut(num, sum.rate) : 0)}`;
       });
-      document.getElementById('past-cut-preview').textContent = formatMoney(Math.round(totalCut * 100) / 100);
+
+      const fuelRows = document.querySelectorAll('#past-fuel-list .modal-fuel-row');
+      fuelRows.forEach((row, idx) => {
+        const num = parseFloat(pastFuelItems[idx]?.amount);
+        const cutEl = row.querySelector('.modal-trip-idx span');
+        if (cutEl) cutEl.textContent = num > 0 ? `−${formatMoney(roundMoney(num))}` : 'ГСМ';
+      });
     }
 
-    function renderPastTrips() {
+    function renderPastLists() {
       const rate = getRateForProfile(pastRole, pastVehicle);
+      document.getElementById('past-fuel-box').style.display = pastRole === 'driver' ? 'block' : 'none';
       renderModalTripRows(
         'past-trips-list',
         pastTripAmounts,
@@ -2204,6 +2667,17 @@
         'onPastTripInput',
         'removePastTripRow'
       );
+      if (pastRole === 'driver') {
+        renderModalFuelRows(
+          'past-fuel-list',
+          pastFuelItems,
+          'onPastFuelTitleInput',
+          'onPastFuelAmountInput',
+          'removePastFuelRow'
+        );
+      } else {
+        document.getElementById('past-fuel-list').innerHTML = '';
+      }
       updatePastTotalsOnly();
     }
 
@@ -2240,8 +2714,20 @@
         amount,
         earn: calcCut(amount, rate)
       }));
-      const totalGross = trips.reduce((s, t) => s + t.amount, 0);
-      const totalEarn = Math.round(trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
+
+      const fuelExpenses = role === 'driver'
+        ? pastFuelItems
+            .filter(item => Number.isFinite(parseFloat(item.amount)) && parseFloat(item.amount) > 0)
+            .map((item, idx) => ({
+              id: Date.now() + 500 + idx + Math.random(),
+              title: normalizeFuelTitle(item.title),
+              amount: roundMoney(parseFloat(item.amount))
+            }))
+        : [];
+      const fuelTotal = roundMoney(fuelExpenses.reduce((s, f) => s + f.amount, 0));
+      const totalGross = roundMoney(trips.reduce((s, t) => s + t.amount, 0));
+      const grossCut = roundMoney(trips.reduce((s, t) => s + t.earn, 0));
+      const totalEarn = roundMoney(grossCut - fuelTotal);
 
       appStore.data.role = role;
       appStore.data.vehicle = vehicle;
@@ -2254,6 +2740,9 @@
         vehicle,
         rate,
         trips,
+        fuelExpenses,
+        fuelTotal,
+        grossCut,
         totalGross,
         totalEarn
       });
@@ -2269,7 +2758,7 @@
       persistAndSync();
       closeModal('past-day-modal');
       render();
-      showToast(`Добавлен день ${formatDateRu(dateVal)} (+${formatMoney(totalEarn)})`);
+      showToast(`Добавлен день ${formatDateRu(dateVal)} (${formatMoney(totalEarn)})`);
     }
 
     /* Редактирование завершённого дня */
@@ -2291,7 +2780,18 @@
       const trips = Array.isArray(rec.trips) ? rec.trips : [];
       editTripAmounts = trips.length > 0 ? trips.map(t => String(t.amount)) : [''];
 
-      renderEditTrips();
+      if (editRole === 'driver' && Array.isArray(rec.fuelExpenses) && rec.fuelExpenses.length > 0) {
+        editFuelItems = rec.fuelExpenses.map(f => ({
+          title: f.title || 'Расход топлива',
+          amount: String(f.amount)
+        }));
+      } else if (editRole === 'driver' && Number(rec.fuelTotal) > 0) {
+        editFuelItems = [{ title: 'Расход топлива', amount: String(rec.fuelTotal) }];
+      } else {
+        editFuelItems = [];
+      }
+
+      renderEditLists();
       document.getElementById('edit-day-modal').classList.add('open');
     }
 
@@ -2300,12 +2800,12 @@
       const norm = normalizeProfile(r, v);
       editRole = norm.role;
       editVehicle = norm.vehicle;
-      renderEditTrips();
+      renderEditLists();
     }
 
     function addEditTripRow() {
       editTripAmounts.push('');
-      renderEditTrips();
+      renderEditLists();
       const inputs = document.querySelectorAll('#edit-trips-list .modal-trip-input');
       if (inputs.length) inputs[inputs.length - 1].focus();
     }
@@ -2318,26 +2818,62 @@
     function removeEditTripRow(idx) {
       if (editTripAmounts.length <= 1) return;
       editTripAmounts.splice(idx, 1);
-      renderEditTrips();
+      renderEditLists();
+    }
+
+    function addEditFuelRow() {
+      editFuelItems.push({ title: '', amount: '' });
+      renderEditLists();
+      const rows = document.querySelectorAll('#edit-fuel-list .modal-fuel-row');
+      if (rows.length) {
+        const firstInp = rows[rows.length - 1].querySelector('input[type="text"]');
+        if (firstInp) firstInp.focus();
+      }
+    }
+
+    function onEditFuelTitleInput(idx, val) {
+      if (editFuelItems[idx]) editFuelItems[idx].title = val;
+    }
+
+    function onEditFuelAmountInput(idx, val) {
+      if (editFuelItems[idx]) editFuelItems[idx].amount = val;
+      updateEditTotalsOnly();
+    }
+
+    function removeEditFuelRow(idx) {
+      editFuelItems.splice(idx, 1);
+      renderEditLists();
     }
 
     function updateEditTotalsOnly() {
-      const rate = getRateForProfile(editRole, editVehicle);
-      document.getElementById('edit-rate-label').textContent = rate;
-      const rows = document.querySelectorAll('#edit-trips-list .modal-trip-row');
-      let totalCut = 0;
-      rows.forEach((row, idx) => {
+      const isDriver = editRole === 'driver';
+      document.getElementById('edit-fuel-box').style.display = isDriver ? 'block' : 'none';
+      document.getElementById('edit-fuel-deduct-row').style.display = isDriver ? 'flex' : 'none';
+
+      const sum = calcModalSummary(editRole, editVehicle, editTripAmounts, editFuelItems);
+      document.getElementById('edit-rate-label').textContent = sum.rate;
+      document.getElementById('edit-gross-cut-preview').textContent = formatMoney(sum.grossCut);
+      document.getElementById('edit-fuel-preview').textContent = `−${formatMoney(sum.fuelTotal)}`;
+      document.getElementById('edit-cut-preview').textContent = formatMoney(sum.netEarn);
+
+      const tripRows = document.querySelectorAll('#edit-trips-list .modal-trip-row');
+      tripRows.forEach((row, idx) => {
         const num = parseFloat(editTripAmounts[idx]);
-        const cut = num > 0 ? calcCut(num, rate) : 0;
-        totalCut += cut;
         const cutEl = row.querySelector('.modal-trip-cut');
-        if (cutEl) cutEl.textContent = `+${formatMoney(cut)}`;
+        if (cutEl) cutEl.textContent = `+${formatMoney(num > 0 ? calcCut(num, sum.rate) : 0)}`;
       });
-      document.getElementById('edit-cut-preview').textContent = formatMoney(Math.round(totalCut * 100) / 100);
+
+      const fuelRows = document.querySelectorAll('#edit-fuel-list .modal-fuel-row');
+      fuelRows.forEach((row, idx) => {
+        const num = parseFloat(editFuelItems[idx]?.amount);
+        const cutEl = row.querySelector('.modal-trip-idx span');
+        if (cutEl) cutEl.textContent = num > 0 ? `−${formatMoney(roundMoney(num))}` : 'ГСМ';
+      });
     }
 
-    function renderEditTrips() {
+    function renderEditLists() {
       const rate = getRateForProfile(editRole, editVehicle);
+      document.getElementById('edit-fuel-box').style.display = editRole === 'driver' ? 'block' : 'none';
       renderModalTripRows(
         'edit-trips-list',
         editTripAmounts,
@@ -2345,6 +2881,17 @@
         'onEditTripInput',
         'removeEditTripRow'
       );
+      if (editRole === 'driver') {
+        renderModalFuelRows(
+          'edit-fuel-list',
+          editFuelItems,
+          'onEditFuelTitleInput',
+          'onEditFuelAmountInput',
+          'removeEditFuelRow'
+        );
+      } else {
+        document.getElementById('edit-fuel-list').innerHTML = '';
+      }
       updateEditTotalsOnly();
     }
 
@@ -2363,8 +2910,18 @@
         .map(v => parseFloat(v))
         .filter(a => Number.isFinite(a) && a > 0);
 
-      if (validAmounts.length === 0) {
-        showToast('Укажите хотя бы один рейс');
+      const validFuels = editRole === 'driver'
+        ? editFuelItems
+            .filter(item => Number.isFinite(parseFloat(item.amount)) && parseFloat(item.amount) > 0)
+            .map((item, idx) => ({
+              id: Date.now() + 500 + idx + Math.random(),
+              title: normalizeFuelTitle(item.title),
+              amount: roundMoney(parseFloat(item.amount))
+            }))
+        : [];
+
+      if (validAmounts.length === 0 && validFuels.length === 0) {
+        showToast('Укажите рейс или расход ГСМ');
         return;
       }
 
@@ -2380,8 +2937,11 @@
         amount,
         earn: calcCut(amount, rate)
       }));
-      const totalGross = trips.reduce((s, t) => s + t.amount, 0);
-      const totalEarn = Math.round(trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
+
+      const fuelTotal = roundMoney(validFuels.reduce((s, f) => s + f.amount, 0));
+      const totalGross = roundMoney(trips.reduce((s, t) => s + t.amount, 0));
+      const grossCut = roundMoney(trips.reduce((s, t) => s + t.earn, 0));
+      const totalEarn = roundMoney(grossCut - fuelTotal);
 
       appStore.data.records = appStore.data.records.filter(r => r.date !== editingOriginalDate && r.date !== newDate);
       appStore.data.records.unshift({
@@ -2391,6 +2951,9 @@
         vehicle: editVehicle,
         rate,
         trips,
+        fuelExpenses: validFuels,
+        fuelTotal,
+        grossCut,
         totalGross,
         totalEarn
       });
@@ -2469,6 +3032,7 @@
     function calcRangeStats(records, activeDay, fromISO, toISO) {
       let earn = 0;
       let gross = 0;
+      let fuelSum = 0;
       let shifts = 0;
       let trips = 0;
 
@@ -2482,29 +3046,46 @@
       records.forEach(r => {
         if (!inRange(r.date)) return;
         if (r.type === 'off') return;
-        const rEarn = r.totalEarn || 0;
-        const rGross = r.totalGross || 0;
+        const inferred = inferProfileFromRate(r.rate);
+        const recRole = r.role === 'driver' ? 'driver' : (r.role === 'loader' ? 'loader' : inferred.role);
         const rTrips = r.trips ? r.trips.length : 0;
-        if (rEarn > 0 || rTrips > 0) {
+        const rGrossCut = Array.isArray(r.trips) && r.trips.length > 0
+          ? roundMoney(r.trips.reduce((s, t) => s + (Number(t.earn) || 0), 0))
+          : roundMoney(r.grossCut != null ? r.grossCut : (r.totalEarn || 0));
+        const rFuel = getRecordFuelTotal(r, recRole);
+        const rNet = roundMoney(rGrossCut - rFuel);
+        const rGross = r.totalGross || 0;
+
+        if (rGrossCut > 0 || rTrips > 0) {
           shifts++;
         }
-        earn += rEarn;
+        earn += rNet;
         gross += rGross;
+        fuelSum += rFuel;
         trips += rTrips;
       });
 
-      if (activeDay && inRange(activeDay.date) && activeDay.trips.length > 0) {
-        earn += activeDay.trips.reduce((s, t) => s + t.earn, 0);
-        gross += activeDay.trips.reduce((s, t) => s + t.amount, 0);
-        trips += activeDay.trips.length;
-        shifts++;
+      if (activeDay && inRange(activeDay.date) && ((activeDay.trips && activeDay.trips.length > 0) || (activeDay.fuelExpenses && activeDay.fuelExpenses.length > 0))) {
+        const activeRole = activeDay.role === 'driver' ? 'driver' : 'loader';
+        const activeGrossCut = roundMoney((activeDay.trips || []).reduce((s, t) => s + t.earn, 0));
+        const activeFuel = activeRole === 'driver'
+          ? roundMoney((activeDay.fuelExpenses || []).reduce((s, f) => s + f.amount, 0))
+          : 0;
+        earn += roundMoney(activeGrossCut - activeFuel);
+        gross += (activeDay.trips || []).reduce((s, t) => s + t.amount, 0);
+        fuelSum += activeFuel;
+        trips += (activeDay.trips || []).length;
+        if ((activeDay.trips && activeDay.trips.length > 0)) {
+          shifts++;
+        }
       }
 
-      earn = Math.round(earn * 100) / 100;
-      gross = Math.round(gross * 100) / 100;
-      const avgPerShift = shifts > 0 ? Math.round((earn / shifts) * 100) / 100 : 0;
+      earn = roundMoney(earn);
+      gross = roundMoney(gross);
+      fuelSum = roundMoney(fuelSum);
+      const avgPerShift = shifts > 0 ? roundMoney(earn / shifts) : 0;
 
-      return { earn, gross, shifts, trips, avgPerShift };
+      return { earn, gross, fuelSum, shifts, trips, avgPerShift };
     }
 
     function render() {
@@ -2519,6 +3100,10 @@
       document.getElementById('idle-rate-badge').textContent = `${savedRate}%`;
       syncDropdownActiveStates('idle-role-dropdown', savedNorm.role, savedNorm.vehicle);
 
+      const effectiveRole = d.activeDay ? (d.activeDay.role === 'driver' ? 'driver' : 'loader') : savedNorm.role;
+      const isDriverProfile = effectiveRole === 'driver';
+      document.getElementById('standalone-fuel-card').style.display = isDriverProfile ? 'block' : 'none';
+
       const statusEl = document.getElementById('shift-status');
       const idleBox = document.getElementById('idle-controls');
       const activeBox = document.getElementById('active-controls');
@@ -2529,6 +3114,7 @@
           d.activeDay.vehicle || savedNorm.vehicle
         );
         const activeRate = getRateForProfile(activeNorm.role, activeNorm.vehicle);
+        const isDriver = activeNorm.role === 'driver';
 
         statusEl.textContent = `Смена идёт · ${activeRate}%`;
         statusEl.className = 'status-pill active';
@@ -2543,8 +3129,16 @@
 
         const trips = d.activeDay.trips || [];
         document.getElementById('active-trips-count').textContent = trips.length;
-        const dayEarn = trips.reduce((sum, t) => sum + t.earn, 0);
-        document.getElementById('active-day-earn').textContent = formatMoney(dayEarn);
+
+        const grossCut = roundMoney(trips.reduce((sum, t) => sum + t.earn, 0));
+        const fuelList = isDriver && Array.isArray(d.activeDay.fuelExpenses) ? d.activeDay.fuelExpenses : [];
+        const fuelTotal = isDriver ? roundMoney(fuelList.reduce((sum, f) => sum + f.amount, 0)) : 0;
+        const netDayEarn = roundMoney(grossCut - fuelTotal);
+
+        document.getElementById('active-day-earn').textContent = formatMoney(netDayEarn);
+        document.getElementById('active-day-breakdown').textContent = fuelTotal > 0
+          ? `Рейсы: ${formatMoney(grossCut)} · ГСМ: −${formatMoney(fuelTotal)}`
+          : `Рейсы: ${formatMoney(grossCut)}`;
 
         const listEl = document.getElementById('active-trips-list');
         if (trips.length === 0) {
@@ -2580,24 +3174,23 @@
       const mStats = calcRangeStats(d.records, d.activeDay, monthBounds.first, monthBounds.last);
 
       document.getElementById('stat-month').textContent = formatMoney(mStats.earn);
-      document.getElementById('stat-month-sub').textContent = `${mStats.trips} рейс(ов) · ${mStats.shifts} смен`;
+      document.getElementById('stat-month-sub').textContent = mStats.fuelSum > 0
+        ? `${mStats.trips} рейс(ов) · ${mStats.shifts} смен · ГСМ −${formatMoney(mStats.fuelSum)}`
+        : `${mStats.trips} рейс(ов) · ${mStats.shifts} смен`;
       document.getElementById('stat-avg-day').textContent = formatMoney(mStats.avgPerShift);
       document.getElementById('stat-avg-day-sub').textContent = `${mStats.shifts} рабочих смен`;
 
-      let totalEarn = d.records.reduce((s, r) => s + (r.totalEarn || 0), 0);
-      let totalGross = d.records.reduce((s, r) => s + (r.totalGross || 0), 0);
-      if (d.activeDay) {
-        totalEarn += (d.activeDay.trips || []).reduce((s, t) => s + t.earn, 0);
-        totalGross += (d.activeDay.trips || []).reduce((s, t) => s + t.amount, 0);
-      }
-
-      document.getElementById('stat-total').textContent = formatMoney(totalEarn);
-      document.getElementById('stat-total-sub').textContent = `Оборот: ${formatMoney(totalGross)}`;
+      const allStats = calcRangeStats(d.records, d.activeDay, null, null);
+      document.getElementById('stat-total').textContent = formatMoney(allStats.earn);
+      document.getElementById('stat-total-sub').textContent = allStats.fuelSum > 0
+        ? `Оборот: ${formatMoney(allStats.gross)} · ГСМ −${formatMoney(allStats.fuelSum)}`
+        : `Оборот: ${formatMoney(allStats.gross)}`;
 
       const rStats = calcRangeStats(d.records, d.activeDay, rangeState.from, rangeState.to);
       document.getElementById('range-earn').textContent = formatMoney(rStats.earn);
-      document.getElementById('range-meta').textContent =
-        `${rStats.shifts} смен · ${rStats.trips} рейсов · оборот ${formatMoney(rStats.gross)}`;
+      document.getElementById('range-meta').textContent = rStats.fuelSum > 0
+        ? `${rStats.shifts} смен · ${rStats.trips} рейсов · ГСМ −${formatMoney(rStats.fuelSum)}`
+        : `${rStats.shifts} смен · ${rStats.trips} рейсов · оборот ${formatMoney(rStats.gross)}`;
       document.getElementById('range-avg').textContent = formatMoney(rStats.avgPerShift);
 
       const workRecords = d.records.filter(r => r.type !== 'off');
@@ -2613,6 +3206,8 @@
           const recNorm = normalizeProfile(rec.role || inferred.role, rec.vehicle || inferred.vehicle);
           const recRate = rec.rate != null ? Number(rec.rate) : getRateForProfile(recNorm.role, recNorm.vehicle);
           const roleBadge = getProfileLabel(recNorm.role, recNorm.vehicle);
+          const recFuel = getRecordFuelTotal(rec, recNorm.role);
+          const recNet = getRecordNetEarn(rec, recNorm.role);
 
           const tripRows = (rec.trips || []).map((t, i) => `
             <div class="history-trip-row">
@@ -2623,6 +3218,20 @@
               <span class="history-trip-cut">+${formatMoney(t.earn)}</span>
             </div>
           `).join('');
+
+          const fuelItems = recNorm.role === 'driver' && Array.isArray(rec.fuelExpenses)
+            ? rec.fuelExpenses.filter(f => Number(f.amount) > 0)
+            : (recNorm.role === 'driver' && recFuel > 0 ? [{ title: 'Расход топлива', amount: recFuel }] : []);
+          const fuelRows = fuelItems.map((f, i) => `
+            <div class="history-trip-row fuel-row">
+              <div class="history-trip-left">
+                <span class="history-trip-idx fuel-idx">ГСМ #${i + 1}</span>
+                <span class="history-trip-gross">${escapeAttr(normalizeFuelTitle(f.title))}</span>
+              </div>
+              <span class="history-trip-fuel">−${formatMoney(f.amount)}</span>
+            </div>
+          `).join('');
+
           return `
             <div class="history-item">
               <div class="history-top">
@@ -2630,10 +3239,11 @@
                   <span class="history-date">${formatDateRu(rec.date)}</span>
                   <span class="history-rate-tag">${recRate}%</span>
                   <span class="history-role-tag">${roleBadge}</span>
+                  ${recFuel > 0 ? `<span class="history-fuel-tag">ГСМ −${formatMoney(recFuel)}</span>` : ''}
                 </div>
-                <span class="history-earn">+${formatMoney(rec.totalEarn)}</span>
+                <span class="history-earn ${recNet < 0 ? 'negative' : ''}">${formatMoney(recNet)}</span>
               </div>
-              <div class="history-trips">${tripRows}</div>
+              <div class="history-trips">${tripRows}${fuelRows}</div>
               <div class="history-actions">
                 <button class="tiny-btn edit-btn" type="button" onclick="openEditDayModal('${rec.date}')">Изменить</button>
                 <button class="tiny-btn del-btn" type="button" onclick="deleteHistoryRecord('${rec.date}')">Удалить</button>
@@ -2670,6 +3280,7 @@
     updateAccountButton();
     updateSyncIndicator();
     syncRangeInputs();
+    initQuickFuelDate();
     initIcon();
     render();
     if (appStore.username && navigator.onLine) {
