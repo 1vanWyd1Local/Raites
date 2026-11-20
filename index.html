@@ -352,10 +352,10 @@
     }
 
     /* Кнопки */
-    .btn-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .btn-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .btn {
@@ -388,12 +388,6 @@
     .btn-success {
       background: var(--success);
       color: #ffffff;
-    }
-
-    .btn-warning {
-      background: var(--warning-soft);
-      color: var(--warning);
-      border: 1px solid rgba(217, 119, 6, 0.32);
     }
 
     .btn-ghost {
@@ -585,9 +579,22 @@
       padding: 12px;
     }
 
-    .stat-box.accent {
-      background: var(--primary-soft);
-      border-color: rgba(246, 195, 0, 0.42);
+    .stat-box.month-highlight {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--primary-soft), var(--surface-2));
+      border: 1.5px solid var(--primary);
+      padding: 14px;
+    }
+
+    .stat-box.month-highlight .stat-title {
+      color: var(--text);
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .stat-box.month-highlight .stat-value {
+      font-size: 24px;
+      color: var(--text);
     }
 
     .stat-title {
@@ -601,10 +608,6 @@
       font-size: 18.5px;
       font-weight: 800;
       letter-spacing: -0.01em;
-    }
-
-    .stat-box.accent .stat-value {
-      color: var(--text);
     }
 
     .stat-sub {
@@ -969,6 +972,37 @@
       margin-bottom: 12px;
     }
 
+    .past-trip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .past-trip-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .past-trip-field input {
+      width: 100%;
+      padding: 9px 8px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .past-trip-field input:focus {
+      border-color: var(--primary);
+    }
+
     .toast {
       position: fixed;
       left: 50%;
@@ -1156,9 +1190,9 @@
               </div>
             </div>
 
-            <div class="btn-grid">
-              <button class="btn btn-primary" type="button" onclick="startDay()">▶️ Начать день</button>
-              <button class="btn btn-warning" type="button" onclick="markDayOff()">🛌 Выходной</button>
+            <div class="btn-stack">
+              <button class="btn btn-primary btn-full" type="button" onclick="startDay()">▶️ Начать день</button>
+              <button class="btn btn-ghost btn-full" type="button" onclick="openPastDayModal()">🗓️ Добавить прошлый день</button>
             </div>
           </div>
 
@@ -1191,9 +1225,12 @@
               <strong id="active-day-earn">0 ₽</strong>
             </div>
 
-            <button class="btn btn-success btn-full" type="button" onclick="finishDay()">
-              ✅ Завершить день и перейти к следующему
-            </button>
+            <div class="btn-stack">
+              <button class="btn btn-success btn-full" type="button" onclick="finishDay()">
+                ✅ Завершить день
+              </button>
+              <button class="btn btn-ghost btn-full" type="button" onclick="openPastDayModal()">🗓️ Добавить прошлый день</button>
+            </div>
           </div>
         </section>
       </div>
@@ -1201,7 +1238,7 @@
       <div class="col-right">
         <section class="card">
           <div class="card-header">
-            <span class="card-label">Заработок и среднее</span>
+            <span class="card-label">Заработок</span>
             <div class="month-nav">
               <button type="button" onclick="changeMonth(-1)">‹</button>
               <span class="month-name" id="selected-month-label">—</span>
@@ -1210,20 +1247,15 @@
           </div>
 
           <div class="stats-grid">
-            <div class="stat-box">
-              <div class="stat-title">За текущий / посл. день</div>
-              <div class="stat-value" id="stat-day">0 ₽</div>
-              <div class="stat-sub" id="stat-day-sub">0 рейсов</div>
+            <div class="stat-box month-highlight">
+              <div class="stat-title">★ За выбранный месяц</div>
+              <div class="stat-value" id="stat-month">0 ₽</div>
+              <div class="stat-sub" id="stat-month-sub">0 рейсов · 0 смен</div>
             </div>
-            <div class="stat-box accent">
+            <div class="stat-box">
               <div class="stat-title">Средний за смену (мес.)</div>
               <div class="stat-value" id="stat-avg-day">0 ₽</div>
               <div class="stat-sub" id="stat-avg-day-sub">0 рабочих смен</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-title">За выбранный месяц</div>
-              <div class="stat-value" id="stat-month">0 ₽</div>
-              <div class="stat-sub" id="stat-month-sub">0 рейсов · 0 вых.</div>
             </div>
             <div class="stat-box">
               <div class="stat-title">Всего за всё время</div>
@@ -1273,6 +1305,69 @@
           <div class="history-list" id="history-list"></div>
         </section>
       </div>
+    </div>
+  </div>
+
+  <!-- Модалка добавления прошлого отработанного дня -->
+  <div class="modal-backdrop" id="past-day-modal" onclick="closeOnBackdrop(event, 'past-day-modal')">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Добавить прошлый день</div>
+        <button class="icon-btn" type="button" onclick="closeModal('past-day-modal')">✕</button>
+      </div>
+
+      <div class="section-box">
+        <h4>Дата и процент смены</h4>
+        <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">Отработанная дата</label>
+        <input type="date" id="past-date-input" class="modal-date-input" />
+
+        <div class="rate-picker-top" style="margin-bottom:8px;">
+          <span class="rate-picker-label">Процент с рейсов:</span>
+          <div class="rate-input-wrap">
+            <input
+              type="number"
+              inputmode="decimal"
+              step="0.1"
+              min="0.1"
+              max="100"
+              id="past-rate-input"
+              class="rate-custom-input"
+              value="19"
+              oninput="updatePastPreview()"
+            />
+            <span style="font-weight:800;color:var(--text-muted);">%</span>
+          </div>
+        </div>
+        <div class="rate-presets" style="margin-bottom:0;">
+          <button type="button" class="rate-chip" onclick="setPastPresetRate(19)">19%</button>
+          <button type="button" class="rate-chip" onclick="setPastPresetRate(37)">37%</button>
+          <button type="button" class="rate-chip" onclick="setPastPresetRate(54)">54%</button>
+        </div>
+      </div>
+
+      <div class="section-box">
+        <h4>Суммы рейсов за день (до 3 рейсов, ₽)</h4>
+        <div class="past-trip-grid">
+          <div class="past-trip-field">
+            <label for="past-trip-1">Рейс #1</label>
+            <input type="number" inputmode="decimal" step="any" min="1" id="past-trip-1" placeholder="0" oninput="updatePastPreview()" />
+          </div>
+          <div class="past-trip-field">
+            <label for="past-trip-2">Рейс #2</label>
+            <input type="number" inputmode="decimal" step="any" min="1" id="past-trip-2" placeholder="0" oninput="updatePastPreview()" />
+          </div>
+          <div class="past-trip-field">
+            <label for="past-trip-3">Рейс #3</label>
+            <input type="number" inputmode="decimal" step="any" min="1" id="past-trip-3" placeholder="0" oninput="updatePastPreview()" />
+          </div>
+        </div>
+        <div class="preview-cut">
+          <span>Итого ваш доход за день:</span>
+          <strong id="past-cut-preview">0 ₽</strong>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" type="button" onclick="savePastDay()">Сохранить отработанный день</button>
     </div>
   </div>
 
@@ -1424,7 +1519,7 @@
     }
 
     let appStore = loadStore();
-    let selectedMonth = appStore.data.currentDate.slice(0, 7);
+    let selectedMonth = getTodayISO().slice(0, 7);
     let rangeState = initRangeState(selectedMonth);
 
     function initRangeState(ymStr) {
@@ -1441,7 +1536,7 @@
     }
 
     function applyRangePreset(preset) {
-      const anchorDate = appStore.data.activeDay ? appStore.data.activeDay.date : appStore.data.currentDate;
+      const anchorDate = getTodayISO();
       if (preset === 'month') {
         const bounds = getMonthBoundsISO(selectedMonth);
         rangeState = { from: bounds.first, to: bounds.last, preset: 'month' };
@@ -1661,7 +1756,7 @@
           appStore.data = defaultData();
         }
 
-        selectedMonth = appStore.data.currentDate.slice(0, 7);
+        selectedMonth = getTodayISO().slice(0, 7);
         rangeState = initRangeState(selectedMonth);
         syncRangeInputs();
         saveLocalOnly();
@@ -1679,7 +1774,7 @@
     function logoutAccount() {
       appStore.username = null;
       appStore.data = defaultData();
-      selectedMonth = appStore.data.currentDate.slice(0, 7);
+      selectedMonth = getTodayISO().slice(0, 7);
       rangeState = initRangeState(selectedMonth);
       syncRangeInputs();
       saveLocalOnly();
@@ -1704,7 +1799,7 @@
               ...defaultData(),
               ...out.state
             };
-            selectedMonth = appStore.data.currentDate.slice(0, 7);
+            selectedMonth = getTodayISO().slice(0, 7);
             rangeState = initRangeState(selectedMonth);
             syncRangeInputs();
             saveLocalOnly();
@@ -1735,32 +1830,18 @@
         return;
       }
       const chosenRate = Math.round(raw * 100) / 100;
+      const todayISO = getTodayISO();
+      appStore.data.currentDate = todayISO;
       appStore.data.defaultRate = chosenRate;
       appStore.data.activeDay = {
-        date: appStore.data.currentDate,
+        date: todayISO,
         rate: chosenRate,
         trips: []
       };
+      selectedMonth = todayISO.slice(0, 7);
       persistAndSync();
       render();
-      showToast(`Смена начата (${chosenRate}%)`);
-    }
-
-    function markDayOff() {
-      const date = appStore.data.currentDate;
-      appStore.data.records = appStore.data.records.filter(r => r.date !== date);
-      appStore.data.records.unshift({
-        date,
-        type: 'off',
-        trips: [],
-        totalGross: 0,
-        totalEarn: 0
-      });
-      appStore.data.currentDate = addDaysISO(date, 1);
-      selectedMonth = appStore.data.currentDate.slice(0, 7);
-      persistAndSync();
-      render();
-      showToast('Выходной записан, дата сдвинута');
+      showToast(`Смена начата за ${formatDateRu(todayISO)} (${chosenRate}%)`);
     }
 
     function updateCutPreview() {
@@ -1809,7 +1890,7 @@
       const active = appStore.data.activeDay;
       if (!active) return;
       if (active.trips.length === 0) {
-        showToast('Добавьте хотя бы 1 рейс или отметьте выходной');
+        showToast('Добавьте хотя бы 1 рейс перед завершением дня');
         return;
       }
       const date = active.date;
@@ -1828,11 +1909,108 @@
       });
 
       appStore.data.activeDay = null;
-      appStore.data.currentDate = addDaysISO(date, 1);
-      selectedMonth = appStore.data.currentDate.slice(0, 7);
+      appStore.data.currentDate = getTodayISO();
+      selectedMonth = date.slice(0, 7);
       persistAndSync();
       render();
-      showToast('День завершён! Открыта следующая дата');
+      showToast('День завершён и сохранён в историю');
+    }
+
+    /* Добавление прошлого отработанного дня */
+    function openPastDayModal() {
+      const todayISO = getTodayISO();
+      const defaultPastDate = addDaysISO(todayISO, -1);
+      document.getElementById('past-date-input').value = defaultPastDate;
+      document.getElementById('past-date-input').max = todayISO;
+      document.getElementById('past-rate-input').value = normalizeRate(appStore.data.defaultRate);
+      document.getElementById('past-trip-1').value = '';
+      document.getElementById('past-trip-2').value = '';
+      document.getElementById('past-trip-3').value = '';
+      updatePastPreview();
+      document.getElementById('past-day-modal').classList.add('open');
+    }
+
+    function setPastPresetRate(rate) {
+      document.getElementById('past-rate-input').value = normalizeRate(rate);
+      updatePastPreview();
+    }
+
+    function updatePastPreview() {
+      const rate = normalizeRate(document.getElementById('past-rate-input').value);
+      const amounts = [
+        parseFloat(document.getElementById('past-trip-1').value) || 0,
+        parseFloat(document.getElementById('past-trip-2').value) || 0,
+        parseFloat(document.getElementById('past-trip-3').value) || 0
+      ];
+      const totalCut = amounts
+        .filter(a => a > 0)
+        .reduce((sum, a) => sum + calcCut(a, rate), 0);
+      document.getElementById('past-cut-preview').textContent = formatMoney(Math.round(totalCut * 100) / 100);
+    }
+
+    function savePastDay() {
+      const dateVal = document.getElementById('past-date-input').value;
+      const todayISO = getTodayISO();
+      if (!dateVal) {
+        showToast('Выберите отработанную дату');
+        return;
+      }
+      if (dateVal > todayISO) {
+        showToast('Выберите прошедшую или сегодняшнюю дату');
+        return;
+      }
+      const rawRate = parseFloat(document.getElementById('past-rate-input').value);
+      if (!Number.isFinite(rawRate) || rawRate <= 0 || rawRate > 100) {
+        showToast('Укажите процент от 0.1 до 100');
+        return;
+      }
+      const rate = Math.round(rawRate * 100) / 100;
+      const rawAmounts = [
+        parseFloat(document.getElementById('past-trip-1').value),
+        parseFloat(document.getElementById('past-trip-2').value),
+        parseFloat(document.getElementById('past-trip-3').value)
+      ];
+      const validAmounts = rawAmounts.filter(a => Number.isFinite(a) && a > 0);
+      if (validAmounts.length === 0) {
+        showToast('Введите сумму хотя бы одного рейса');
+        return;
+      }
+
+      const existing = appStore.data.records.find(r => r.date === dateVal);
+      if (existing && !confirm(`За ${formatDateRu(dateVal)} уже есть запись. Перезаписать её?`)) {
+        return;
+      }
+
+      const trips = validAmounts.map((amount, idx) => ({
+        id: Date.now() + idx,
+        amount,
+        earn: calcCut(amount, rate)
+      }));
+      const totalGross = trips.reduce((s, t) => s + t.amount, 0);
+      const totalEarn = Math.round(trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
+
+      appStore.data.records = appStore.data.records.filter(r => r.date !== dateVal);
+      appStore.data.records.unshift({
+        date: dateVal,
+        type: 'work',
+        rate,
+        trips,
+        totalGross,
+        totalEarn
+      });
+
+      selectedMonth = dateVal.slice(0, 7);
+      if (rangeState.preset === 'month') {
+        const bounds = getMonthBoundsISO(selectedMonth);
+        rangeState.from = bounds.first;
+        rangeState.to = bounds.last;
+        syncRangeInputs();
+      }
+
+      persistAndSync();
+      closeModal('past-day-modal');
+      render();
+      showToast(`Добавлен день ${formatDateRu(dateVal)} (+${formatMoney(totalEarn)})`);
     }
 
     function deleteHistoryRecord(date) {
@@ -1897,7 +2075,7 @@
     function buildBackupPayload() {
       return JSON.stringify({
         app: 'trip_tracker_gazelle_d1',
-        version: 3,
+        version: 4,
         account: appStore.username || null,
         exportedAt: new Date().toISOString(),
         data: appStore.data
@@ -1944,7 +2122,7 @@
           records: src.records,
           updatedAt: Date.now()
         };
-        selectedMonth = appStore.data.currentDate.slice(0, 7);
+        selectedMonth = getTodayISO().slice(0, 7);
         rangeState = initRangeState(selectedMonth);
         syncRangeInputs();
         persistAndSync();
@@ -1977,7 +2155,7 @@
     function resetAllData() {
       if (!confirm('Точно удалить все записи?')) return;
       appStore.data = defaultData();
-      selectedMonth = appStore.data.currentDate.slice(0, 7);
+      selectedMonth = getTodayISO().slice(0, 7);
       rangeState = initRangeState(selectedMonth);
       syncRangeInputs();
       persistAndSync();
@@ -1991,7 +2169,6 @@
       let gross = 0;
       let shifts = 0;
       let trips = 0;
-      let offs = 0;
 
       const inRange = (d) => {
         if (!d) return false;
@@ -2002,19 +2179,16 @@
 
       records.forEach(r => {
         if (!inRange(r.date)) return;
-        if (r.type === 'off') {
-          offs++;
-        } else {
-          const rEarn = r.totalEarn || 0;
-          const rGross = r.totalGross || 0;
-          const rTrips = r.trips ? r.trips.length : 0;
-          if (rEarn > 0 || rTrips > 0) {
-            shifts++;
-          }
-          earn += rEarn;
-          gross += rGross;
-          trips += rTrips;
+        if (r.type === 'off') return;
+        const rEarn = r.totalEarn || 0;
+        const rGross = r.totalGross || 0;
+        const rTrips = r.trips ? r.trips.length : 0;
+        if (rEarn > 0 || rTrips > 0) {
+          shifts++;
         }
+        earn += rEarn;
+        gross += rGross;
+        trips += rTrips;
       });
 
       if (activeDay && inRange(activeDay.date) && activeDay.trips.length > 0) {
@@ -2028,12 +2202,12 @@
       gross = Math.round(gross * 100) / 100;
       const avgPerShift = shifts > 0 ? Math.round((earn / shifts) * 100) / 100 : 0;
 
-      return { earn, gross, shifts, trips, offs, avgPerShift };
+      return { earn, gross, shifts, trips, avgPerShift };
     }
 
     function render() {
       const d = appStore.data;
-      const activeDate = d.activeDay ? d.activeDay.date : d.currentDate;
+      const activeDate = d.activeDay ? d.activeDay.date : (d.currentDate || getTodayISO());
       document.getElementById('current-date-display').textContent = formatDateRu(activeDate);
       document.getElementById('current-weekday-display').textContent = formatWeekdayRu(activeDate);
 
@@ -2084,18 +2258,6 @@
         syncRateChips(defRate);
       }
 
-      let dayEarn = 0;
-      let dayTripsCount = 0;
-      if (d.activeDay) {
-        dayEarn = d.activeDay.trips.reduce((s, t) => s + t.earn, 0);
-        dayTripsCount = d.activeDay.trips.length;
-      } else if (d.records.length > 0) {
-        dayEarn = d.records[0].totalEarn || 0;
-        dayTripsCount = d.records[0].trips ? d.records[0].trips.length : 0;
-      }
-      document.getElementById('stat-day').textContent = formatMoney(dayEarn);
-      document.getElementById('stat-day-sub').textContent = `${dayTripsCount} рейс(ов)`;
-
       const [my, mm] = selectedMonth.split('-').map(Number);
       document.getElementById('selected-month-label').textContent = new Date(my, mm - 1, 1).toLocaleDateString('ru-RU', {
         month: 'long',
@@ -2106,7 +2268,7 @@
       const mStats = calcRangeStats(d.records, d.activeDay, monthBounds.first, monthBounds.last);
 
       document.getElementById('stat-month').textContent = formatMoney(mStats.earn);
-      document.getElementById('stat-month-sub').textContent = `${mStats.trips} рейс(ов) · ${mStats.offs} вых.`;
+      document.getElementById('stat-month-sub').textContent = `${mStats.trips} рейс(ов) · ${mStats.shifts} смен`;
       document.getElementById('stat-avg-day').textContent = formatMoney(mStats.avgPerShift);
       document.getElementById('stat-avg-day-sub').textContent = `${mStats.shifts} рабочих смен`;
 
@@ -2126,27 +2288,15 @@
         `${rStats.shifts} смен · ${rStats.trips} рейсов · оборот ${formatMoney(rStats.gross)}`;
       document.getElementById('range-avg').textContent = formatMoney(rStats.avgPerShift);
 
-      const sortedRecords = [...d.records].sort((a, b) => b.date.localeCompare(a.date));
+      const workRecords = d.records.filter(r => r.type !== 'off');
+      const sortedRecords = [...workRecords].sort((a, b) => b.date.localeCompare(a.date));
       document.getElementById('history-count').textContent = `${sortedRecords.length} записей`;
       const historyEl = document.getElementById('history-list');
 
       if (sortedRecords.length === 0) {
-        historyEl.innerHTML = '<div class="empty-note">История пока пуста. Выберите процент и нажмите «Начать день» или «Выходной».</div>';
+        historyEl.innerHTML = '<div class="empty-note">История пока пуста. Начните день или добавьте прошлый отработанный день.</div>';
       } else {
         historyEl.innerHTML = sortedRecords.map(rec => {
-          if (rec.type === 'off') {
-            return `
-              <div class="history-item">
-                <div class="history-top">
-                  <span class="history-date">${formatDateRu(rec.date)}</span>
-                  <span class="history-badge-off">Выходной</span>
-                </div>
-                <div class="history-actions">
-                  <button class="tiny-btn" type="button" onclick="deleteHistoryRecord('${rec.date}')">Удалить</button>
-                </div>
-              </div>
-            `;
-          }
           const recRate = normalizeRate(rec.rate ?? DEFAULT_RATE);
           const tripRows = (rec.trips || []).map((t, i) => `
             <div class="history-trip-row">
