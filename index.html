@@ -278,77 +278,40 @@
       border: 1px solid rgba(34, 197, 94, 0.25);
     }
 
-    /* Выбор процента */
-    .rate-picker {
+    /* Текущий профиль роли/машины на смене */
+    .role-summary-box {
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       padding: 12px;
       margin-bottom: 12px;
-    }
-
-    .rate-picker-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      margin-bottom: 10px;
     }
 
-    .rate-picker-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .rate-input-wrap {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 4px 9px;
-      width: 92px;
-    }
-
-    .rate-input-wrap:focus-within {
-      border-color: var(--primary);
-    }
-
-    .rate-custom-input {
-      width: 100%;
-      border: none;
-      background: transparent;
-      color: var(--text);
-      font-size: 15px;
-      font-weight: 800;
-      text-align: right;
-      outline: none;
-    }
-
-    .rate-presets {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .rate-chip {
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      border-radius: 10px;
-      padding: 8px 10px;
+    .role-summary-title {
       font-size: 13.5px;
       font-weight: 800;
-      cursor: pointer;
-      transition: all 0.14s ease;
+      color: var(--text);
     }
 
-    .rate-chip.selected {
+    .role-summary-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .role-rate-badge {
       background: var(--primary);
-      border-color: var(--primary);
       color: var(--primary-text);
+      font-size: 15px;
+      font-weight: 800;
+      padding: 6px 11px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     /* Кнопки */
@@ -394,11 +357,6 @@
       background: var(--surface-2);
       color: var(--text);
       border: 1px solid var(--border);
-    }
-
-    .btn-danger-soft {
-      background: var(--danger-soft);
-      color: var(--danger);
     }
 
     /* Ввод рейса */
@@ -793,13 +751,14 @@
       border: 1px solid rgba(246, 195, 0, 0.4);
     }
 
-    .history-badge-off {
-      font-size: 11.5px;
+    .history-role-tag {
+      font-size: 11px;
       font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: var(--warning-soft);
-      color: var(--warning);
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
     }
 
     .history-earn {
@@ -863,6 +822,7 @@
       margin-top: 8px;
       display: flex;
       justify-content: flex-end;
+      gap: 6px;
     }
 
     .tiny-btn {
@@ -872,13 +832,45 @@
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      padding: 3px 7px;
+      padding: 3px 8px;
       border-radius: 6px;
     }
 
-    .tiny-btn:hover {
+    .tiny-btn.edit-btn:hover {
+      color: var(--text);
+      background: var(--primary-soft);
+    }
+
+    .tiny-btn.del-btn:hover {
       color: var(--danger);
       background: var(--danger-soft);
+    }
+
+    /* Переключатели выбора в модалках */
+    .choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .choice-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 10px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.14s ease;
+      text-align: center;
+    }
+
+    .choice-btn.selected {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--primary-text);
     }
 
     /* Модалки */
@@ -947,19 +939,6 @@
       gap: 8px;
     }
 
-    textarea.backup-text {
-      width: 100%;
-      min-height: 84px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      padding: 10px;
-      font-size: 12px;
-      font-family: monospace;
-      resize: vertical;
-    }
-
     input[type="date"].modal-date-input {
       width: 100%;
       padding: 11px 12px;
@@ -969,7 +948,7 @@
       color: var(--text);
       font-size: 15px;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .past-trip-grid {
@@ -1059,7 +1038,7 @@
 
       .icon-btn:hover,
       .pill-btn:hover,
-      .rate-chip:hover:not(.selected),
+      .choice-btn:hover:not(.selected),
       .range-preset-btn:hover:not(.active),
       .month-nav button:hover,
       .del-trip-btn:hover {
@@ -1144,7 +1123,7 @@
       <div class="top-actions">
         <button class="pill-btn" id="account-btn" type="button" onclick="openAccountModal()">👤 Войти</button>
         <button class="icon-btn" id="theme-btn" type="button" title="Сменить тему">🌓</button>
-        <button class="icon-btn" id="settings-btn" type="button" title="Резервная копия и настройки">⚙️</button>
+        <button class="icon-btn" id="settings-btn" type="button" title="Настройки роли и машины">⚙️</button>
       </div>
     </header>
 
@@ -1165,29 +1144,12 @@
           </div>
 
           <div id="idle-controls">
-            <div class="rate-picker">
-              <div class="rate-picker-top">
-                <span class="rate-picker-label">Процент с рейсов на смену:</span>
-                <div class="rate-input-wrap">
-                  <input
-                    type="number"
-                    inputmode="decimal"
-                    step="0.1"
-                    min="0.1"
-                    max="100"
-                    id="shift-rate-input"
-                    class="rate-custom-input"
-                    value="19"
-                    oninput="onRateInputChange()"
-                  />
-                  <span style="font-weight:800;color:var(--text-muted);">%</span>
-                </div>
+            <div class="role-summary-box">
+              <div>
+                <div class="role-summary-title" id="idle-role-title">Грузчик</div>
+                <div class="role-summary-sub" id="idle-role-sub">Фиксированная ставка за смену</div>
               </div>
-              <div class="rate-presets" id="rate-presets">
-                <button type="button" class="rate-chip selected" data-rate="19" onclick="selectPresetRate(19)">19%</button>
-                <button type="button" class="rate-chip" data-rate="37" onclick="selectPresetRate(37)">37%</button>
-                <button type="button" class="rate-chip" data-rate="54" onclick="selectPresetRate(54)">54%</button>
-              </div>
+              <div class="role-rate-badge" id="idle-rate-badge">19%</div>
             </div>
 
             <div class="btn-stack">
@@ -1197,6 +1159,14 @@
           </div>
 
           <div id="active-controls" style="display:none;">
+            <div class="role-summary-box">
+              <div>
+                <div class="role-summary-title" id="active-role-title">Грузчик</div>
+                <div class="role-summary-sub" id="active-role-sub">Смена запущена</div>
+              </div>
+              <div class="role-rate-badge" id="active-rate-badge">19%</div>
+            </div>
+
             <div class="trip-form" id="trip-form-box">
               <div class="input-group">
                 <input
@@ -1266,7 +1236,7 @@
 
           <div class="range-box">
             <div class="range-head">
-              <span class="range-title">📅 Заработок за период</span>
+              <span class="range-title">📅 Заработок за период (от и до)</span>
               <button type="button" class="range-clear-btn" onclick="resetDateRange()">Сбросить</button>
             </div>
             <div class="range-presets">
@@ -1317,31 +1287,15 @@
       </div>
 
       <div class="section-box">
-        <h4>Дата и процент смены</h4>
+        <h4>Дата и ставка смены</h4>
         <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">Отработанная дата</label>
         <input type="date" id="past-date-input" class="modal-date-input" />
-
-        <div class="rate-picker-top" style="margin-bottom:8px;">
-          <span class="rate-picker-label">Процент с рейсов:</span>
-          <div class="rate-input-wrap">
-            <input
-              type="number"
-              inputmode="decimal"
-              step="0.1"
-              min="0.1"
-              max="100"
-              id="past-rate-input"
-              class="rate-custom-input"
-              value="19"
-              oninput="updatePastPreview()"
-            />
-            <span style="font-weight:800;color:var(--text-muted);">%</span>
+        <div class="role-summary-box" style="margin-bottom:0;">
+          <div>
+            <div class="role-summary-title" id="past-role-title">Грузчик</div>
+            <div class="role-summary-sub" id="past-role-sub">По текущим настройкам</div>
           </div>
-        </div>
-        <div class="rate-presets" style="margin-bottom:0;">
-          <button type="button" class="rate-chip" onclick="setPastPresetRate(19)">19%</button>
-          <button type="button" class="rate-chip" onclick="setPastPresetRate(37)">37%</button>
-          <button type="button" class="rate-chip" onclick="setPastPresetRate(54)">54%</button>
+          <div class="role-rate-badge" id="past-rate-badge">19%</div>
         </div>
       </div>
 
@@ -1368,6 +1322,53 @@
       </div>
 
       <button class="btn btn-primary btn-full" type="button" onclick="savePastDay()">Сохранить отработанный день</button>
+    </div>
+  </div>
+
+  <!-- Модалка редактирования завершённого дня -->
+  <div class="modal-backdrop" id="edit-day-modal" onclick="closeOnBackdrop(event, 'edit-day-modal')">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Редактировать день</div>
+        <button class="icon-btn" type="button" onclick="closeModal('edit-day-modal')">✕</button>
+      </div>
+
+      <div class="section-box">
+        <h4>Дата и ставка за смену</h4>
+        <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">Дата смены</label>
+        <input type="date" id="edit-date-input" class="modal-date-input" />
+
+        <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">Роль и машина</label>
+        <div class="choice-grid">
+          <button type="button" class="choice-btn" id="edit-choice-loader" onclick="setEditPreset('loader', 'company')">Грузчик · 19%</button>
+          <button type="button" class="choice-btn" id="edit-choice-driver-company" onclick="setEditPreset('driver', 'company')">Водитель (компания) · 37%</button>
+          <button type="button" class="choice-btn" id="edit-choice-driver-own" style="grid-column: span 2;" onclick="setEditPreset('driver', 'own')">Водитель (своя машина) · 54%</button>
+        </div>
+      </div>
+
+      <div class="section-box">
+        <h4>Суммы рейсов за день (до 3 рейсов, ₽)</h4>
+        <div class="past-trip-grid">
+          <div class="past-trip-field">
+            <label for="edit-trip-1">Рейс #1</label>
+            <input type="number" inputmode="decimal" step="any" min="1" id="edit-trip-1" placeholder="0" oninput="updateEditPreview()" />
+          </div>
+          <div class="past-trip-field">
+            <label for="edit-trip-2">Рейс #2</label>
+            <input type="number" inputmode="decimal" step="any" min="1" id="edit-trip-2" placeholder="0" oninput="updateEditPreview()" />
+          </div>
+          <div class="past-trip-field">
+            <label for="edit-trip-3">Рейс #3</label>
+            <input type="number" inputmode="decimal" step="any" min="1" id="edit-trip-3" placeholder="0" oninput="updateEditPreview()" />
+          </div>
+        </div>
+        <div class="preview-cut">
+          <span>Итого доход за день (<span id="edit-rate-label">19</span>%):</span>
+          <strong id="edit-cut-preview">0 ₽</strong>
+        </div>
+      </div>
+
+      <button class="btn btn-success btn-full" type="button" onclick="saveEditedDay()">Сохранить изменения</button>
     </div>
   </div>
 
@@ -1401,36 +1402,30 @@
     </div>
   </div>
 
-  <!-- Модалка резервной копии и настроек -->
+  <!-- Модалка настроек: кто ты и на чьей машине ездишь -->
   <div class="modal-backdrop" id="settings-modal" onclick="closeOnBackdrop(event, 'settings-modal')">
     <div class="modal">
       <div class="modal-head">
-        <div class="modal-title">Резервная копия и настройки</div>
+        <div class="modal-title">Настройки</div>
         <button class="icon-btn" type="button" onclick="closeModal('settings-modal')">✕</button>
       </div>
 
       <div class="section-box">
-        <h4>💾 Резервная копия (JSON)</h4>
-        <p>Дополнительная копия для переноса или сохранения данных в файл.</p>
-        <div class="stack">
-          <button class="btn btn-primary btn-full" type="button" onclick="exportBackupFile()">📥 Скачать файл копии (.json)</button>
-          <button class="btn btn-ghost btn-full" type="button" onclick="copyBackupText()">📋 Скопировать копию в буфер</button>
+        <h4>Кто вы</h4>
+        <p>Выберите вашу роль. Ставка рассчитывается автоматически.</p>
+        <div class="choice-grid" style="margin-bottom:0;">
+          <button type="button" class="choice-btn" id="role-btn-loader" onclick="selectRole('loader')">Грузчик · 19%</button>
+          <button type="button" class="choice-btn" id="role-btn-driver" onclick="selectRole('driver')">Водитель</button>
         </div>
       </div>
 
-      <div class="section-box">
-        <h4>♻️ Восстановить из копии</h4>
-        <div class="stack">
-          <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;" onchange="importBackupFile(event)" />
-          <button class="btn btn-ghost btn-full" type="button" onclick="document.getElementById('import-file-input').click()">📂 Выбрать файл .json</button>
-          <textarea class="backup-text" id="import-text-area" placeholder="Или вставьте JSON-код резервной копии..."></textarea>
-          <button class="btn btn-success btn-full" type="button" onclick="importBackupFromText()">Восстановить из текста</button>
+      <div class="section-box" id="vehicle-box" style="display:none;">
+        <h4>На чьей машине ездите</h4>
+        <p>По умолчанию используется машина компании.</p>
+        <div class="choice-grid" style="margin-bottom:0;">
+          <button type="button" class="choice-btn" id="vehicle-btn-company" onclick="selectVehicle('company')">Машина компании · 37%</button>
+          <button type="button" class="choice-btn" id="vehicle-btn-own" onclick="selectVehicle('own')">Своя машина · 54%</button>
         </div>
-      </div>
-
-      <div class="section-box" style="border-color: rgba(185,28,28,0.35);">
-        <h4>🗑 Сброс данных</h4>
-        <button class="btn btn-danger-soft btn-full" type="button" onclick="resetAllData()">Очистить все записи</button>
       </div>
     </div>
   </div>
@@ -1451,7 +1446,33 @@
 
   <script>
     const STORAGE_KEY = 'trip_tracker_d1_v1';
-    const DEFAULT_RATE = 19;
+
+    const RATES = {
+      loader: 19,
+      driverCompany: 37,
+      driverOwn: 54
+    };
+
+    function getRateForProfile(role, vehicle) {
+      if (role === 'driver') {
+        return vehicle === 'own' ? RATES.driverOwn : RATES.driverCompany;
+      }
+      return RATES.loader;
+    }
+
+    function getProfileLabel(role, vehicle) {
+      if (role === 'driver') {
+        return vehicle === 'own' ? 'Водитель · своя машина' : 'Водитель · машина компании';
+      }
+      return 'Грузчик';
+    }
+
+    function inferProfileFromRate(rate) {
+      const n = Number(rate);
+      if (n === RATES.driverOwn) return { role: 'driver', vehicle: 'own', rate: RATES.driverOwn };
+      if (n === RATES.driverCompany) return { role: 'driver', vehicle: 'company', rate: RATES.driverCompany };
+      return { role: 'loader', vehicle: 'company', rate: RATES.loader };
+    }
 
     function getTodayISO() {
       const now = new Date();
@@ -1498,12 +1519,6 @@
       }).format(safe) + '\u00A0₽';
     }
 
-    function normalizeRate(raw) {
-      const n = parseFloat(raw);
-      if (!Number.isFinite(n) || n <= 0 || n > 100) return DEFAULT_RATE;
-      return Math.round(n * 100) / 100;
-    }
-
     function calcCut(amount, ratePercent) {
       return Math.round(amount * (ratePercent / 100) * 100) / 100;
     }
@@ -1511,7 +1526,8 @@
     function defaultData() {
       return {
         currentDate: getTodayISO(),
-        defaultRate: DEFAULT_RATE,
+        role: 'loader',
+        vehicle: 'company',
         activeDay: null,
         records: [],
         updatedAt: Date.now()
@@ -1521,6 +1537,9 @@
     let appStore = loadStore();
     let selectedMonth = getTodayISO().slice(0, 7);
     let rangeState = initRangeState(selectedMonth);
+    let editingOriginalDate = null;
+    let editRole = 'loader';
+    let editVehicle = 'company';
 
     function initRangeState(ymStr) {
       const { first, last } = getMonthBoundsISO(ymStr);
@@ -1579,18 +1598,17 @@
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
+          const inferred = inferProfileFromRate(parsed.data?.defaultRate);
+          const role = parsed.data?.role === 'driver' ? 'driver' : (parsed.data?.role === 'loader' ? 'loader' : inferred.role);
+          const vehicle = parsed.data?.vehicle === 'own' ? 'own' : (parsed.data?.vehicle === 'company' ? 'company' : inferred.vehicle);
           return {
             username: parsed.username || null,
             theme: parsed.theme || 'dark',
             data: {
               currentDate: parsed.data?.currentDate || getTodayISO(),
-              defaultRate: normalizeRate(parsed.data?.defaultRate ?? DEFAULT_RATE),
-              activeDay: parsed.data?.activeDay
-                ? {
-                    ...parsed.data.activeDay,
-                    rate: normalizeRate(parsed.data.activeDay.rate ?? DEFAULT_RATE)
-                  }
-                : null,
+              role,
+              vehicle,
+              activeDay: parsed.data?.activeDay || null,
               records: Array.isArray(parsed.data?.records) ? parsed.data.records : [],
               updatedAt: parsed.data?.updatedAt || Date.now()
             }
@@ -1680,32 +1698,59 @@
       applyTheme();
     });
 
-    function syncRateChips(rate) {
-      document.querySelectorAll('#rate-presets .rate-chip').forEach(btn => {
-        const chipRate = parseFloat(btn.dataset.rate);
-        btn.classList.toggle('selected', chipRate === rate);
-      });
+    /* Настройки роли и машины */
+    function openSettingsModal() {
+      syncSettingsUI();
+      document.getElementById('settings-modal').classList.add('open');
     }
 
-    function selectPresetRate(rate) {
-      const valid = normalizeRate(rate);
-      appStore.data.defaultRate = valid;
-      document.getElementById('shift-rate-input').value = valid;
-      syncRateChips(valid);
-      saveLocalOnly();
+    document.getElementById('settings-btn').addEventListener('click', openSettingsModal);
+
+    function syncSettingsUI() {
+      const role = appStore.data.role === 'driver' ? 'driver' : 'loader';
+      const vehicle = appStore.data.vehicle === 'own' ? 'own' : 'company';
+      document.getElementById('role-btn-loader').classList.toggle('selected', role === 'loader');
+      document.getElementById('role-btn-driver').classList.toggle('selected', role === 'driver');
+      document.getElementById('vehicle-box').style.display = role === 'driver' ? 'block' : 'none';
+      document.getElementById('vehicle-btn-company').classList.toggle('selected', vehicle === 'company');
+      document.getElementById('vehicle-btn-own').classList.toggle('selected', vehicle === 'own');
     }
 
-    function onRateInputChange() {
-      const raw = parseFloat(document.getElementById('shift-rate-input').value);
-      if (Number.isFinite(raw) && raw > 0 && raw <= 100) {
-        appStore.data.defaultRate = Math.round(raw * 100) / 100;
-        syncRateChips(appStore.data.defaultRate);
-        saveLocalOnly();
-      } else {
-        syncRateChips(-1);
+    function applyProfileRateToActiveDay() {
+      if (!appStore.data.activeDay) return;
+      const newRate = getRateForProfile(appStore.data.role, appStore.data.vehicle);
+      appStore.data.activeDay.role = appStore.data.role;
+      appStore.data.activeDay.vehicle = appStore.data.vehicle;
+      appStore.data.activeDay.rate = newRate;
+      appStore.data.activeDay.trips = (appStore.data.activeDay.trips || []).map(t => ({
+        ...t,
+        earn: calcCut(t.amount, newRate)
+      }));
+    }
+
+    function selectRole(role) {
+      appStore.data.role = role === 'driver' ? 'driver' : 'loader';
+      if (appStore.data.role === 'loader') {
+        appStore.data.vehicle = 'company';
       }
+      applyProfileRateToActiveDay();
+      syncSettingsUI();
+      persistAndSync();
+      render();
+      showToast(`Выбрано: ${getProfileLabel(appStore.data.role, appStore.data.vehicle)} (${getRateForProfile(appStore.data.role, appStore.data.vehicle)}%)`);
     }
 
+    function selectVehicle(vehicle) {
+      appStore.data.role = 'driver';
+      appStore.data.vehicle = vehicle === 'own' ? 'own' : 'company';
+      applyProfileRateToActiveDay();
+      syncSettingsUI();
+      persistAndSync();
+      render();
+      showToast(`Выбрано: ${getProfileLabel(appStore.data.role, appStore.data.vehicle)} (${getRateForProfile(appStore.data.role, appStore.data.vehicle)}%)`);
+    }
+
+    /* Аккаунт */
     function openAccountModal() {
       const loggedIn = Boolean(appStore.username);
       document.getElementById('logged-out-box').style.display = loggedIn ? 'none' : 'block';
@@ -1746,9 +1791,12 @@
         appStore.username = out.user.username;
 
         if (out.state && Array.isArray(out.state.records)) {
+          const inferred = inferProfileFromRate(out.state.defaultRate);
           appStore.data = {
             ...defaultData(),
-            ...out.state
+            ...out.state,
+            role: out.state.role === 'driver' ? 'driver' : (out.state.role === 'loader' ? 'loader' : inferred.role),
+            vehicle: out.state.vehicle === 'own' ? 'own' : (out.state.vehicle === 'company' ? 'company' : inferred.vehicle)
           };
         } else if (localHasRecords) {
           await persistAndSync(false);
@@ -1795,9 +1843,12 @@
           const cloudTs = out.state.updatedAt || 0;
           const localTs = appStore.data.updatedAt || 0;
           if (cloudTs > localTs) {
+            const inferred = inferProfileFromRate(out.state.defaultRate);
             appStore.data = {
               ...defaultData(),
-              ...out.state
+              ...out.state,
+              role: out.state.role === 'driver' ? 'driver' : (out.state.role === 'loader' ? 'loader' : inferred.role),
+              vehicle: out.state.vehicle === 'own' ? 'own' : (out.state.vehicle === 'company' ? 'company' : inferred.vehicle)
             };
             selectedMonth = getTodayISO().slice(0, 7);
             rangeState = initRangeState(selectedMonth);
@@ -1822,19 +1873,15 @@
       btn.textContent = appStore.username ? `👤 @${appStore.username}` : '👤 Войти';
     }
 
+    /* Рабочий день */
     function startDay() {
-      const raw = parseFloat(document.getElementById('shift-rate-input').value);
-      if (!Number.isFinite(raw) || raw <= 0 || raw > 100) {
-        showToast('Укажите процент от 0.1 до 100');
-        document.getElementById('shift-rate-input').focus();
-        return;
-      }
-      const chosenRate = Math.round(raw * 100) / 100;
       const todayISO = getTodayISO();
+      const chosenRate = getRateForProfile(appStore.data.role, appStore.data.vehicle);
       appStore.data.currentDate = todayISO;
-      appStore.data.defaultRate = chosenRate;
       appStore.data.activeDay = {
         date: todayISO,
+        role: appStore.data.role,
+        vehicle: appStore.data.vehicle,
         rate: chosenRate,
         trips: []
       };
@@ -1846,7 +1893,7 @@
 
     function updateCutPreview() {
       const active = appStore.data.activeDay;
-      const rate = active ? normalizeRate(active.rate) : DEFAULT_RATE;
+      const rate = active ? getRateForProfile(active.role || appStore.data.role, active.vehicle || appStore.data.vehicle) : getRateForProfile(appStore.data.role, appStore.data.vehicle);
       const val = parseFloat(document.getElementById('trip-amount').value);
       document.getElementById('cut-preview').textContent = formatMoney(val > 0 ? calcCut(val, rate) : 0);
     }
@@ -1865,7 +1912,7 @@
         input.focus();
         return;
       }
-      const rate = normalizeRate(active.rate);
+      const rate = getRateForProfile(active.role || appStore.data.role, active.vehicle || appStore.data.vehicle);
       const earn = calcCut(amount, rate);
       active.trips.push({
         id: Date.now(),
@@ -1894,16 +1941,24 @@
         return;
       }
       const date = active.date;
-      const rate = normalizeRate(active.rate);
-      const totalGross = active.trips.reduce((s, t) => s + t.amount, 0);
-      const totalEarn = Math.round(active.trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
+      const role = active.role || appStore.data.role;
+      const vehicle = active.vehicle || appStore.data.vehicle;
+      const rate = getRateForProfile(role, vehicle);
+      const trips = active.trips.map(t => ({
+        ...t,
+        earn: calcCut(t.amount, rate)
+      }));
+      const totalGross = trips.reduce((s, t) => s + t.amount, 0);
+      const totalEarn = Math.round(trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
 
       appStore.data.records = appStore.data.records.filter(r => r.date !== date);
       appStore.data.records.unshift({
         date,
         type: 'work',
+        role,
+        vehicle,
         rate,
-        trips: [...active.trips],
+        trips,
         totalGross,
         totalEarn
       });
@@ -1919,10 +1974,12 @@
     /* Добавление прошлого отработанного дня */
     function openPastDayModal() {
       const todayISO = getTodayISO();
-      const defaultPastDate = addDaysISO(todayISO, -1);
-      document.getElementById('past-date-input').value = defaultPastDate;
+      const rate = getRateForProfile(appStore.data.role, appStore.data.vehicle);
+      document.getElementById('past-date-input').value = addDaysISO(todayISO, -1);
       document.getElementById('past-date-input').max = todayISO;
-      document.getElementById('past-rate-input').value = normalizeRate(appStore.data.defaultRate);
+      document.getElementById('past-role-title').textContent = getProfileLabel(appStore.data.role, appStore.data.vehicle);
+      document.getElementById('past-role-sub').textContent = 'Ставка по текущим настройкам';
+      document.getElementById('past-rate-badge').textContent = `${rate}%`;
       document.getElementById('past-trip-1').value = '';
       document.getElementById('past-trip-2').value = '';
       document.getElementById('past-trip-3').value = '';
@@ -1930,13 +1987,8 @@
       document.getElementById('past-day-modal').classList.add('open');
     }
 
-    function setPastPresetRate(rate) {
-      document.getElementById('past-rate-input').value = normalizeRate(rate);
-      updatePastPreview();
-    }
-
     function updatePastPreview() {
-      const rate = normalizeRate(document.getElementById('past-rate-input').value);
+      const rate = getRateForProfile(appStore.data.role, appStore.data.vehicle);
       const amounts = [
         parseFloat(document.getElementById('past-trip-1').value) || 0,
         parseFloat(document.getElementById('past-trip-2').value) || 0,
@@ -1959,12 +2011,6 @@
         showToast('Выберите прошедшую или сегодняшнюю дату');
         return;
       }
-      const rawRate = parseFloat(document.getElementById('past-rate-input').value);
-      if (!Number.isFinite(rawRate) || rawRate <= 0 || rawRate > 100) {
-        showToast('Укажите процент от 0.1 до 100');
-        return;
-      }
-      const rate = Math.round(rawRate * 100) / 100;
       const rawAmounts = [
         parseFloat(document.getElementById('past-trip-1').value),
         parseFloat(document.getElementById('past-trip-2').value),
@@ -1981,6 +2027,9 @@
         return;
       }
 
+      const role = appStore.data.role;
+      const vehicle = appStore.data.vehicle;
+      const rate = getRateForProfile(role, vehicle);
       const trips = validAmounts.map((amount, idx) => ({
         id: Date.now() + idx,
         amount,
@@ -1993,6 +2042,8 @@
       appStore.data.records.unshift({
         date: dateVal,
         type: 'work',
+        role,
+        vehicle,
         rate,
         trips,
         totalGross,
@@ -2011,6 +2062,120 @@
       closeModal('past-day-modal');
       render();
       showToast(`Добавлен день ${formatDateRu(dateVal)} (+${formatMoney(totalEarn)})`);
+    }
+
+    /* Редактирование завершённого дня */
+    function openEditDayModal(dateStr) {
+      const rec = appStore.data.records.find(r => r.date === dateStr);
+      if (!rec) return;
+
+      editingOriginalDate = dateStr;
+      const inferred = inferProfileFromRate(rec.rate);
+      editRole = rec.role === 'driver' ? 'driver' : (rec.role === 'loader' ? 'loader' : inferred.role);
+      editVehicle = rec.vehicle === 'own' ? 'own' : (rec.vehicle === 'company' ? 'company' : inferred.vehicle);
+
+      document.getElementById('edit-date-input').value = rec.date;
+      document.getElementById('edit-date-input').max = getTodayISO();
+
+      const trips = Array.isArray(rec.trips) ? rec.trips : [];
+      document.getElementById('edit-trip-1').value = trips[0] ? trips[0].amount : '';
+      document.getElementById('edit-trip-2').value = trips[1] ? trips[1].amount : '';
+      document.getElementById('edit-trip-3').value = trips[2] ? trips[2].amount : '';
+
+      syncEditChoices();
+      updateEditPreview();
+      document.getElementById('edit-day-modal').classList.add('open');
+    }
+
+    function setEditPreset(role, vehicle) {
+      editRole = role;
+      editVehicle = role === 'driver' ? vehicle : 'company';
+      syncEditChoices();
+      updateEditPreview();
+    }
+
+    function syncEditChoices() {
+      document.getElementById('edit-choice-loader').classList.toggle('selected', editRole === 'loader');
+      document.getElementById('edit-choice-driver-company').classList.toggle('selected', editRole === 'driver' && editVehicle === 'company');
+      document.getElementById('edit-choice-driver-own').classList.toggle('selected', editRole === 'driver' && editVehicle === 'own');
+    }
+
+    function updateEditPreview() {
+      const rate = getRateForProfile(editRole, editVehicle);
+      document.getElementById('edit-rate-label').textContent = rate;
+      const amounts = [
+        parseFloat(document.getElementById('edit-trip-1').value) || 0,
+        parseFloat(document.getElementById('edit-trip-2').value) || 0,
+        parseFloat(document.getElementById('edit-trip-3').value) || 0
+      ];
+      const totalCut = amounts
+        .filter(a => a > 0)
+        .reduce((sum, a) => sum + calcCut(a, rate), 0);
+      document.getElementById('edit-cut-preview').textContent = formatMoney(Math.round(totalCut * 100) / 100);
+    }
+
+    function saveEditedDay() {
+      if (!editingOriginalDate) return;
+      const newDate = document.getElementById('edit-date-input').value;
+      if (!newDate) {
+        showToast('Выберите дату смены');
+        return;
+      }
+      if (newDate > getTodayISO()) {
+        showToast('Дата не может быть в будущем');
+        return;
+      }
+      const rawAmounts = [
+        parseFloat(document.getElementById('edit-trip-1').value),
+        parseFloat(document.getElementById('edit-trip-2').value),
+        parseFloat(document.getElementById('edit-trip-3').value)
+      ];
+      const validAmounts = rawAmounts.filter(a => Number.isFinite(a) && a > 0);
+      if (validAmounts.length === 0) {
+        showToast('Укажите хотя бы один рейс');
+        return;
+      }
+
+      if (newDate !== editingOriginalDate && appStore.data.records.some(r => r.date === newDate)) {
+        if (!confirm(`За ${formatDateRu(newDate)} уже есть запись. Перезаписать её?`)) {
+          return;
+        }
+      }
+
+      const rate = getRateForProfile(editRole, editVehicle);
+      const trips = validAmounts.map((amount, idx) => ({
+        id: Date.now() + idx,
+        amount,
+        earn: calcCut(amount, rate)
+      }));
+      const totalGross = trips.reduce((s, t) => s + t.amount, 0);
+      const totalEarn = Math.round(trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
+
+      appStore.data.records = appStore.data.records.filter(r => r.date !== editingOriginalDate && r.date !== newDate);
+      appStore.data.records.unshift({
+        date: newDate,
+        type: 'work',
+        role: editRole,
+        vehicle: editVehicle,
+        rate,
+        trips,
+        totalGross,
+        totalEarn
+      });
+
+      selectedMonth = newDate.slice(0, 7);
+      if (rangeState.preset === 'month') {
+        const bounds = getMonthBoundsISO(selectedMonth);
+        rangeState.from = bounds.first;
+        rangeState.to = bounds.last;
+        syncRangeInputs();
+      }
+
+      editingOriginalDate = null;
+      persistAndSync();
+      closeModal('edit-day-modal');
+      render();
+      showToast(`День обновлён (${formatDateRu(newDate)})`);
     }
 
     function deleteHistoryRecord(date) {
@@ -2040,10 +2205,6 @@
       document.getElementById('date-modal').classList.add('open');
     }
 
-    document.getElementById('settings-btn').addEventListener('click', () => {
-      document.getElementById('settings-modal').classList.add('open');
-    });
-
     function closeModal(id) {
       document.getElementById(id).classList.remove('open');
     }
@@ -2070,98 +2231,6 @@
       closeModal('date-modal');
       render();
       showToast('Рабочая дата обновлена');
-    }
-
-    function buildBackupPayload() {
-      return JSON.stringify({
-        app: 'trip_tracker_gazelle_d1',
-        version: 4,
-        account: appStore.username || null,
-        exportedAt: new Date().toISOString(),
-        data: appStore.data
-      }, null, 2);
-    }
-
-    function exportBackupFile() {
-      const blob = new Blob([buildBackupPayload()], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `trips-backup-${getTodayISO()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-      showToast('Файл резервной копии скачан');
-    }
-
-    async function copyBackupText() {
-      const json = buildBackupPayload();
-      try {
-        await navigator.clipboard.writeText(json);
-        showToast('Копия скопирована в буфер обмена');
-      } catch (e) {
-        document.getElementById('import-text-area').value = json;
-        showToast('Текст вставлен в поле ниже');
-      }
-    }
-
-    function applyImportedJson(rawText) {
-      try {
-        const parsed = JSON.parse(rawText);
-        const src = parsed.data && parsed.records === undefined ? parsed.data : parsed;
-        if (!src || !Array.isArray(src.records) || !src.currentDate) {
-          throw new Error('Неверный формат');
-        }
-        appStore.data = {
-          currentDate: src.currentDate,
-          defaultRate: normalizeRate(src.defaultRate ?? DEFAULT_RATE),
-          activeDay: src.activeDay
-            ? { ...src.activeDay, rate: normalizeRate(src.activeDay.rate ?? DEFAULT_RATE) }
-            : null,
-          records: src.records,
-          updatedAt: Date.now()
-        };
-        selectedMonth = getTodayISO().slice(0, 7);
-        rangeState = initRangeState(selectedMonth);
-        syncRangeInputs();
-        persistAndSync();
-        render();
-        closeModal('settings-modal');
-        showToast(`Восстановлено записей: ${appStore.data.records.length}`);
-      } catch (err) {
-        alert('Ошибка восстановления: проверьте формат JSON.');
-      }
-    }
-
-    function importBackupFile(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => applyImportedJson(reader.result);
-      reader.readAsText(file);
-      event.target.value = '';
-    }
-
-    function importBackupFromText() {
-      const txt = document.getElementById('import-text-area').value.trim();
-      if (!txt) {
-        showToast('Вставьте текст копии');
-        return;
-      }
-      applyImportedJson(txt);
-    }
-
-    function resetAllData() {
-      if (!confirm('Точно удалить все записи?')) return;
-      appStore.data = defaultData();
-      selectedMonth = getTodayISO().slice(0, 7);
-      rangeState = initRangeState(selectedMonth);
-      syncRangeInputs();
-      persistAndSync();
-      closeModal('settings-modal');
-      render();
-      showToast('Данные очищены');
     }
 
     function calcRangeStats(records, activeDay, fromISO, toISO) {
@@ -2211,21 +2280,34 @@
       document.getElementById('current-date-display').textContent = formatDateRu(activeDate);
       document.getElementById('current-weekday-display').textContent = formatWeekdayRu(activeDate);
 
+      const profileRate = getRateForProfile(d.role, d.vehicle);
+      const profileLabel = getProfileLabel(d.role, d.vehicle);
+
+      document.getElementById('idle-role-title').textContent = profileLabel;
+      document.getElementById('idle-role-sub').textContent = 'Ставка берётся из настроек профиля';
+      document.getElementById('idle-rate-badge').textContent = `${profileRate}%`;
+
       const statusEl = document.getElementById('shift-status');
       const idleBox = document.getElementById('idle-controls');
       const activeBox = document.getElementById('active-controls');
 
       if (d.activeDay) {
-        const activeRate = normalizeRate(d.activeDay.rate);
+        const activeRole = d.activeDay.role || d.role;
+        const activeVehicle = d.activeDay.vehicle || d.vehicle;
+        const activeRate = getRateForProfile(activeRole, activeVehicle);
+
         statusEl.textContent = `Смена идёт · ${activeRate}%`;
         statusEl.className = 'status-pill active';
         idleBox.style.display = 'none';
         activeBox.style.display = 'block';
 
+        document.getElementById('active-role-title').textContent = getProfileLabel(activeRole, activeVehicle);
+        document.getElementById('active-role-sub').textContent = 'Активная рабочая смена';
+        document.getElementById('active-rate-badge').textContent = `${activeRate}%`;
         document.getElementById('active-rate-label').textContent = activeRate;
         document.getElementById('active-rate-bar').textContent = activeRate;
 
-        const trips = d.activeDay.trips;
+        const trips = d.activeDay.trips || [];
         document.getElementById('trip-form-box').style.display = trips.length >= 3 ? 'none' : 'block';
         document.getElementById('active-trips-count').textContent = trips.length;
         const dayEarn = trips.reduce((sum, t) => sum + t.earn, 0);
@@ -2249,13 +2331,10 @@
           `).join('');
         }
       } else {
-        const defRate = normalizeRate(d.defaultRate);
         statusEl.textContent = 'День не начат';
         statusEl.className = 'status-pill idle';
         idleBox.style.display = 'block';
         activeBox.style.display = 'none';
-        document.getElementById('shift-rate-input').value = defRate;
-        syncRateChips(defRate);
       }
 
       const [my, mm] = selectedMonth.split('-').map(Number);
@@ -2275,8 +2354,8 @@
       let totalEarn = d.records.reduce((s, r) => s + (r.totalEarn || 0), 0);
       let totalGross = d.records.reduce((s, r) => s + (r.totalGross || 0), 0);
       if (d.activeDay) {
-        totalEarn += d.activeDay.trips.reduce((s, t) => s + t.earn, 0);
-        totalGross += d.activeDay.trips.reduce((s, t) => s + t.amount, 0);
+        totalEarn += (d.activeDay.trips || []).reduce((s, t) => s + t.earn, 0);
+        totalGross += (d.activeDay.trips || []).reduce((s, t) => s + t.amount, 0);
       }
 
       document.getElementById('stat-total').textContent = formatMoney(totalEarn);
@@ -2297,7 +2376,12 @@
         historyEl.innerHTML = '<div class="empty-note">История пока пуста. Начните день или добавьте прошлый отработанный день.</div>';
       } else {
         historyEl.innerHTML = sortedRecords.map(rec => {
-          const recRate = normalizeRate(rec.rate ?? DEFAULT_RATE);
+          const inferred = inferProfileFromRate(rec.rate);
+          const rRole = rec.role === 'driver' ? 'driver' : (rec.role === 'loader' ? 'loader' : inferred.role);
+          const rVehicle = rec.vehicle === 'own' ? 'own' : (rec.vehicle === 'company' ? 'company' : inferred.vehicle);
+          const recRate = rec.rate != null ? Number(rec.rate) : getRateForProfile(rRole, rVehicle);
+          const roleBadge = getProfileLabel(rRole, rVehicle);
+
           const tripRows = (rec.trips || []).map((t, i) => `
             <div class="history-trip-row">
               <div class="history-trip-left">
@@ -2313,12 +2397,14 @@
                 <div class="history-date-wrap">
                   <span class="history-date">${formatDateRu(rec.date)}</span>
                   <span class="history-rate-tag">${recRate}%</span>
+                  <span class="history-role-tag">${roleBadge}</span>
                 </div>
                 <span class="history-earn">+${formatMoney(rec.totalEarn)}</span>
               </div>
               <div class="history-trips">${tripRows}</div>
               <div class="history-actions">
-                <button class="tiny-btn" type="button" onclick="deleteHistoryRecord('${rec.date}')">Удалить</button>
+                <button class="tiny-btn edit-btn" type="button" onclick="openEditDayModal('${rec.date}')">Изменить</button>
+                <button class="tiny-btn del-btn" type="button" onclick="deleteHistoryRecord('${rec.date}')">Удалить</button>
               </div>
             </div>
           `;
