@@ -417,7 +417,6 @@
       border-color: var(--primary);
     }
 
-    /* Встроенный селект (для модалок) */
     .role-select {
       width: 100%;
       background: var(--surface);
@@ -478,6 +477,11 @@
       background: var(--surface-2);
       color: var(--text);
       border: 1px solid var(--border);
+    }
+
+    .btn-sm {
+      padding: 10px 12px;
+      font-size: 13.5px;
     }
 
     /* Ввод рейса */
@@ -1045,35 +1049,58 @@
       margin-bottom: 10px;
     }
 
-    .past-trip-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+    .modal-trips-stack {
+      display: flex;
+      flex-direction: column;
       gap: 8px;
       margin-bottom: 10px;
     }
 
-    .past-trip-field label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 4px;
+    .modal-trip-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
     }
 
-    .past-trip-field input {
-      width: 100%;
-      padding: 9px 8px;
-      border-radius: 10px;
+    .modal-trip-meta {
+      min-width: 68px;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .modal-trip-idx {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+
+    .modal-trip-cut {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--success);
+    }
+
+    .modal-trip-input {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 10px;
+      border-radius: 9px;
       border: 1.5px solid var(--border);
-      background: var(--surface);
+      background: var(--surface-2);
       color: var(--text);
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
       outline: none;
     }
 
-    .past-trip-field input:focus {
+    .modal-trip-input:focus {
       border-color: var(--primary);
+      background: var(--surface);
     }
 
     .toast {
@@ -1321,7 +1348,7 @@
             <div class="trips-list" id="active-trips-list"></div>
 
             <div class="day-summary-bar">
-              <span>Итого за день (<span id="active-trips-count">0</span>/3 рейса · <span id="active-rate-bar">19</span>%):</span>
+              <span>Итого за день (<span id="active-trips-count">0</span> рейс(а) · <span id="active-rate-bar">19</span>%):</span>
               <strong id="active-day-earn">0 ₽</strong>
             </div>
 
@@ -1430,21 +1457,11 @@
       </div>
 
       <div class="section-box">
-        <h4>Суммы рейсов за день (до 3 рейсов, ₽)</h4>
-        <div class="past-trip-grid">
-          <div class="past-trip-field">
-            <label for="past-trip-1">Рейс #1</label>
-            <input type="number" inputmode="decimal" step="any" min="1" id="past-trip-1" placeholder="0" oninput="updatePastPreview()" />
-          </div>
-          <div class="past-trip-field">
-            <label for="past-trip-2">Рейс #2</label>
-            <input type="number" inputmode="decimal" step="any" min="1" id="past-trip-2" placeholder="0" oninput="updatePastPreview()" />
-          </div>
-          <div class="past-trip-field">
-            <label for="past-trip-3">Рейс #3</label>
-            <input type="number" inputmode="decimal" step="any" min="1" id="past-trip-3" placeholder="0" oninput="updatePastPreview()" />
-          </div>
-        </div>
+        <h4>Рейсы за день (₽)</h4>
+        <div class="modal-trips-stack" id="past-trips-list"></div>
+        <button type="button" class="btn btn-ghost btn-sm btn-full" style="margin-bottom:10px;" onclick="addPastTripRow()">
+          + Добавить рейс
+        </button>
         <div class="preview-cut">
           <span>Итого ваш доход за день (<span id="past-rate-label">19</span>%):</span>
           <strong id="past-cut-preview">0 ₽</strong>
@@ -1477,21 +1494,11 @@
       </div>
 
       <div class="section-box">
-        <h4>Суммы рейсов за день (до 3 рейсов, ₽)</h4>
-        <div class="past-trip-grid">
-          <div class="past-trip-field">
-            <label for="edit-trip-1">Рейс #1</label>
-            <input type="number" inputmode="decimal" step="any" min="1" id="edit-trip-1" placeholder="0" oninput="updateEditPreview()" />
-          </div>
-          <div class="past-trip-field">
-            <label for="edit-trip-2">Рейс #2</label>
-            <input type="number" inputmode="decimal" step="any" min="1" id="edit-trip-2" placeholder="0" oninput="updateEditPreview()" />
-          </div>
-          <div class="past-trip-field">
-            <label for="edit-trip-3">Рейс #3</label>
-            <input type="number" inputmode="decimal" step="any" min="1" id="edit-trip-3" placeholder="0" oninput="updateEditPreview()" />
-          </div>
-        </div>
+        <h4>Рейсы за день (₽)</h4>
+        <div class="modal-trips-stack" id="edit-trips-list"></div>
+        <button type="button" class="btn btn-ghost btn-sm btn-full" style="margin-bottom:10px;" onclick="addEditTripRow()">
+          + Добавить рейс
+        </button>
         <div class="preview-cut">
           <span>Итого доход за день (<span id="edit-rate-label">19</span>%):</span>
           <strong id="edit-cut-preview">0 ₽</strong>
@@ -1648,10 +1655,12 @@
 
     let pastRole = appStore.data.role;
     let pastVehicle = appStore.data.vehicle;
+    let pastTripAmounts = [''];
 
     let editingOriginalDate = null;
     let editRole = 'loader';
     let editVehicle = 'company';
+    let editTripAmounts = [''];
 
     function toggleDropdown(event, id) {
       event.stopPropagation();
@@ -2032,10 +2041,6 @@
     function addTrip() {
       const active = appStore.data.activeDay;
       if (!active) return;
-      if (active.trips.length >= 3) {
-        showToast('Максимум 3 рейса в день');
-        return;
-      }
       const input = document.getElementById('trip-amount');
       const amount = parseFloat(input.value);
       if (!amount || amount <= 0) {
@@ -2046,7 +2051,7 @@
       const rate = getRateForProfile(active.role || appStore.data.role, active.vehicle || appStore.data.vehicle);
       const earn = calcCut(amount, rate);
       active.trips.push({
-        id: Date.now(),
+        id: Date.now() + Math.random(),
         amount,
         earn
       });
@@ -2102,6 +2107,37 @@
       showToast('День завершён и сохранён в историю');
     }
 
+    /* Рендер списка рейсов в модалках прошлого дня и редактирования */
+    function renderModalTripRows(containerId, amounts, rate, onChangeFnName, onRemoveFnName) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = amounts.map((valStr, idx) => {
+        const num = parseFloat(valStr);
+        const cut = num > 0 ? calcCut(num, rate) : 0;
+        const canRemove = amounts.length > 1;
+        return `
+          <div class="modal-trip-row">
+            <div class="modal-trip-meta">
+              <span class="modal-trip-idx">Рейс #${idx + 1}</span>
+              <span class="modal-trip-cut">+${formatMoney(cut)}</span>
+            </div>
+            <input
+              type="number"
+              inputmode="decimal"
+              step="any"
+              min="1"
+              class="modal-trip-input"
+              placeholder="Сумма рейса, ₽"
+              value="${valStr}"
+              oninput="${onChangeFnName}(${idx}, this.value)"
+            />
+            ${canRemove
+              ? `<button class="del-trip-btn" type="button" onclick="${onRemoveFnName}(${idx})" title="Удалить рейс">✕</button>`
+              : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
     /* Добавление прошлого отработанного дня */
     function openPastDayModal() {
       closeAllDropdowns();
@@ -2109,14 +2145,12 @@
       const norm = normalizeProfile(appStore.data.role, appStore.data.vehicle);
       pastRole = norm.role;
       pastVehicle = norm.vehicle;
+      pastTripAmounts = [''];
 
       document.getElementById('past-date-input').value = addDaysISO(todayISO, -1);
       document.getElementById('past-date-input').max = todayISO;
       document.getElementById('past-role-select').value = `${pastRole}|${pastVehicle}`;
-      document.getElementById('past-trip-1').value = '';
-      document.getElementById('past-trip-2').value = '';
-      document.getElementById('past-trip-3').value = '';
-      updatePastPreview();
+      renderPastTrips();
       document.getElementById('past-day-modal').classList.add('open');
     }
 
@@ -2125,21 +2159,52 @@
       const norm = normalizeProfile(r, v);
       pastRole = norm.role;
       pastVehicle = norm.vehicle;
-      updatePastPreview();
+      renderPastTrips();
     }
 
-    function updatePastPreview() {
+    function addPastTripRow() {
+      pastTripAmounts.push('');
+      renderPastTrips();
+      const inputs = document.querySelectorAll('#past-trips-list .modal-trip-input');
+      if (inputs.length) inputs[inputs.length - 1].focus();
+    }
+
+    function onPastTripInput(idx, val) {
+      pastTripAmounts[idx] = val;
+      updatePastTotalsOnly();
+    }
+
+    function removePastTripRow(idx) {
+      if (pastTripAmounts.length <= 1) return;
+      pastTripAmounts.splice(idx, 1);
+      renderPastTrips();
+    }
+
+    function updatePastTotalsOnly() {
       const rate = getRateForProfile(pastRole, pastVehicle);
       document.getElementById('past-rate-label').textContent = rate;
-      const amounts = [
-        parseFloat(document.getElementById('past-trip-1').value) || 0,
-        parseFloat(document.getElementById('past-trip-2').value) || 0,
-        parseFloat(document.getElementById('past-trip-3').value) || 0
-      ];
-      const totalCut = amounts
-        .filter(a => a > 0)
-        .reduce((sum, a) => sum + calcCut(a, rate), 0);
+      const rows = document.querySelectorAll('#past-trips-list .modal-trip-row');
+      let totalCut = 0;
+      rows.forEach((row, idx) => {
+        const num = parseFloat(pastTripAmounts[idx]);
+        const cut = num > 0 ? calcCut(num, rate) : 0;
+        totalCut += cut;
+        const cutEl = row.querySelector('.modal-trip-cut');
+        if (cutEl) cutEl.textContent = `+${formatMoney(cut)}`;
+      });
       document.getElementById('past-cut-preview').textContent = formatMoney(Math.round(totalCut * 100) / 100);
+    }
+
+    function renderPastTrips() {
+      const rate = getRateForProfile(pastRole, pastVehicle);
+      renderModalTripRows(
+        'past-trips-list',
+        pastTripAmounts,
+        rate,
+        'onPastTripInput',
+        'removePastTripRow'
+      );
+      updatePastTotalsOnly();
     }
 
     function savePastDay() {
@@ -2153,12 +2218,10 @@
         showToast('Выберите прошедшую или сегодняшнюю дату');
         return;
       }
-      const rawAmounts = [
-        parseFloat(document.getElementById('past-trip-1').value),
-        parseFloat(document.getElementById('past-trip-2').value),
-        parseFloat(document.getElementById('past-trip-3').value)
-      ];
-      const validAmounts = rawAmounts.filter(a => Number.isFinite(a) && a > 0);
+      const validAmounts = pastTripAmounts
+        .map(v => parseFloat(v))
+        .filter(a => Number.isFinite(a) && a > 0);
+
       if (validAmounts.length === 0) {
         showToast('Введите сумму хотя бы одного рейса');
         return;
@@ -2173,14 +2236,13 @@
       const vehicle = pastVehicle;
       const rate = getRateForProfile(role, vehicle);
       const trips = validAmounts.map((amount, idx) => ({
-        id: Date.now() + idx,
+        id: Date.now() + idx + Math.random(),
         amount,
         earn: calcCut(amount, rate)
       }));
       const totalGross = trips.reduce((s, t) => s + t.amount, 0);
       const totalEarn = Math.round(trips.reduce((s, t) => s + t.earn, 0) * 100) / 100;
 
-      // Сохраняем выбранную роль как последний выбор
       appStore.data.role = role;
       appStore.data.vehicle = vehicle;
 
@@ -2227,11 +2289,9 @@
       document.getElementById('edit-role-select').value = `${editRole}|${editVehicle}`;
 
       const trips = Array.isArray(rec.trips) ? rec.trips : [];
-      document.getElementById('edit-trip-1').value = trips[0] ? trips[0].amount : '';
-      document.getElementById('edit-trip-2').value = trips[1] ? trips[1].amount : '';
-      document.getElementById('edit-trip-3').value = trips[2] ? trips[2].amount : '';
+      editTripAmounts = trips.length > 0 ? trips.map(t => String(t.amount)) : [''];
 
-      updateEditPreview();
+      renderEditTrips();
       document.getElementById('edit-day-modal').classList.add('open');
     }
 
@@ -2240,21 +2300,52 @@
       const norm = normalizeProfile(r, v);
       editRole = norm.role;
       editVehicle = norm.vehicle;
-      updateEditPreview();
+      renderEditTrips();
     }
 
-    function updateEditPreview() {
+    function addEditTripRow() {
+      editTripAmounts.push('');
+      renderEditTrips();
+      const inputs = document.querySelectorAll('#edit-trips-list .modal-trip-input');
+      if (inputs.length) inputs[inputs.length - 1].focus();
+    }
+
+    function onEditTripInput(idx, val) {
+      editTripAmounts[idx] = val;
+      updateEditTotalsOnly();
+    }
+
+    function removeEditTripRow(idx) {
+      if (editTripAmounts.length <= 1) return;
+      editTripAmounts.splice(idx, 1);
+      renderEditTrips();
+    }
+
+    function updateEditTotalsOnly() {
       const rate = getRateForProfile(editRole, editVehicle);
       document.getElementById('edit-rate-label').textContent = rate;
-      const amounts = [
-        parseFloat(document.getElementById('edit-trip-1').value) || 0,
-        parseFloat(document.getElementById('edit-trip-2').value) || 0,
-        parseFloat(document.getElementById('edit-trip-3').value) || 0
-      ];
-      const totalCut = amounts
-        .filter(a => a > 0)
-        .reduce((sum, a) => sum + calcCut(a, rate), 0);
+      const rows = document.querySelectorAll('#edit-trips-list .modal-trip-row');
+      let totalCut = 0;
+      rows.forEach((row, idx) => {
+        const num = parseFloat(editTripAmounts[idx]);
+        const cut = num > 0 ? calcCut(num, rate) : 0;
+        totalCut += cut;
+        const cutEl = row.querySelector('.modal-trip-cut');
+        if (cutEl) cutEl.textContent = `+${formatMoney(cut)}`;
+      });
       document.getElementById('edit-cut-preview').textContent = formatMoney(Math.round(totalCut * 100) / 100);
+    }
+
+    function renderEditTrips() {
+      const rate = getRateForProfile(editRole, editVehicle);
+      renderModalTripRows(
+        'edit-trips-list',
+        editTripAmounts,
+        rate,
+        'onEditTripInput',
+        'removeEditTripRow'
+      );
+      updateEditTotalsOnly();
     }
 
     function saveEditedDay() {
@@ -2268,12 +2359,10 @@
         showToast('Дата не может быть в будущем');
         return;
       }
-      const rawAmounts = [
-        parseFloat(document.getElementById('edit-trip-1').value),
-        parseFloat(document.getElementById('edit-trip-2').value),
-        parseFloat(document.getElementById('edit-trip-3').value)
-      ];
-      const validAmounts = rawAmounts.filter(a => Number.isFinite(a) && a > 0);
+      const validAmounts = editTripAmounts
+        .map(v => parseFloat(v))
+        .filter(a => Number.isFinite(a) && a > 0);
+
       if (validAmounts.length === 0) {
         showToast('Укажите хотя бы один рейс');
         return;
@@ -2287,7 +2376,7 @@
 
       const rate = getRateForProfile(editRole, editVehicle);
       const trips = validAmounts.map((amount, idx) => ({
-        id: Date.now() + idx,
+        id: Date.now() + idx + Math.random(),
         amount,
         earn: calcCut(amount, rate)
       }));
@@ -2453,14 +2542,13 @@
         syncDropdownActiveStates('active-role-dropdown', activeNorm.role, activeNorm.vehicle);
 
         const trips = d.activeDay.trips || [];
-        document.getElementById('trip-form-box').style.display = trips.length >= 3 ? 'none' : 'block';
         document.getElementById('active-trips-count').textContent = trips.length;
         const dayEarn = trips.reduce((sum, t) => sum + t.earn, 0);
         document.getElementById('active-day-earn').textContent = formatMoney(dayEarn);
 
         const listEl = document.getElementById('active-trips-list');
         if (trips.length === 0) {
-          listEl.innerHTML = '<div class="empty-note">Добавьте первый рейс за эту смену (от 1 до 3 в день)</div>';
+          listEl.innerHTML = '<div class="empty-note">Добавьте первый рейс за эту смену</div>';
         } else {
           listEl.innerHTML = trips.map((t, idx) => `
             <div class="trip-item">
