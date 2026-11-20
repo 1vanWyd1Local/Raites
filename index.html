@@ -314,6 +314,33 @@
       flex-shrink: 0;
     }
 
+    .shift-picker-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 11px;
+      margin-bottom: 12px;
+    }
+
+    .shift-picker-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .shift-picker-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .shift-picker-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
     /* Кнопки */
     .btn-stack {
       display: flex;
@@ -846,7 +873,7 @@
       background: var(--danger-soft);
     }
 
-    /* Переключатели выбора в модалках */
+    /* Переключатели выбора */
     .choice-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -859,12 +886,13 @@
       background: var(--surface);
       color: var(--text);
       border-radius: 10px;
-      padding: 10px 10px;
-      font-size: 13px;
+      padding: 9px 10px;
+      font-size: 12.5px;
       font-weight: 800;
       cursor: pointer;
       transition: all 0.14s ease;
       text-align: center;
+      line-height: 1.25;
     }
 
     .choice-btn.selected {
@@ -1144,12 +1172,16 @@
           </div>
 
           <div id="idle-controls">
-            <div class="role-summary-box">
-              <div>
-                <div class="role-summary-title" id="idle-role-title">Грузчик</div>
-                <div class="role-summary-sub" id="idle-role-sub">Фиксированная ставка за смену</div>
+            <div class="shift-picker-box">
+              <div class="shift-picker-head">
+                <span class="shift-picker-label">Кто вы на эту смену:</span>
+                <span class="shift-picker-hint" id="idle-default-hint">По умолч.: Грузчик</span>
               </div>
-              <div class="role-rate-badge" id="idle-rate-badge">19%</div>
+              <div class="choice-grid" style="margin-bottom:0;">
+                <button type="button" class="choice-btn" id="shift-choice-loader" onclick="selectShiftPreset('loader', 'company')">Грузчик · 19%</button>
+                <button type="button" class="choice-btn" id="shift-choice-driver-company" onclick="selectShiftPreset('driver', 'company')">Водитель (компания) · 37%</button>
+                <button type="button" class="choice-btn" id="shift-choice-driver-own" style="grid-column: span 2;" onclick="selectShiftPreset('driver', 'own')">Водитель (своя машина) · 54%</button>
+              </div>
             </div>
 
             <div class="btn-stack">
@@ -1162,7 +1194,7 @@
             <div class="role-summary-box">
               <div>
                 <div class="role-summary-title" id="active-role-title">Грузчик</div>
-                <div class="role-summary-sub" id="active-role-sub">Смена запущена</div>
+                <div class="role-summary-sub" id="active-role-sub">Активная рабочая смена</div>
               </div>
               <div class="role-rate-badge" id="active-rate-badge">19%</div>
             </div>
@@ -1287,15 +1319,15 @@
       </div>
 
       <div class="section-box">
-        <h4>Дата и ставка смены</h4>
+        <h4>Дата и кем отработали смену</h4>
         <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">Отработанная дата</label>
         <input type="date" id="past-date-input" class="modal-date-input" />
-        <div class="role-summary-box" style="margin-bottom:0;">
-          <div>
-            <div class="role-summary-title" id="past-role-title">Грузчик</div>
-            <div class="role-summary-sub" id="past-role-sub">По текущим настройкам</div>
-          </div>
-          <div class="role-rate-badge" id="past-rate-badge">19%</div>
+
+        <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">Роль и машина за этот день</label>
+        <div class="choice-grid" style="margin-bottom:0;">
+          <button type="button" class="choice-btn" id="past-choice-loader" onclick="setPastPreset('loader', 'company')">Грузчик · 19%</button>
+          <button type="button" class="choice-btn" id="past-choice-driver-company" onclick="setPastPreset('driver', 'company')">Водитель (компания) · 37%</button>
+          <button type="button" class="choice-btn" id="past-choice-driver-own" style="grid-column: span 2;" onclick="setPastPreset('driver', 'own')">Водитель (своя машина) · 54%</button>
         </div>
       </div>
 
@@ -1316,7 +1348,7 @@
           </div>
         </div>
         <div class="preview-cut">
-          <span>Итого ваш доход за день:</span>
+          <span>Итого ваш доход за день (<span id="past-rate-label">19</span>%):</span>
           <strong id="past-cut-preview">0 ₽</strong>
         </div>
       </div>
@@ -1339,7 +1371,7 @@
         <input type="date" id="edit-date-input" class="modal-date-input" />
 
         <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">Роль и машина</label>
-        <div class="choice-grid">
+        <div class="choice-grid" style="margin-bottom:0;">
           <button type="button" class="choice-btn" id="edit-choice-loader" onclick="setEditPreset('loader', 'company')">Грузчик · 19%</button>
           <button type="button" class="choice-btn" id="edit-choice-driver-company" onclick="setEditPreset('driver', 'company')">Водитель (компания) · 37%</button>
           <button type="button" class="choice-btn" id="edit-choice-driver-own" style="grid-column: span 2;" onclick="setEditPreset('driver', 'own')">Водитель (своя машина) · 54%</button>
@@ -1411,8 +1443,8 @@
       </div>
 
       <div class="section-box">
-        <h4>Кто вы</h4>
-        <p>Выберите вашу роль. Ставка рассчитывается автоматически.</p>
+        <h4>Кто вы по умолчанию</h4>
+        <p>Эта роль будет автоматически выбираться при начале каждой новой смены.</p>
         <div class="choice-grid" style="margin-bottom:0;">
           <button type="button" class="choice-btn" id="role-btn-loader" onclick="selectRole('loader')">Грузчик · 19%</button>
           <button type="button" class="choice-btn" id="role-btn-driver" onclick="selectRole('driver')">Водитель</button>
@@ -1537,9 +1569,24 @@
     let appStore = loadStore();
     let selectedMonth = getTodayISO().slice(0, 7);
     let rangeState = initRangeState(selectedMonth);
+
+    // Временный выбор для текущей смены (перед нажатием «Начать день»)
+    let nextShiftRole = appStore.data.role;
+    let nextShiftVehicle = appStore.data.vehicle;
+
+    // Временный выбор в модалке добавления прошлого дня
+    let pastRole = appStore.data.role;
+    let pastVehicle = appStore.data.vehicle;
+
+    // Временный выбор в модалке редактирования дня
     let editingOriginalDate = null;
     let editRole = 'loader';
     let editVehicle = 'company';
+
+    function resetNextShiftToDefault() {
+      nextShiftRole = appStore.data.role;
+      nextShiftVehicle = appStore.data.role === 'driver' ? appStore.data.vehicle : 'company';
+    }
 
     function initRangeState(ymStr) {
       const { first, last } = getMonthBoundsISO(ymStr);
@@ -1698,7 +1745,7 @@
       applyTheme();
     });
 
-    /* Настройки роли и машины */
+    /* Настройки роли и машины по умолчанию */
     function openSettingsModal() {
       syncSettingsUI();
       document.getElementById('settings-modal').classList.add('open');
@@ -1716,38 +1763,37 @@
       document.getElementById('vehicle-btn-own').classList.toggle('selected', vehicle === 'own');
     }
 
-    function applyProfileRateToActiveDay() {
-      if (!appStore.data.activeDay) return;
-      const newRate = getRateForProfile(appStore.data.role, appStore.data.vehicle);
-      appStore.data.activeDay.role = appStore.data.role;
-      appStore.data.activeDay.vehicle = appStore.data.vehicle;
-      appStore.data.activeDay.rate = newRate;
-      appStore.data.activeDay.trips = (appStore.data.activeDay.trips || []).map(t => ({
-        ...t,
-        earn: calcCut(t.amount, newRate)
-      }));
-    }
-
     function selectRole(role) {
       appStore.data.role = role === 'driver' ? 'driver' : 'loader';
       if (appStore.data.role === 'loader') {
         appStore.data.vehicle = 'company';
       }
-      applyProfileRateToActiveDay();
+      resetNextShiftToDefault();
       syncSettingsUI();
       persistAndSync();
       render();
-      showToast(`Выбрано: ${getProfileLabel(appStore.data.role, appStore.data.vehicle)} (${getRateForProfile(appStore.data.role, appStore.data.vehicle)}%)`);
     }
 
     function selectVehicle(vehicle) {
       appStore.data.role = 'driver';
       appStore.data.vehicle = vehicle === 'own' ? 'own' : 'company';
-      applyProfileRateToActiveDay();
+      resetNextShiftToDefault();
       syncSettingsUI();
       persistAndSync();
       render();
-      showToast(`Выбрано: ${getProfileLabel(appStore.data.role, appStore.data.vehicle)} (${getRateForProfile(appStore.data.role, appStore.data.vehicle)}%)`);
+    }
+
+    /* Выбор роли на текущую смену перед стартом дня */
+    function selectShiftPreset(role, vehicle) {
+      nextShiftRole = role === 'driver' ? 'driver' : 'loader';
+      nextShiftVehicle = nextShiftRole === 'driver' ? (vehicle === 'own' ? 'own' : 'company') : 'company';
+      syncShiftPickerUI();
+    }
+
+    function syncShiftPickerUI() {
+      document.getElementById('shift-choice-loader').classList.toggle('selected', nextShiftRole === 'loader');
+      document.getElementById('shift-choice-driver-company').classList.toggle('selected', nextShiftRole === 'driver' && nextShiftVehicle === 'company');
+      document.getElementById('shift-choice-driver-own').classList.toggle('selected', nextShiftRole === 'driver' && nextShiftVehicle === 'own');
     }
 
     /* Аккаунт */
@@ -1804,6 +1850,7 @@
           appStore.data = defaultData();
         }
 
+        resetNextShiftToDefault();
         selectedMonth = getTodayISO().slice(0, 7);
         rangeState = initRangeState(selectedMonth);
         syncRangeInputs();
@@ -1822,6 +1869,7 @@
     function logoutAccount() {
       appStore.username = null;
       appStore.data = defaultData();
+      resetNextShiftToDefault();
       selectedMonth = getTodayISO().slice(0, 7);
       rangeState = initRangeState(selectedMonth);
       syncRangeInputs();
@@ -1850,6 +1898,7 @@
               role: out.state.role === 'driver' ? 'driver' : (out.state.role === 'loader' ? 'loader' : inferred.role),
               vehicle: out.state.vehicle === 'own' ? 'own' : (out.state.vehicle === 'company' ? 'company' : inferred.vehicle)
             };
+            resetNextShiftToDefault();
             selectedMonth = getTodayISO().slice(0, 7);
             rangeState = initRangeState(selectedMonth);
             syncRangeInputs();
@@ -1876,12 +1925,15 @@
     /* Рабочий день */
     function startDay() {
       const todayISO = getTodayISO();
-      const chosenRate = getRateForProfile(appStore.data.role, appStore.data.vehicle);
+      const shiftRole = nextShiftRole === 'driver' ? 'driver' : 'loader';
+      const shiftVehicle = shiftRole === 'driver' ? (nextShiftVehicle === 'own' ? 'own' : 'company') : 'company';
+      const chosenRate = getRateForProfile(shiftRole, shiftVehicle);
+
       appStore.data.currentDate = todayISO;
       appStore.data.activeDay = {
         date: todayISO,
-        role: appStore.data.role,
-        vehicle: appStore.data.vehicle,
+        role: shiftRole,
+        vehicle: shiftVehicle,
         rate: chosenRate,
         trips: []
       };
@@ -1893,7 +1945,9 @@
 
     function updateCutPreview() {
       const active = appStore.data.activeDay;
-      const rate = active ? getRateForProfile(active.role || appStore.data.role, active.vehicle || appStore.data.vehicle) : getRateForProfile(appStore.data.role, appStore.data.vehicle);
+      const rate = active
+        ? getRateForProfile(active.role || appStore.data.role, active.vehicle || appStore.data.vehicle)
+        : getRateForProfile(nextShiftRole, nextShiftVehicle);
       const val = parseFloat(document.getElementById('trip-amount').value);
       document.getElementById('cut-preview').textContent = formatMoney(val > 0 ? calcCut(val, rate) : 0);
     }
@@ -1965,6 +2019,8 @@
 
       appStore.data.activeDay = null;
       appStore.data.currentDate = getTodayISO();
+      // Возвращаем роль для следующего рабочего дня к выбранной в настройках
+      resetNextShiftToDefault();
       selectedMonth = date.slice(0, 7);
       persistAndSync();
       render();
@@ -1974,21 +2030,35 @@
     /* Добавление прошлого отработанного дня */
     function openPastDayModal() {
       const todayISO = getTodayISO();
-      const rate = getRateForProfile(appStore.data.role, appStore.data.vehicle);
+      pastRole = appStore.data.role === 'driver' ? 'driver' : 'loader';
+      pastVehicle = pastRole === 'driver' ? (appStore.data.vehicle === 'own' ? 'own' : 'company') : 'company';
+
       document.getElementById('past-date-input').value = addDaysISO(todayISO, -1);
       document.getElementById('past-date-input').max = todayISO;
-      document.getElementById('past-role-title').textContent = getProfileLabel(appStore.data.role, appStore.data.vehicle);
-      document.getElementById('past-role-sub').textContent = 'Ставка по текущим настройкам';
-      document.getElementById('past-rate-badge').textContent = `${rate}%`;
       document.getElementById('past-trip-1').value = '';
       document.getElementById('past-trip-2').value = '';
       document.getElementById('past-trip-3').value = '';
+      syncPastChoices();
       updatePastPreview();
       document.getElementById('past-day-modal').classList.add('open');
     }
 
+    function setPastPreset(role, vehicle) {
+      pastRole = role === 'driver' ? 'driver' : 'loader';
+      pastVehicle = pastRole === 'driver' ? (vehicle === 'own' ? 'own' : 'company') : 'company';
+      syncPastChoices();
+      updatePastPreview();
+    }
+
+    function syncPastChoices() {
+      document.getElementById('past-choice-loader').classList.toggle('selected', pastRole === 'loader');
+      document.getElementById('past-choice-driver-company').classList.toggle('selected', pastRole === 'driver' && pastVehicle === 'company');
+      document.getElementById('past-choice-driver-own').classList.toggle('selected', pastRole === 'driver' && pastVehicle === 'own');
+    }
+
     function updatePastPreview() {
-      const rate = getRateForProfile(appStore.data.role, appStore.data.vehicle);
+      const rate = getRateForProfile(pastRole, pastVehicle);
+      document.getElementById('past-rate-label').textContent = rate;
       const amounts = [
         parseFloat(document.getElementById('past-trip-1').value) || 0,
         parseFloat(document.getElementById('past-trip-2').value) || 0,
@@ -2027,8 +2097,8 @@
         return;
       }
 
-      const role = appStore.data.role;
-      const vehicle = appStore.data.vehicle;
+      const role = pastRole;
+      const vehicle = pastVehicle;
       const rate = getRateForProfile(role, vehicle);
       const trips = validAmounts.map((amount, idx) => ({
         id: Date.now() + idx,
@@ -2280,12 +2350,9 @@
       document.getElementById('current-date-display').textContent = formatDateRu(activeDate);
       document.getElementById('current-weekday-display').textContent = formatWeekdayRu(activeDate);
 
-      const profileRate = getRateForProfile(d.role, d.vehicle);
-      const profileLabel = getProfileLabel(d.role, d.vehicle);
-
-      document.getElementById('idle-role-title').textContent = profileLabel;
-      document.getElementById('idle-role-sub').textContent = 'Ставка берётся из настроек профиля';
-      document.getElementById('idle-rate-badge').textContent = `${profileRate}%`;
+      document.getElementById('idle-default-hint').textContent =
+        `По умолч.: ${getProfileLabel(d.role, d.vehicle)}`;
+      syncShiftPickerUI();
 
       const statusEl = document.getElementById('shift-status');
       const idleBox = document.getElementById('idle-controls');
