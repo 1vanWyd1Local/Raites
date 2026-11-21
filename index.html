@@ -441,6 +441,13 @@
       gap: 8px;
     }
 
+    .idle-hint {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
     .btn {
       border: none;
       border-radius: var(--radius-sm);
@@ -1399,6 +1406,7 @@
               <button class="btn btn-primary btn-full" type="button" onclick="startDay()">▶️ Начать день</button>
               <button class="btn btn-ghost btn-full" type="button" onclick="openPastDayModal()">🗓️ Добавить прошлый день</button>
             </div>
+            <div class="idle-hint">Показана сегодняшняя дата; нажмите «Начать день», чтобы открыть смену.</div>
           </div>
 
           <div id="active-controls" style="display:none;">
@@ -1861,12 +1869,23 @@
     function defaultData() {
       return {
         currentDate: getTodayISO(),
+        manualDateOverride: false,
         role: 'loader',
         vehicle: 'company',
         activeDay: null,
         records: [],
         updatedAt: Date.now()
       };
+    }
+
+    function getDisplayDate(data) {
+      if (data.activeDay && data.activeDay.date) {
+        return data.activeDay.date;
+      }
+      if (data.manualDateOverride && data.currentDate) {
+        return data.currentDate;
+      }
+      return getTodayISO();
     }
 
     let appStore = loadStore();
@@ -1887,7 +1906,7 @@
     function initQuickFuelDate() {
       const el = document.getElementById('quick-fuel-date');
       if (el) {
-        el.value = appStore.data.activeDay ? appStore.data.activeDay.date : getTodayISO();
+        el.value = getDisplayDate(appStore.data);
       }
     }
 
@@ -2027,6 +2046,7 @@
             theme: parsed.theme || 'dark',
             data: {
               currentDate: parsed.data?.currentDate || getTodayISO(),
+              manualDateOverride: Boolean(parsed.data?.manualDateOverride),
               role: norm.role,
               vehicle: norm.vehicle,
               activeDay,
@@ -2168,6 +2188,7 @@
           appStore.data = {
             ...defaultData(),
             ...out.state,
+            manualDateOverride: Boolean(out.state.manualDateOverride),
             role: norm.role,
             vehicle: norm.vehicle
           };
@@ -2224,6 +2245,7 @@
             appStore.data = {
               ...defaultData(),
               ...out.state,
+              manualDateOverride: Boolean(out.state.manualDateOverride),
               role: norm.role,
               vehicle: norm.vehicle
             };
@@ -2253,25 +2275,26 @@
     /* Рабочий день */
     function startDay() {
       closeAllDropdowns();
-      const todayISO = getTodayISO();
+      const targetDate = getDisplayDate(appStore.data);
       const norm = normalizeProfile(appStore.data.role, appStore.data.vehicle);
       const chosenRate = getRateForProfile(norm.role, norm.vehicle);
 
-      appStore.data.currentDate = todayISO;
+      appStore.data.currentDate = targetDate;
+      appStore.data.manualDateOverride = false;
       appStore.data.activeDay = {
-        date: todayISO,
+        date: targetDate,
         role: norm.role,
         vehicle: norm.vehicle,
         rate: chosenRate,
         trips: [],
         fuelExpenses: []
       };
-      selectedMonth = todayISO.slice(0, 7);
+      selectedMonth = targetDate.slice(0, 7);
       const quickDateEl = document.getElementById('quick-fuel-date');
-      if (quickDateEl) quickDateEl.value = todayISO;
+      if (quickDateEl) quickDateEl.value = targetDate;
       persistAndSync();
       render();
-      showToast(`Смена начата за ${formatDateRu(todayISO)} (${chosenRate}%)`);
+      showToast(`Смена начата за ${formatDateRu(targetDate)} (${chosenRate}%)`);
     }
 
     function updateCutPreview() {
@@ -2326,7 +2349,7 @@
       const labelInput = document.getElementById('quick-fuel-label');
       const amountInput = document.getElementById('quick-fuel-amount');
 
-      const dateVal = dateInput.value || getTodayISO();
+      const dateVal = dateInput.value || getDisplayDate(appStore.data);
       const title = normalizeFuelTitle(labelInput.value);
       const amount = parseFloat(amountInput.value);
 
@@ -2452,11 +2475,13 @@
         totalEarn
       });
 
+      const todayISO = getTodayISO();
       appStore.data.activeDay = null;
-      appStore.data.currentDate = getTodayISO();
+      appStore.data.currentDate = todayISO;
+      appStore.data.manualDateOverride = false;
       selectedMonth = date.slice(0, 7);
       const quickDateEl = document.getElementById('quick-fuel-date');
-      if (quickDateEl) quickDateEl.value = getTodayISO();
+      if (quickDateEl) quickDateEl.value = todayISO;
       persistAndSync();
       render();
       showToast('День завершён и сохранён в историю');
@@ -2996,8 +3021,7 @@
 
     function openDateModal() {
       closeAllDropdowns();
-      document.getElementById('manual-date-input').value =
-        appStore.data.activeDay ? appStore.data.activeDay.date : appStore.data.currentDate;
+      document.getElementById('manual-date-input').value = getDisplayDate(appStore.data);
       document.getElementById('date-modal').classList.add('open');
     }
 
@@ -3013,9 +3037,12 @@
       const val = document.getElementById('manual-date-input').value;
       if (!val) return;
       appStore.data.currentDate = val;
+      appStore.data.manualDateOverride = val !== getTodayISO();
       if (appStore.data.activeDay) {
         appStore.data.activeDay.date = val;
       }
+      const quickDateEl = document.getElementById('quick-fuel-date');
+      if (quickDateEl) quickDateEl.value = val;
       selectedMonth = val.slice(0, 7);
       if (rangeState.preset === 'month') {
         const bounds = getMonthBoundsISO(selectedMonth);
@@ -3090,7 +3117,7 @@
 
     function render() {
       const d = appStore.data;
-      const activeDate = d.activeDay ? d.activeDay.date : (d.currentDate || getTodayISO());
+      const activeDate = getDisplayDate(d);
       document.getElementById('current-date-display').textContent = formatDateRu(activeDate);
       document.getElementById('current-weekday-display').textContent = formatWeekdayRu(activeDate);
 
